@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">KTC Driver</string>
+    <!--utils-->
+    <string name="retry">Retry</string>
+    <string name="activity_login_txtLogin">Login</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Notification</string>
+    <!--activity login-->
+    <string name="activity_login_driver_id">Driver Id</string>
+    <string name="activity_login_password">Password</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
