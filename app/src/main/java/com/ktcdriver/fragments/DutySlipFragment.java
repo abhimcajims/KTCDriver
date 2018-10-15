@@ -1,14 +1,18 @@
 package com.ktcdriver.fragments;
 
 
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ktcdriver.R;
@@ -26,6 +30,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     private ArrayList<String> title2List;
     private ArrayList<String>title1List;
     private TextView txtSave;
+    LinearLayout txtCharge1, txtCharge2;
 
     public DutySlipFragment() {
         // Required empty public constructor
@@ -62,12 +67,16 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
 
         recyclerView = getView().findViewById(R.id.fragment_duty_slip);
         txtSave = getView().findViewById(R.id.fragment_duty_slip_txtsave);
+        txtCharge1 = getView().findViewById(R.id.fragment_duty_slip_txt_charge1);
+        txtCharge2 = getView().findViewById(R.id.fragment_duty_slip_txt_charge2);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(linearLayoutManager);
         setAdapter();
 
         txtSave.setOnClickListener(this);
+        txtCharge2.setOnClickListener(this);
+        txtCharge1.setOnClickListener(this);
     }
 
     private void setAdapter(){
@@ -79,6 +88,13 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     public void onResume() {
         super.onResume();
         HomeActivity.toolbar.setTitle("Duty Slip");
+        HomeActivity.toolbar.setNavigationIcon(R.drawable.ic_menu);
+        HomeActivity.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HomeActivity.drawer.openDrawer(GravityCompat.START);
+            }
+        });
     }
 
     @Override
@@ -91,8 +107,63 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         switch (view.getId()){
             case R.id.fragment_duty_slip_txtsave:
                 new Utility().callFragment(new FeedbackFragment(),getFragmentManager(),R.id.fragment_container,FeedbackFragment.class.getName());
+                break;
+            case R.id.fragment_duty_slip_txt_charge2:
+                showChargeDialog(R.layout.dialog_duty_slip_charge);
+
+                break;
+            case R.id.fragment_duty_slip_txt_charge1:
+                showCharge2Dialog(R.layout.dialog_duty_slip_charge2);
 
                 break;
         }
     }
+
+    private Dialog charge1Dialog,charge2Dialog;
+
+    private void showChargeDialog(int id){
+        charge1Dialog = new Dialog(getContext());
+        charge1Dialog.setContentView(id);
+        charge1Dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        charge1Dialog.show();
+        LinearLayout linearLayout = charge1Dialog.findViewById(R.id.duty_slip_charge1_cross);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                charge1Dialog.dismiss();
+            }
+        });
+
+        TextView txtSave = charge1Dialog.findViewById(R.id.duty_slip_charge1_save);
+        txtSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                charge1Dialog.dismiss();
+            }
+        });
+
+    }
+    private void showCharge2Dialog(int id){
+        charge2Dialog = new Dialog(getContext());
+        charge2Dialog.setContentView(id);
+        charge2Dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        charge2Dialog.show();
+        LinearLayout linearLayout = charge2Dialog.findViewById(R.id.duty_slip_charge2_cross);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                charge2Dialog.dismiss();
+            }
+        });
+
+        TextView txtSave = charge2Dialog.findViewById(R.id.duty_slip_charge2_save);
+        txtSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                charge2Dialog.dismiss();
+            }
+        });
+    }
+
+
 }

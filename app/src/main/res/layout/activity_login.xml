@@ -25,25 +25,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/activity_login_driver_id"
-            android:textSize="@dimen/size_12"
+            android:textSize="@dimen/size_16"
             android:padding="15dp"
             android:layout_margin="10dp"
+            android:singleLine="true"
             android:background="@drawable/edittext_bg"
             android:imeOptions="actionNext"
             android:drawablePadding="5dp"
+            android:id="@+id/activity_login_edtDriverId"
             android:drawableLeft="@drawable/ic_user"/>
 
         <com.ktcdriver.customtext.CustomEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/activity_login_password"
-            android:textSize="@dimen/size_12"
+            android:textSize="@dimen/size_16"
             android:padding="15dp"
             android:layout_margin="10dp"
             android:background="@drawable/edittext_bg"
             android:inputType="textPassword"
             android:imeOptions="actionDone"
             android:drawablePadding="5dp"
+            android:singleLine="true"
+            android:id="@+id/activity_login_edtPass"
             android:drawableLeft="@drawable/ic_lock"/>
 
         <com.ktcdriver.customtext.CustomTextView

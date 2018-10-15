@@ -12,6 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ktcdriver.R;
+import com.ktcdriver.model.LoginResponse;
+
+import java.util.List;
 
 /**
  * Created by Rakhi on 10/9/2018.
@@ -19,10 +22,12 @@ import com.ktcdriver.R;
 public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyViewHolder> {
     private Context context;
     private DashboardInterface dashboardInterface;
+    private List<LoginResponse.JobListBean> jobListBeans;
 
-    public DashboardAdapter(Context context, DashboardInterface dashboardInterface) {
+    public DashboardAdapter(Context context, DashboardInterface dashboardInterface, List<LoginResponse.JobListBean> jobListBeans) {
         this.context = context;
         this.dashboardInterface = dashboardInterface;
+        this.jobListBeans = jobListBeans;
     }
 
     public interface DashboardInterface{
@@ -44,6 +49,11 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyVi
             myViewHolder.mainLayout.setAlpha((float) 0.5);
             myViewHolder.txtStartJob.setBackground(context.getResources().getDrawable(R.drawable.button_grey_bg));
         }
+
+        myViewHolder.txtEndDate.setText(jobListBeans.get(i).getReportingtoDate());
+        myViewHolder.txtStartDate.setText(jobListBeans.get(i).getReportingDate());
+        myViewHolder.txtCompanyName.setText(jobListBeans.get(i).getClientName());
+        myViewHolder.txtDutySlip.setText(jobListBeans.get(i).getDutyslipnum());
     }
 
     @Override
@@ -53,19 +63,25 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyVi
 
     @Override
     public int getItemCount() {
-        return 20;
+        return jobListBeans.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         LinearLayout mainLayout;
-        TextView txtStartJob;
+        TextView txtStartJob, txtDutySlip,txtStartDate,txtEndDate,txtCompanyName;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mainLayout = itemView.findViewById(R.id.item_dash_board_layout);
             txtStartJob = itemView.findViewById(R.id.item_dashboard_txtStartJob);
+            txtDutySlip = itemView.findViewById(R.id.item_dashboard_txtSlipValue);
+            txtStartDate = itemView.findViewById(R.id.item_dashboard_txtStartValue);
+            txtCompanyName = itemView.findViewById(R.id.item_dashboard_txtComNameValue);
+            txtEndDate = itemView.findViewById(R.id.item_dashboard_txtEndValue);
+
             txtStartJob.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (getAdapterPosition()==0)
                     dashboardInterface.startJob(getAdapterPosition());
                 }
             });

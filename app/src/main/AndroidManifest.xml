@@ -3,6 +3,7 @@
     package="com.ktcdriver">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -14,16 +15,16 @@
         <activity android:name=".activities.setup.LoginActivity"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".activities.setup.SplashActivity">
-        </activity>
-        <activity
-            android:name=".activities.home.HomeActivity"
-            android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.home.HomeActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
     </application>

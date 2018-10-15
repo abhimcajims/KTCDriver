@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background"
+    tools:context=".fragments.ThankFragment">
+
+    <ImageView
+        android:src="@drawable/thank"
+        android:layout_gravity="center"
+        android:layout_marginTop="110dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp" />
+    <com.ktcdriver.customtext.CustomTextViewBold
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Thank You"
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="center"
+        android:textSize="30sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.ktcdriver.customtext.CustomTextView
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="Your Duty No 232332 has been completed. Please go for"
+        android:textColor="@color/colorBlack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.ktcdriver.customtext.CustomTextView
+        android:layout_gravity="center"
+        android:text="Next Duty"
+        android:background="@drawable/button_bg"
+        android:textColor="@color/colorWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="8dp"
+        android:id="@+id/fragment_thank_txt_next_Duty"
+        android:paddingRight="10dp"/>
+
+</LinearLayout>

@@ -9,9 +9,12 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.ktcdriver.R;
+import com.ktcdriver.activities.home.HomeActivity;
 import com.ktcdriver.utils.AppbaseActivity;
+import com.mukesh.tinydb.TinyDB;
 
 public class SplashActivity extends AppbaseActivity {
+    private TinyDB tinyDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,14 +25,21 @@ public class SplashActivity extends AppbaseActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         getSupportActionBar().hide();
-
+        tinyDB = new TinyDB(getApplicationContext());
         int TIME_INTERVAL = 3000;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-                overridePendingTransition(R.anim.enter, R.anim.exit);
-                finish();
+                if (tinyDB.contains("login_data")){
+                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                    finish();
+                } else {
+                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                    finish();
+                }
+
             }
         }, TIME_INTERVAL);
     }

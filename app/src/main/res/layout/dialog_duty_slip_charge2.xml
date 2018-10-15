@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".activities.home.HomeActivity">
+
+    <LinearLayout
+        android:focusableInTouchMode="false"
+        android:background="@drawable/top_bg_round"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <com.ktcdriver.customtext.CustomTextViewBold
+                    android:text="Add Charges"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/colorBlack"
+                    android:padding="5dp"
+                    android:textSize="@dimen/size_16"
+                    android:layout_height="wrap_content" />
+                <com.ktcdriver.customtext.CustomTextView
+                    android:text="Night Halt"
+                    android:layout_width="wrap_content"
+                    android:padding="5dp"
+                    android:textSize="@dimen/size_12"
+                    android:layout_height="wrap_content" />
+
+                <com.ktcdriver.customtext.CustomEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:padding="10dp"
+                    android:textSize="@dimen/size_12"
+                    android:singleLine="true"
+                    android:background="@drawable/edittext_bg" />
+
+                <com.ktcdriver.customtext.CustomTextView
+                    android:text="Toll"
+                    android:textSize="@dimen/size_12"
+                    android:layout_width="wrap_content"
+                    android:padding="5dp"
+                    android:layout_height="wrap_content" />
+
+                <com.ktcdriver.customtext.CustomEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:padding="10dp"
+                    android:textSize="@dimen/size_12"
+                    android:singleLine="true"
+                    android:background="@drawable/edittext_bg" />
+
+                <com.ktcdriver.customtext.CustomTextView
+                    android:text="Parking"
+                    android:layout_width="wrap_content"
+                    android:padding="5dp"
+                    android:textSize="@dimen/size_12"
+                    android:layout_height="wrap_content" />
+
+                <com.ktcdriver.customtext.CustomEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:padding="10dp"
+                    android:textSize="@dimen/size_12"
+                    android:singleLine="true"
+                    android:background="@drawable/edittext_bg" />
+
+                <com.ktcdriver.customtext.CustomTextView
+                    android:text="E Toll"
+                    android:layout_width="wrap_content"
+                    android:padding="5dp"
+                    android:textSize="@dimen/size_12"
+                    android:layout_height="wrap_content" />
+
+                <com.ktcdriver.customtext.CustomEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:padding="10dp"
+                    android:textSize="@dimen/size_12"
+                    android:singleLine="true"
+                    android:background="@drawable/edittext_bg" />
+
+                <com.ktcdriver.customtext.CustomTextView
+                    android:text="Entrance Tax"
+                    android:layout_width="wrap_content"
+                    android:padding="5dp"
+                    android:layout_height="wrap_content" />
+
+                <com.ktcdriver.customtext.CustomEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:padding="10dp"
+                    android:textSize="@dimen/size_12"
+                    android:singleLine="true"
+                    android:background="@drawable/edittext_bg" />
+
+                <com.ktcdriver.customtext.CustomTextView
+                    android:text="Others"
+                    android:textSize="@dimen/size_12"
+                    android:layout_width="wrap_content"
+                    android:padding="5dp"
+                    android:layout_height="wrap_content" />
+
+                <com.ktcdriver.customtext.CustomEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:padding="10dp"
+                    android:textSize="@dimen/size_12"
+                    android:singleLine="true"
+                    android:background="@drawable/edittext_bg" />
+
+                <com.ktcdriver.customtext.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Save"
+                    android:id="@+id/duty_slip_charge2_save"
+                    android:textSize="@dimen/size_16"
+                    android:textColor="@color/colorWhite"
+                    android:background="@drawable/button_bg"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:paddingRight="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"/>
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_add_charges_pop"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/button_dark_blue_round"
+        android:gravity="center"
+        android:id="@+id/duty_slip_charge2_cross"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="15dp">
+
+        <com.ktcdriver.customtext.CustomTextView
+            android:id="@+id/dialog_location_tv_cross"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
+
+

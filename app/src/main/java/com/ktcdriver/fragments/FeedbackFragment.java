@@ -4,6 +4,7 @@ package com.ktcdriver.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,13 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener{
     public void onResume() {
         super.onResume();
         HomeActivity.toolbar.setTitle("Feedback");
+        HomeActivity.toolbar.setNavigationIcon(R.drawable.ic_menu);
+        HomeActivity.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HomeActivity.drawer.openDrawer(GravityCompat.START);
+            }
+        });
     }
 
     @Override

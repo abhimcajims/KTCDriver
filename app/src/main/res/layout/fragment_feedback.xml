@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorBg"
     tools:context=".fragments.FeedbackFragment">
 
     <ScrollView
@@ -22,8 +23,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Ratings"
+                android:textSize="@dimen/size_16"
                 android:padding="10dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_marginLeft="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_star"/>
+                <ImageView
+                    android:layout_marginLeft="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_star"/>
+
+                <ImageView
+                    android:layout_marginLeft="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_star"/>
+                <ImageView
+                    android:layout_marginLeft="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_star_b"/>
+                <ImageView
+                    android:layout_marginLeft="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_star_b"/>
+
+            </LinearLayout>
             <RatingBar
+                android:visibility="gone"
                 android:paddingLeft="10dp"
                 android:id="@+id/ratingBar1"
                 style="@style/foodRatingBar"
@@ -43,12 +78,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Remarks(Optionals)"
+                android:textSize="@dimen/size_16"
                 android:padding="10dp" />
 
             <com.ktcdriver.customtext.CustomEditText
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_margin="10dp"
+                android:textSize="@dimen/size_12"
                 android:background="@drawable/duty_slip_bg"/>
 
             <View
@@ -62,12 +99,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Signature"
+                android:textSize="@dimen/size_16"
                 android:padding="10dp" />
 
             <com.ktcdriver.customtext.CustomEditText
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_margin="10dp"
+                android:textSize="@dimen/size_12"
                 android:background="@drawable/duty_slip_bg"/>
 
             <View
@@ -85,11 +124,11 @@
                 android:id="@+id/fragment_feedback_submit"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:textColor="@color/colorWhite"
                 android:background="@drawable/button_bg"
-                android:padding="10dp" />
+                android:padding="15dp" />
 
 
         </LinearLayout>

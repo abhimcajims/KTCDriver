@@ -14,6 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Duty Slip no"
+            android:textSize="@dimen/size_16"
             android:id="@+id/item_dashboard_txtSlip"
             android:textColor="@color/colorBlack"/>
 
@@ -26,6 +27,7 @@
             android:textColor="@color/colorWhite"
             android:layout_margin="5dp"
             android:paddingLeft="10dp"
+            android:textSize="@dimen/size_12"
             android:id="@+id/item_dashboard_txtStartJob"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
@@ -35,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="#232344"
+            android:textSize="@dimen/size_12"
             android:layout_below="@+id/item_dashboard_txtSlip"
             android:id="@+id/item_dashboard_txtSlipValue"
             android:textColor="@color/colorPrimary"/>
@@ -43,6 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Company Name"
+            android:textSize="@dimen/size_16"
             android:layout_below="@+id/item_dashboard_txtSlipValue"
             android:id="@+id/item_dashboard_txtComName"
             android:textColor="@color/colorBlack"/>
@@ -51,6 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Askonlinesolutions"
+            android:textSize="@dimen/size_12"
             android:layout_below="@+id/item_dashboard_txtComName"
             android:id="@+id/item_dashboard_txtComNameValue"
             android:textColor="@color/colorPrimary"/>
@@ -59,9 +64,9 @@
             android:layout_height=".5dp"
             android:layout_below="@+id/item_dashboard_txtComNameValue"
             android:background="@color/colorDarkGrey"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:id="@+id/item_dashboard_view"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="8dp"/>
 
        <ImageView
            android:layout_width="wrap_content"
@@ -89,8 +94,7 @@
             android:textSize="@dimen/size_12"
             android:layout_below="@+id/item_dashboard_txtStart"
             android:layout_toRightOf="@+id/item_dashboard_img_cal_start"
-            android:id="@+id/item_dashboard_txtStartValue"
-            android:textColor="@color/colorBlack"/>
+            android:id="@+id/item_dashboard_txtStartValue" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -116,19 +120,19 @@
                     android:textSize="@dimen/size_16"
                     android:layout_toRightOf="@+id/item_dashboard_img_cal_end"
                     android:id="@+id/item_dashboard_txtEnd"
-                    android:textColor="@color/colorBlack"/>
+                    android:textColor="@color/colorBlack"
+                    android:layout_toEndOf="@+id/item_dashboard_img_cal_end" />
+                <com.ktcdriver.customtext.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="08-10-2018"
+                    android:layout_below="@+id/item_dashboard_txtEnd"
+                    android:paddingLeft="25dp"
+                    android:textSize="@dimen/size_12"
+                    android:id="@+id/item_dashboard_txtEndValue" />
+
             </RelativeLayout>
-            <com.ktcdriver.customtext.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="08-10-2018"
-                android:paddingLeft="30dp"
-                android:layout_alignParentRight="true"
-                android:textSize="@dimen/size_12"
-                android:layout_below="@+id/item_dashboard_txtEnd"
-                android:layout_toRightOf="@+id/item_dashboard_img_cal_end"
-                android:id="@+id/item_dashboard_txtEndValue"
-                android:textColor="@color/colorBlack"/>
+
         </LinearLayout>
 
 

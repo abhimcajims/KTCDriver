@@ -7,9 +7,9 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <!--activity login-->
-    <dimen name="size_12">12sp</dimen>
-    <dimen name="size_16">16sp</dimen>
+    <dimen name="size_12">10sp</dimen>
+    <dimen name="size_16">12sp</dimen>
     <dimen name="size_18">18sp</dimen>
-    <dimen name="size_20">20sp</dimen>
+    <dimen name="size_20">22sp</dimen>
 
 </resources>
