@@ -85,7 +85,6 @@ public class HomeActivity extends AppCompatActivity
                     anim.setDuration(0);
                     anim.setFillAfter(true);
                     frameLayout.startAnimation(anim);
-
                     lastTranslate = moveFactor;
                 }
             }

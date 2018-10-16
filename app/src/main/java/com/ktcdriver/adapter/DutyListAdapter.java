@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,17 +25,21 @@ public class DutyListAdapter extends RecyclerView.Adapter<DutyListAdapter.MyView
     private DutyListInterface dashboardInterface;
     private ArrayList<String>title2List;
     private ArrayList<String>title1List;
+    private ArrayList<String> title2ListValue;
+    private ArrayList<String>title1ListValue;
 
     public DutyListAdapter(Context context, DutyListInterface dashboardInterface, ArrayList<String> title2List,
-                           ArrayList<String> title1List) {
+                           ArrayList<String> title1List, ArrayList<String> title2ListValue, ArrayList<String> title1ListValue) {
         this.context = context;
         this.dashboardInterface = dashboardInterface;
         this.title2List = title2List;
         this.title1List = title1List;
+        this.title2ListValue = title2ListValue;
+        this.title1ListValue = title1ListValue;
     }
 
     public interface  DutyListInterface{
-        void startJob(int i);
+        void openTimerPicker(int i, TextView textView);
     }
 
     @NonNull
@@ -49,6 +55,10 @@ public class DutyListAdapter extends RecyclerView.Adapter<DutyListAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.txtTitle.setText(title1List.get(i));
         myViewHolder.txtTitle2.setText(title2List.get(i));
+        if (title1ListValue.get(i)!=null)
+        myViewHolder.edtValue.setText(title1ListValue.get(i));
+        if (title2ListValue.get(i)!=null)
+        myViewHolder.txtTime.setText(title2ListValue.get(i));
     }
 
     @Override
@@ -62,12 +72,24 @@ public class DutyListAdapter extends RecyclerView.Adapter<DutyListAdapter.MyView
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+        EditText edtValue;
+        TextView txtTitle, txtTitle2,txtTime;
+        ImageView imgClock;
 
-        TextView txtTitle, txtTitle2;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             txtTitle = itemView.findViewById(R.id.item_duty_title1);
             txtTitle2 = itemView.findViewById(R.id.item_duty_title2);
+            edtValue = itemView.findViewById(R.id.item_duty_slip_edt);
+            txtTime = itemView.findViewById(R.id.item_duty_cal_value);
+            imgClock = itemView.findViewById(R.id.item_duty_slip_img_clock);
+
+            imgClock.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dashboardInterface.openTimerPicker(getAdapterPosition(),txtTime);
+                }
+            });
         }
     }
 }

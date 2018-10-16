@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.ktcdriver.R;
@@ -90,7 +91,11 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Dash
 
     @Override
     public void startJob(int i) {
-        new Utility().callFragment(new DutySlipFragment(),getFragmentManager(),
+        DutySlipFragment dutySlipFragment = new DutySlipFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("reservationid",jobListBeans.get(i).getReservationid());
+        dutySlipFragment.setArguments(bundle);
+        new Utility().callFragment(dutySlipFragment,getFragmentManager(),
                 R.id.fragment_container,DutySlipFragment.class.getName());
     }
 
@@ -127,7 +132,6 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Dash
                 tinyDB.putString("login_data",new Gson().toJson(loginResponse));
                 jobListBeans = loginResponse.getJob_list();
                 setDashboardAdapter();
-
             }
             else if (loginResponse.getStatus().equals("0")){
                 Utility.showToast(getActivity(),loginResponse.getMessage());
@@ -137,6 +141,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Dash
 
     @Override
     public void onApiFailure(String message) {
+        Utility.showToast(getContext(),getContext().getResources().getString(R.string.error));
         progressDialog.dismiss();
     }
 }

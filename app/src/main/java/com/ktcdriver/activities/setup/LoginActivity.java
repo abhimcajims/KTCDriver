@@ -79,7 +79,7 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
 
         Call<LoginResponse> call = APIClient.getInstance().getApiInterface().getLoginDetails(driverId,pass);
         call.request().url();
-        Log.d("TAG", "fetchLoginData: "+call.request().url());
+        Log.d("TAG", "rakhi: "+call.request().url());
         new ResponseListner(this,getApplicationContext()).getResponse( call);
     }
 

@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorBg"
+    android:id="@+id/fragment_duty_slip_layout"
     tools:context=".fragments.DutySlipFragment">
 
     <android.support.v4.widget.NestedScrollView
@@ -27,6 +28,7 @@
                     android:text="KTC(India) PVT LTD"
                     android:textSize="@dimen/size_18"
                     android:padding="10dp"
+                    android:id="@+id/fragment_duty_slip_txt_companyName"
                     android:textColor="@color/colorPrimary"/>
 
                 <LinearLayout
@@ -41,12 +43,14 @@
                         android:drawableLeft="@drawable/ic_pin"
                         android:drawablePadding="5dp"
                         android:layout_weight="1"
+                        android:id="@+id/fragment_duty_slip_txt_companyAdd"
                         android:textSize="@dimen/size_12"
                         android:text="Regd. Office:RZ-A/96,Road no.6,Street no.9, Mahipailpur Extn.,New Delhi-110037 Tel:42588888"
                         android:drawableStart="@drawable/ic_pin" />
                     <com.ktcdriver.customtext.CustomTextView
                         android:layout_width="wrap_content"
                         android:textSize="@dimen/size_12"
+                        android:id="@+id/fragment_duty_slip_txt_companyMob"
                         android:layout_marginLeft="10dp"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_phone_call"
@@ -68,6 +72,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:textSize="@dimen/size_12"
+                        android:id="@+id/fragment_duty_slip_txt_companyEmail"
                         android:gravity="center_vertical"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_email"
@@ -79,6 +84,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_width="wrap_content"
                         android:textSize="@dimen/size_12"
+                        android:id="@+id/fragment_duty_slip_txt_companyFax"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_fax"
                         android:drawablePadding="5dp"
@@ -108,6 +114,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:textSize="@dimen/size_12"
+                    android:id="@+id/fragment_duty_slip_txt_driver_detail"
                     android:gravity="center_vertical"
                     android:layout_height="match_parent"
                     android:text="Pradeep Kumar Gupta"/>
@@ -134,6 +141,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:textSize="@dimen/size_12"
+                    android:id="@+id/fragment_duty_slip_txt_car_detail"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="Toyata Hiace(DL 1VC 3195)"
@@ -187,6 +195,7 @@
                                 android:layout_marginTop="3dp"
                                 android:paddingBottom="5dp"
                                 android:textSize="@dimen/size_12"
+                                android:id="@+id/fragment_duty_slip_txt_rq_no"
                                 android:gravity="center_horizontal"
                                 android:textColor="@color/colorGreen"/>
 
@@ -217,6 +226,7 @@
                                 android:text="099887553"
                                 android:gravity="center_horizontal"
                                 android:paddingTop="3dp"
+                                android:id="@+id/fragment_duty_slip_txt_booker_no"
                                 android:paddingBottom="5dp"
                                 android:textSize="@dimen/size_12"
                                 android:textColor="@color/colorGreen"/>
@@ -245,6 +255,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Credit"
+                                android:id="@+id/fragment_duty_slip_txt_payment"
                                 android:gravity="center_horizontal"
                                 android:paddingTop="3dp"
                                 android:paddingBottom="5dp"
@@ -282,6 +293,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Delhi/NCR"
+                                android:id="@+id/fragment_duty_slip_txt_city"
                                 android:gravity="center_horizontal"
                                 android:paddingTop="3dp"
                                 android:textSize="@dimen/size_12"
@@ -313,6 +325,7 @@
                                 android:text="TOYOTA HIACE"
                                 android:gravity="center_horizontal"
                                 android:paddingTop="3dp"
+                                android:id="@+id/fragment_duty_slip_txt_vehicle_req"
                                 android:textSize="@dimen/size_12"
                                 android:paddingBottom="5dp"
                                 android:textAllCaps="true" />
@@ -341,6 +354,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="For Show"
+                                android:id="@+id/fragment_duty_slip_txt_user_name"
                                 android:gravity="center_horizontal"
                                 android:paddingTop="3dp"
                                 android:textSize="@dimen/size_12"
@@ -375,6 +389,7 @@
                         android:layout_height="match_parent"
                         android:text="KTC INDIA INTERNAL USE"
                         android:paddingTop="5dp"
+                        android:id="@+id/fragment_duty_slip_txt_companyName2"
                         android:paddingBottom="5dp"
                         android:textSize="@dimen/size_12"
                         android:textAllCaps="true" />
@@ -405,6 +420,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:textSize="@dimen/size_12"
+                        android:id="@+id/fragment_duty_slip_txt_bookedName"
                         android:layout_height="wrap_content"
                         android:text="Mr. Abhishek Batham"
                         android:paddingTop="5dp"
@@ -437,6 +453,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:textSize="@dimen/size_12"
+                        android:id="@+id/fragment_duty_slip_txt_report_place"
                         android:layout_height="wrap_content"
                         android:text="212-213 Verdham Crown Mall, Sector 19-Dwarka,New Delhi"
                         android:paddingTop="5dp"
@@ -467,6 +484,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:textSize="@dimen/size_12"
+                        android:id="@+id/fragment_duty_slip_txt_assign"
                         android:layout_height="wrap_content"
                         android:text="LOCAL RUN FULL DAY"
                         android:paddingTop="5dp"
@@ -500,6 +518,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:text="For Show"
+                        android:id="@+id/fragment_duty_slip_txt_details"
                         android:textSize="@dimen/size_12"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp" />
@@ -554,6 +573,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:text="10-09-2018"
+                                android:id="@+id/fragment_duty_slip_txt_starting_date"
                                 android:paddingLeft="5dp"
                                 android:textSize="@dimen/size_12"
                                 android:layout_weight="1"
@@ -595,6 +615,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:text="10-09-2018"
+                                android:id="@+id/fragment_duty_slip_txt_end_date"
                                 android:textSize="@dimen/size_12"
                                 android:paddingLeft="5dp"
                                 android:layout_weight="1"

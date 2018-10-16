@@ -2,6 +2,7 @@ package com.ktcdriver.webservices;
 
 import com.ktcdriver.model.ApiResponse;
 import com.ktcdriver.model.LoginResponse;
+import com.ktcdriver.model.ViewDetailsData;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -12,8 +13,8 @@ import retrofit2.http.POST;
 public interface ApiInterface {
 
     @FormUrlEncoded
-    @POST()
-    Call<ApiResponse> job_details(@Field("Reservationid")String Reservationid);
+    @POST("viewdetail.php")
+    Call<ViewDetailsData> job_details(@Field("Reservationid")String Reservationid);
 
     @FormUrlEncoded
     @POST("login.php")
