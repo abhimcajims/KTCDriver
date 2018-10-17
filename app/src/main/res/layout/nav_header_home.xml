@@ -14,9 +14,9 @@
 
     <ImageView
         android:layout_gravity="center_horizontal"
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/nav_header_img"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:srcCompat="@drawable/placeholder" />
@@ -27,10 +27,11 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="Harish Kumar Shakya"
         android:gravity="center_horizontal"
+        android:id="@+id/nav_header_name"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <com.ktcdriver.customtext.CustomTextView
-        android:id="@+id/textView"
+        android:id="@+id/nav_header_email"
         android:textSize="@dimen/size_12"
         android:gravity="center_horizontal"
         android:layout_width="match_parent"

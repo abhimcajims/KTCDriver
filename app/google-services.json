@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "226207931978",
+    "firebase_url": "https://ktc-driver.firebaseio.com",
+    "project_id": "ktc-driver",
+    "storage_bucket": "ktc-driver.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226207931978:android:c72f295e015a3290",
+        "android_client_info": {
+          "package_name": "com.ktcdriver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "226207931978-99559sja9il9hppcl2dl2deu8o7a6925.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkUCK4g0LM7C4j3aBMyOtoIN30C_-lT9k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

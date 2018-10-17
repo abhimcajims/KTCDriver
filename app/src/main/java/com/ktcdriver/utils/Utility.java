@@ -1,6 +1,7 @@
 package com.ktcdriver.utils;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -13,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.ktcdriver.R;
+import com.ktcdriver.activities.setup.LoginActivity;
 
 import java.text.DecimalFormat;
 import java.util.regex.Pattern;
@@ -36,6 +38,18 @@ public class Utility {
 
     public static boolean isValidMobile(String phone) {
         return android.util.Patterns.PHONE.matcher(phone).matches();
+    }
+
+    private static ProgressDialog progressDialog;
+    public void showProgressDialog(Context context){
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+        progressDialog.setMessage("Please wait...");
+    }
+
+    public void hideDialog(){
+        progressDialog.dismiss();
     }
 
     public static DecimalFormat df2 = new DecimalFormat("#0.00");

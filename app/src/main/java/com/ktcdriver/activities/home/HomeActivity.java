@@ -23,11 +23,14 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.ktcdriver.R;
 import com.ktcdriver.fragments.DashboardFragment;
@@ -65,6 +68,20 @@ public class HomeActivity extends AppCompatActivity
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header=navigationView.getHeaderView(0);
+        /*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
+        TextView name = (TextView)header.findViewById(R.id.nav_header_name);
+        TextView email = (TextView)header.findViewById(R.id.nav_header_email);
+        if (loginResponse.getProfileInfo().getUserName()!=null)
+        name.setText(loginResponse.getProfileInfo().getUserName());
+        if (loginResponse.getProfileInfo().getEmail()!=null)
+        email.setText(loginResponse.getProfileInfo().getEmail());
+        ImageView imgUser = header.findViewById(R.id.nav_header_img);
+        if (loginResponse.getProfileInfo().getPhotoURL()!=null)
+        Glide.with(getApplicationContext())
+                .load(loginResponse.getProfileInfo().getPhotoURL())
+                .apply(RequestOptions.circleCropTransform())
+                .into(imgUser);
         final FrameLayout frameLayout = (FrameLayout) findViewById(R.id.container_frame);
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close)

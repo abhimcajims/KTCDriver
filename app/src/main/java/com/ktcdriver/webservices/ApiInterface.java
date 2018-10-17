@@ -20,5 +20,10 @@ public interface ApiInterface {
     @POST("login.php")
     Call<LoginResponse> getLoginDetails(@Field("driverId")String driverId,
                                         @Field("password")String password);
+    @FormUrlEncoded
+    @POST("new_user_register.php ")
+    Call<LoginResponse> registerNewUser(@Field("driverId")String driverId,
+                                        @Field("IMEI")String IMEI,
+                                        @Field("TOKEN_ID")String TOKEN_ID);
 
 }

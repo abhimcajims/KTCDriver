@@ -9,9 +9,9 @@ import retrofit2.Response;
 
 public class ResponseListner {
 
-    OnResponseInterface onResponseInterface;
-    String message;
-    Context context;
+    private OnResponseInterface onResponseInterface;
+    private String message;
+    private Context context;
 
     public ResponseListner(OnResponseInterface onResponseInterface, Context context) {
         this.onResponseInterface = onResponseInterface;
