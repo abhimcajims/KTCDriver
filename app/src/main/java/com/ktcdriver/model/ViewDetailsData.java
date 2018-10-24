@@ -454,7 +454,7 @@ public class ViewDetailsData {
 
             private Object beverage_charge;
             private Object entrance_charge;
-            private Object parking;
+            private Object guide_charge;
             private Object driver_ta;
 
             public Object getBeverage_charge() {
@@ -474,11 +474,11 @@ public class ViewDetailsData {
             }
 
             public Object getParking() {
-                return parking;
+                return guide_charge;
             }
 
             public void setParking(Object parking) {
-                this.parking = parking;
+                this.guide_charge = parking;
             }
 
             public Object getDriver_ta() {

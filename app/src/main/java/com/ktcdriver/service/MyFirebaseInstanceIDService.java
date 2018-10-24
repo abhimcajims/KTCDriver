@@ -16,7 +16,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
     @Override
     public void onTokenRefresh() {
-        super.onTokenRefresh();
+            super.onTokenRefresh();
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
 
         // Saving reg id to shared preferences

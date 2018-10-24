@@ -46,6 +46,7 @@
                     android:padding="10dp"
                     android:textSize="@dimen/size_12"
                     android:singleLine="true"
+                    android:id="@+id/duty_slip_charge1_edt_beverage"
                     android:background="@drawable/edittext_bg" />
 
                 <com.ktcdriver.customtext.CustomTextView
@@ -60,6 +61,7 @@
                     android:layout_height="35dp"
                     android:padding="10dp"
                     android:textSize="@dimen/size_12"
+                    android:id="@+id/duty_slip_charge1_edt_entrance"
                     android:singleLine="true"
                     android:background="@drawable/edittext_bg" />
 
@@ -74,6 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:padding="10dp"
+                    android:id="@+id/duty_slip_charge1_edt_guide"
                     android:textSize="@dimen/size_12"
                     android:singleLine="true"
                     android:background="@drawable/edittext_bg" />
@@ -91,6 +94,7 @@
                     android:padding="10dp"
                     android:textSize="@dimen/size_12"
                     android:singleLine="true"
+                    android:id="@+id/duty_slip_charge1_edt_driver_ta"
                     android:background="@drawable/edittext_bg" />
 
                 <com.ktcdriver.customtext.CustomTextView

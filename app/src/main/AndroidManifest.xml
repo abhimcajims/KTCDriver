@@ -45,6 +45,7 @@
             </intent-filter>
         </service>
         <!-- ./Firebase Notifications -->
+
     </application>
 
 </manifest>

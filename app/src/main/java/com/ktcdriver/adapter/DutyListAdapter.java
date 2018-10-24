@@ -5,13 +5,16 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ktcdriver.R;
 
@@ -39,7 +42,8 @@ public class DutyListAdapter extends RecyclerView.Adapter<DutyListAdapter.MyView
     }
 
     public interface  DutyListInterface{
-        void openTimerPicker(int i, TextView textView);
+        void openTimerPicker(int i, TextView textView, EditText edtValue);
+        void onTextChanged(int position, String charSeq);
     }
 
     @NonNull
@@ -83,13 +87,36 @@ public class DutyListAdapter extends RecyclerView.Adapter<DutyListAdapter.MyView
             edtValue = itemView.findViewById(R.id.item_duty_slip_edt);
             txtTime = itemView.findViewById(R.id.item_duty_cal_value);
             imgClock = itemView.findViewById(R.id.item_duty_slip_img_clock);
+            edtValue.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    String s = charSequence.toString();
+                    Log.d("TAG", "onTextChanged: "+s);
+                    dashboardInterface.onTextChanged(getAdapterPosition(), edtValue.getText().toString().trim());
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
 
             imgClock.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dashboardInterface.openTimerPicker(getAdapterPosition(),txtTime);
+                    dashboardInterface.openTimerPicker(getAdapterPosition(),txtTime, edtValue);
                 }
             });
         }
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 }

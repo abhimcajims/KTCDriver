@@ -1,8 +1,8 @@
 package com.ktcdriver.fragments;
 
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,13 +14,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.ktcdriver.R;
 import com.ktcdriver.activities.home.HomeActivity;
 import com.ktcdriver.adapter.DutyListAdapter;
+import com.ktcdriver.model.SaveResponse;
 import com.ktcdriver.model.ViewDetailsData;
 import com.ktcdriver.utils.Utility;
 import com.ktcdriver.webservices.APIClient;
@@ -43,11 +48,33 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     private ArrayList<String>title1List;
     private ArrayList<String> title2ListValue;
     private ArrayList<String>title1ListValue;
-    private TextView txtSave,txtCompanyName,txtComapAdd,txtCompMobile,txtCompEmail,txtCompFax,txtDriverDetail,txtCarDetail,
-    txtrqNo,txtBookerNo, txtPaymentMode,txtCompName2,txtBookedName,txtReportPlace, txtAssignment,
-            txtDetails,txtStartingDate,txtEdndingDate,txtcity,txtVehicleReq,txtUserName;
+    private TextView txtCompanyName;
+    private TextView txtComapAdd;
+    private TextView txtCompMobile;
+    private TextView txtCompEmail;
+    private TextView txtCompFax;
+    private TextView txtDriverDetail;
+    private TextView txtCarDetail;
+    private TextView txtrqNo;
+    private TextView txtBookerNo;
+    private TextView txtPaymentMode;
+    private TextView txtCompName2;
+    private TextView txtBookedName;
+    private TextView txtReportPlace;
+    private TextView txtAssignment;
+    private TextView txtDetails;
+    private TextView txtStartingDate;
+    private TextView txtEdndingDate;
+    private TextView txtcity;
+    private TextView txtVehicleReq;
+    private TextView txtUserName;
     private LinearLayout txtCharge1, txtCharge2;
-    private String reservationId;
+    private String reservationId, dutyslipnum, starting_date, ending_date, starting_meter,
+            starting_time, reporting_meter, reporting_time, ending_meter, ending_time, meter_at_garage,
+            time_at_garage, total_meter, total_time,night_halt,toll,parking,e_toll,interstate_tax,others,
+            beverages_charges,entrance_charge,guide_charge,driver_ta;
+
+    private ImageView startClock, endClock;
 
     public DutySlipFragment() {
         // Required empty public constructor
@@ -88,8 +115,10 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
 
         main_Layout = getView().findViewById(R.id.fragment_duty_slip_layout);
         main_Layout.setVisibility(View.GONE);
+        startClock = getView().findViewById(R.id.fragment_duty_slip_txt_starting_clock);
+        endClock = getView().findViewById(R.id.fragment_duty_slip_txt_end_clock);
         recyclerView = getView().findViewById(R.id.fragment_duty_slip);
-        txtSave = getView().findViewById(R.id.fragment_duty_slip_txtsave);
+        TextView txtSave = getView().findViewById(R.id.fragment_duty_slip_txtsave);
         txtCharge1 = getView().findViewById(R.id.fragment_duty_slip_txt_charge1);
         txtCharge2 = getView().findViewById(R.id.fragment_duty_slip_txt_charge2);
         txtCompanyName = getView().findViewById(R.id.fragment_duty_slip_txt_companyName);
@@ -122,6 +151,8 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         txtSave.setOnClickListener(this);
         txtCharge2.setOnClickListener(this);
         txtCharge1.setOnClickListener(this);
+        startClock.setOnClickListener(this);
+        endClock.setOnClickListener(this);
        // reservationId = "709180043";
         fetchDetails(reservationId);
     }
@@ -145,31 +176,39 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         });
     }
 
-    @Override
-    public void openTimerPicker(int i,TextView textView) {
-        String selectedTime = openTimer();
-        textView.setText(selectedTime);
+    private TextView timeText;
 
-        switch (i){
+    @Override
+    public void onTextChanged(int position, String charSeq) {
+        Log.d("TAG", "onTextChanged: "+charSeq);
+        switch (position){
             case 0:
-                viewDetailsData.getJob_detail().setStarting_time(selectedTime);
+                starting_meter = charSeq;
                 break;
             case 1:
+                reporting_meter = charSeq;
                 break;
             case 2:
+                ending_meter = charSeq;
                 break;
             case 3:
+                meter_at_garage = charSeq;
                 break;
             case 4:
-                break;
-            case 5:
+                total_meter = charSeq;
                 break;
         }
     }
 
-    String time;
-    private String openTimer(){
+    @Override
+    public void openTimerPicker(int i, TextView textView, EditText edtValue) {
+        timeText = textView;
+        openTimer(i);
+    }
 
+
+    String time;
+    private void openTimer(final int i){
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
@@ -177,29 +216,94 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-               time = selectedHour + ":" + selectedMinute;
+                time = String.format("%02d:%02d", selectedHour, selectedMinute);
+                switch (i){
+                    case 0:
+                        starting_time = time;
+                        timeText.setText(time );
+                        Toast.makeText(getContext(), "starting_time: "+starting_time, Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+                        reporting_time = time;
+                        timeText.setText(time );
+                        Toast.makeText(getContext(), "reporting_time: "+reporting_time, Toast.LENGTH_SHORT).show();
+                        break;
+                    case 2:
+                        ending_time = time;
+                        timeText.setText(time );
+                        Toast.makeText(getContext(), "ending_time: "+ending_time, Toast.LENGTH_SHORT).show();
+                        break;
+                    case 3:
+                        time_at_garage = time;
+                        timeText.setText(time );
+                        Toast.makeText(getContext(), "time_at_garage: "+time_at_garage, Toast.LENGTH_SHORT).show();
+                        break;
+                    case 4:
+                        total_time = time;
+                        timeText.setText(time );
+                        Toast.makeText(getContext(), "total_time: "+total_time, Toast.LENGTH_SHORT).show();
+                        break;
+                }
             }
         }, hour, minute, true);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
-        return time;
+
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.fragment_duty_slip_txtsave:
-                new Utility().callFragment(new FeedbackFragment(),getFragmentManager(),R.id.fragment_container,FeedbackFragment.class.getName());
+
+                saveDutySlip();
+             //  new Utility().callFragment(new FeedbackFragment(),getFragmentManager(),R.id.fragment_container,FeedbackFragment.class.getName());
                 break;
             case R.id.fragment_duty_slip_txt_charge2:
                 showChargeDialog(R.layout.dialog_duty_slip_charge);
-
                 break;
             case R.id.fragment_duty_slip_txt_charge1:
                 showCharge2Dialog(R.layout.dialog_duty_slip_charge2);
-
+                break;
+            case R.id.fragment_duty_slip_txt_starting_clock:
+                if (starting_date==null){
+                    openDateTicker(1);
+                }
+                break;
+            case R.id.fragment_duty_slip_txt_end_clock:
+                openDateTicker(2);
                 break;
         }
+    }
+
+    DatePickerDialog datePickerDialog;
+    int year;
+    int month;
+    int dayOfMonth;
+    Calendar calendar;
+
+    private void openDateTicker(final int i){
+        calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        datePickerDialog = new DatePickerDialog(getContext(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        String a = year + "-" + (month + 1) + "-" + day;
+                        if (i==1){
+                            starting_date = a;
+                            txtStartingDate.setText(starting_date);
+                        }
+                        else if (i==2){
+                            ending_date = a;
+                            txtEdndingDate.setText(ending_date);
+                        }
+                    }
+                }, year, month, dayOfMonth);
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        datePickerDialog.show();
     }
 
     private Dialog charge1Dialog,charge2Dialog;
@@ -216,12 +320,30 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 charge1Dialog.dismiss();
             }
         });
+        final EditText edtBeverage = charge1Dialog.findViewById(R.id.duty_slip_charge1_edt_beverage);
+        final EditText edtEntrance = charge1Dialog.findViewById(R.id.duty_slip_charge1_edt_entrance);
+        final EditText edtDTA = charge1Dialog.findViewById(R.id.duty_slip_charge1_edt_driver_ta);
+        final EditText edtGuide = charge1Dialog.findViewById(R.id.duty_slip_charge1_edt_guide);
+
+        if (beverages_charges!=null)
+        edtBeverage.setText(beverages_charges);
+        if (entrance_charge!=null)
+        edtEntrance.setText(entrance_charge);
+        if (driver_ta!=null)
+        edtDTA.setText(driver_ta);
+        if (guide_charge!=null)
+        edtGuide.setText(guide_charge);
 
         TextView txtSave = charge1Dialog.findViewById(R.id.duty_slip_charge1_save);
         txtSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                charge1Dialog.dismiss();
+                beverages_charges = edtBeverage.getText().toString().trim();
+                entrance_charge = edtEntrance.getText().toString().trim();
+                driver_ta = edtDTA.getText().toString().trim();
+                guide_charge = edtGuide.getText().toString().trim();
+                saveMis2();
+               // charge1Dialog.dismiss();
             }
         });
 
@@ -233,6 +355,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         charge2Dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         charge2Dialog.show();
         LinearLayout linearLayout = charge2Dialog.findViewById(R.id.duty_slip_charge2_cross);
+
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -240,20 +363,45 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             }
         });
 
+        final EditText edtNight = charge2Dialog.findViewById(R.id.duty_slip_charge2_edt_night);
+        final EditText edtEToll = charge2Dialog.findViewById(R.id.duty_slip_charge2_edt_e_toll);
+        final EditText edtParking = charge2Dialog.findViewById(R.id.duty_slip_charge2_edt_parking);
+        final EditText edttoll = charge2Dialog.findViewById(R.id.duty_slip_charge2_edt_toll);
+        final EditText edtinterstate = charge2Dialog.findViewById(R.id.duty_slip_charge2_edt_entrance);
+        final EditText edtOther = charge2Dialog.findViewById(R.id.duty_slip_charge2_edt_other);
+
+        if (e_toll!=null)
+            edtEToll.setText(e_toll);
+        if (night_halt!=null)
+            edtNight.setText(night_halt);
+        if (parking!=null)
+            edtParking.setText(parking);
+        if (toll!=null)
+            edttoll.setText(toll);
+        if (interstate_tax!=null)
+            edtinterstate.setText(interstate_tax);
+        if (others!=null)
+            edtOther.setText(others);
+
         TextView txtSave = charge2Dialog.findViewById(R.id.duty_slip_charge2_save);
         txtSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                charge2Dialog.dismiss();
+
+                e_toll = edtEToll.getText().toString().trim();
+                night_halt = edtNight.getText().toString().trim();
+                parking = edtParking.getText().toString().trim();
+                toll = edttoll.getText().toString().trim();
+                interstate_tax = edtinterstate.getText().toString().trim();
+                others = edtOther.getText().toString().trim();
+                saveMis1();
+                //charge2Dialog.dismiss();
             }
         });
     }
 
-    private ProgressDialog progressDialog;
     private void fetchDetails(final String reservationId) {
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+        new Utility().showProgressDialog(getContext());
 
         Call<ViewDetailsData> call = APIClient.getInstance().getApiInterface().job_details(reservationId);
         call.request().url();
@@ -261,70 +409,193 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         new ResponseListner(this,getContext()).getResponse( call);
     }
 
-    private ViewDetailsData viewDetailsData;
-
     @Override
     public void onApiResponse(Object response) {
-        progressDialog.dismiss();
+       new Utility().hideDialog();
         main_Layout.setVisibility(View.VISIBLE);
         if (response!=null){
-            viewDetailsData = new ViewDetailsData();
-            viewDetailsData= (ViewDetailsData) response;
-            if (viewDetailsData.getJob_detail()!=null){
-                if (viewDetailsData.getJob_detail().getVehiclerequest()!=null)
-                    txtVehicleReq.setText(viewDetailsData.getJob_detail().getVehiclerequest());
-                if (viewDetailsData.getJob_detail().get_$CompanyName59()!=null){
-                    txtCompanyName.setText(viewDetailsData.getJob_detail().get_$CompanyName59());
-                    txtCompName2.setText(viewDetailsData.getJob_detail().get_$CompanyName59());
-                }
-
+            if (response instanceof ViewDetailsData){
+                ViewDetailsData viewDetailsData = new ViewDetailsData();
+                viewDetailsData = (ViewDetailsData) response;
+                if (viewDetailsData.getJob_detail()!=null){
+                    if (viewDetailsData.getJob_detail().getVehiclerequest()!=null)
+                        txtVehicleReq.setText(viewDetailsData.getJob_detail().getVehiclerequest());
+                    if (viewDetailsData.getJob_detail().get_$CompanyName59()!=null){
+                        txtCompanyName.setText(viewDetailsData.getJob_detail().get_$CompanyName59());
+                        txtCompName2.setText(viewDetailsData.getJob_detail().get_$CompanyName59());
+                    }
+                    if (viewDetailsData.getJob_detail().getDutyslipnum()!=null)
+                        dutyslipnum = viewDetailsData.getJob_detail().getDutyslipnum();
 //            txtCompFax.setText(viewDetailsData.getJob_detail().getVehiclerequest());
 //            txtCompMobile.setText(viewDetailsData.getJob_detail().getVehiclerequest());
 //            txtCompEmail.setText(viewDetailsData.getJob_detail().getVehiclerequest());
 //            txtComapAdd.setText(viewDetailsData.getJob_detail().getVehiclerequest());
-                if (viewDetailsData.getJob_detail().getDetails()!=null)
-                    txtDetails.setText(viewDetailsData.getJob_detail().getDetails());
-                if (viewDetailsData.getJob_detail().getBookername()!=null)
-                    txtBookedName.setText(viewDetailsData.getJob_detail().getBookername());
-                if (viewDetailsData.getJob_detail().getAssignment()!=null)
-                    txtAssignment.setText(viewDetailsData.getJob_detail().getAssignment());
-                if (viewDetailsData.getJob_detail().get_$CityOfUsage184()!=null)
-                    txtcity.setText(viewDetailsData.getJob_detail().get_$CityOfUsage184());
-                if (viewDetailsData.getJob_detail().getPaymentmode()!=null)
-                    txtPaymentMode.setText(viewDetailsData.getJob_detail().getPaymentmode());
-                if (viewDetailsData.getJob_detail().getReportingPlace()!=null)
-                    txtReportPlace.setText(viewDetailsData.getJob_detail().getReportingPlace());
-                if (viewDetailsData.getJob_detail().getBookercontactno()!=null)
-                    txtBookerNo.setText(viewDetailsData.getJob_detail().getBookercontactno());
-                if (viewDetailsData.getJob_detail().getBookername()!=null)
-                    txtUserName.setText(viewDetailsData.getJob_detail().getBookername());
-                if (viewDetailsData.getJob_detail().getDrivername()!=null)
-                    txtDriverDetail.setText(viewDetailsData.getJob_detail().getDrivername());
-                if (viewDetailsData.getJob_detail().getStarting_date()!=null)
-                    txtStartingDate.setText(viewDetailsData.getJob_detail().getStarting_date());
-                if (viewDetailsData.getJob_detail().getEnding_date()!=null)
-                    txtEdndingDate.setText(viewDetailsData.getJob_detail().getEnding_date());
+                    if (viewDetailsData.getJob_detail().getDetails()!=null)
+                        txtDetails.setText(viewDetailsData.getJob_detail().getDetails());
+                    if (viewDetailsData.getJob_detail().getBookername()!=null)
+                        txtBookedName.setText(viewDetailsData.getJob_detail().getBookername());
+                    if (viewDetailsData.getJob_detail().getAssignment()!=null)
+                        txtAssignment.setText(viewDetailsData.getJob_detail().getAssignment());
+                    if (viewDetailsData.getJob_detail().get_$CityOfUsage184()!=null)
+                        txtcity.setText(viewDetailsData.getJob_detail().get_$CityOfUsage184());
+                    if (viewDetailsData.getJob_detail().getPaymentmode()!=null)
+                        txtPaymentMode.setText(viewDetailsData.getJob_detail().getPaymentmode());
+                    if (viewDetailsData.getJob_detail().getReportingPlace()!=null)
+                        txtReportPlace.setText(viewDetailsData.getJob_detail().getReportingPlace());
+                    if (viewDetailsData.getJob_detail().getBookercontactno()!=null)
+                        txtBookerNo.setText(viewDetailsData.getJob_detail().getBookercontactno());
+                    if (viewDetailsData.getJob_detail().getBookername()!=null)
+                        txtUserName.setText(viewDetailsData.getJob_detail().getBookername());
+                    if (viewDetailsData.getJob_detail().getDrivername()!=null)
+                        txtDriverDetail.setText(viewDetailsData.getJob_detail().getDrivername());
+                    if (viewDetailsData.getJob_detail().getStarting_date()!=null &&
+                            !viewDetailsData.getJob_detail().getStarting_date().equals("0000-00-00")){
+                        starting_date = viewDetailsData.getJob_detail().getStarting_date();
+                        txtStartingDate.setText(viewDetailsData.getJob_detail().getStarting_date());
+                    } else {
+                        txtStartingDate.setText(viewDetailsData.getJob_detail().getReportingfrom());
+                    }
+                    if (viewDetailsData.getJob_detail().getEnding_date()!=null){
+                        ending_date = viewDetailsData.getJob_detail().getEnding_date();
+                        txtEdndingDate.setText(viewDetailsData.getJob_detail().getEnding_date());
+                    } else {
+                        txtEdndingDate.setText(viewDetailsData.getJob_detail().getReporingto());
+                    }
+                    if (viewDetailsData.getJob_detail().getStarting_meter()!=null)
+                        starting_meter = viewDetailsData.getJob_detail().getStarting_meter();
+                    title1ListValue.add(starting_meter);
+                    if (viewDetailsData.getJob_detail().getReporting_meter()!=null)
+                        reporting_meter = viewDetailsData.getJob_detail().getReporting_meter();
+                    title1ListValue.add(reporting_meter);
+                    if (viewDetailsData.getJob_detail().getEnding_meter()!=null)
+                        ending_meter = viewDetailsData.getJob_detail().getEnding_meter();
+                    title1ListValue.add(ending_meter);
+                    if (viewDetailsData.getJob_detail().getMeter_at_garage()!=null)
+                        meter_at_garage = viewDetailsData.getJob_detail().getMeter_at_garage();
+                    title1ListValue.add(meter_at_garage);
+                    if (viewDetailsData.getJob_detail().getTotal_meter()!=null)
+                        total_meter = viewDetailsData.getJob_detail().getTotal_meter();
+                    title1ListValue.add(total_meter);
+                    if (viewDetailsData.getJob_detail().getStarting_time()!=null)
+                        starting_time = viewDetailsData.getJob_detail().getStarting_time();
+                    title2ListValue.add(starting_time);
+                    if (viewDetailsData.getJob_detail().getReporingtime()!=null)
+                        reporting_time = viewDetailsData.getJob_detail().getReporting_time();
+                    title2ListValue.add(reporting_time);
+                    if (viewDetailsData.getJob_detail().getEnding_time()!=null)
+                        ending_time = viewDetailsData.getJob_detail().getEnding_time();
+                    title2ListValue.add(ending_time);
+                    if (viewDetailsData.getJob_detail().getTime_at_garage()!=null)
+                        time_at_garage = viewDetailsData.getJob_detail().getTime_at_garage();
+                    title2ListValue.add(time_at_garage);
+                    if (viewDetailsData.getJob_detail().getTotal_time()!=null)
+                        total_time = viewDetailsData.getJob_detail().getTotal_time();
+                    title2ListValue.add(total_time);
+                    /**
+                     * night_halt : null
+                     * toll : null
+                     * parking : null
+                     * e_toll : null
+                     * interstate_tax : null
+                     * others : null
+                     */
 
-                title1ListValue.add(viewDetailsData.getJob_detail().getStarting_meter());
-                title1ListValue.add(viewDetailsData.getJob_detail().getReporting_meter());
-                title1ListValue.add(viewDetailsData.getJob_detail().getEnding_meter());
-                title1ListValue.add(viewDetailsData.getJob_detail().getMeter_at_garage());
-                title1ListValue.add(viewDetailsData.getJob_detail().getTotal_meter());
-                title2ListValue.add(viewDetailsData.getJob_detail().getStarting_time());
-                title2ListValue.add(viewDetailsData.getJob_detail().getReporingtime());
-                title2ListValue.add(viewDetailsData.getJob_detail().getEnding_time());
-                title2ListValue.add(viewDetailsData.getJob_detail().getTime_at_garage());
-                title2ListValue.add(viewDetailsData.getJob_detail().getTotal_time());
-                setAdapter(title2ListValue,title1ListValue);
+                    if (viewDetailsData.getJob_detail().getMisc_charges1().getNight_halt()!=null){
+                        night_halt = viewDetailsData.getJob_detail().getMisc_charges1().getNight_halt()+"";
+                    }
+                    if (viewDetailsData.getJob_detail().getMisc_charges1().getE_toll()!=null){
+                        e_toll = viewDetailsData.getJob_detail().getMisc_charges1().getE_toll()+"";
+                    }
+                    if (viewDetailsData.getJob_detail().getMisc_charges1().getInterstate_tax()!=null){
+                        interstate_tax = viewDetailsData.getJob_detail().getMisc_charges1().getInterstate_tax()+"";
+                    }
+                    if (viewDetailsData.getJob_detail().getMisc_charges1().getToll()!=null){
+                        toll = viewDetailsData.getJob_detail().getMisc_charges1().getToll()+"";
+                    }
+                    if (viewDetailsData.getJob_detail().getMisc_charges1().getOthers()!=null){
+                        others = viewDetailsData.getJob_detail().getMisc_charges1().getOthers()+"";
+                    }
+                    if (viewDetailsData.getJob_detail().getMisc_charges1().getNight_halt()!=null){
+                        others = viewDetailsData.getJob_detail().getMisc_charges1().getNight_halt()+"";
+                    }
 
+                     /**
+                     * beverage_charge : null
+                     * entrance_charge : null
+                     * parking : null
+                     * driver_ta : null
+                     */
+
+                    if (viewDetailsData.getJob_detail().getMisc_charges2().getBeverage_charge()!=null){
+                        beverages_charges = viewDetailsData.getJob_detail().getMisc_charges2().getBeverage_charge()+"";
+                    }
+                    if (viewDetailsData.getJob_detail().getMisc_charges2().getBeverage_charge()!=null){
+                        entrance_charge = viewDetailsData.getJob_detail().getMisc_charges2().getEntrance_charge()+"";
+                    }
+                    if (viewDetailsData.getJob_detail().getMisc_charges2().getBeverage_charge()!=null){
+                        guide_charge = viewDetailsData.getJob_detail().getMisc_charges2().getParking()+"";
+                    }
+                    if (viewDetailsData.getJob_detail().getMisc_charges1().getParking()!=null){
+                        parking = viewDetailsData.getJob_detail().getMisc_charges1().getParking()+"";
+                    }
+                    if (viewDetailsData.getJob_detail().getMisc_charges2().getBeverage_charge()!=null){
+                        driver_ta = viewDetailsData.getJob_detail().getMisc_charges2().getDriver_ta()+"";
+                    }
+
+                    setAdapter(title2ListValue,title1ListValue);
+                }
+            } else if (response instanceof SaveResponse){
+                SaveResponse saveResponse = (SaveResponse) response;
+                if (saveResponse.getStatus().equals("1")){
+                    Utility.showToast(getContext(), "Saved successfully...");
+                    if (charge1Dialog!=null)
+                        charge1Dialog.dismiss();
+                    if (charge2Dialog!=null)
+                        charge2Dialog.dismiss();
+                } else {
+                    Utility.showToast(getContext(),getContext().getResources().getString(R.string.error));
+                }
             }
+
+        } else {
+            Utility.showToast(getContext(),getResources().getString(R.string.error));
         }
     }
 
     @Override
     public void onApiFailure(String message) {
         Utility.showToast(getContext(),getContext().getResources().getString(R.string.error));
-        progressDialog.dismiss();
+        new Utility().hideDialog();
+    }
+
+    private void saveDutySlip(){
+        new Utility().showProgressDialog(getContext());
+
+        Call<SaveResponse> call = APIClient.getInstance().getApiInterface().saveDutySlip(dutyslipnum,starting_date,ending_date,
+                starting_meter,reporting_meter,starting_time,reporting_time,ending_meter,ending_time,
+                meter_at_garage,time_at_garage,total_meter,total_time);
+        call.request().url();
+        Log.d("TAG", "rakhi: "+call.request().url());
+        new ResponseListner(this,getContext()).getResponse( call);
+    }
+
+
+    private void saveMis1(){
+        new Utility().showProgressDialog(getContext());
+        Call<SaveResponse> call = APIClient.getInstance().getApiInterface().saveMis1(dutyslipnum,night_halt,
+                toll,parking,e_toll,interstate_tax,others);
+        call.request().url();
+        Log.d("TAG", "rakhi: "+call.request().url());
+        new ResponseListner(this,getContext()).getResponse( call);
+    }
+
+    private void saveMis2(){
+        new Utility().showProgressDialog(getContext());
+        Call<SaveResponse> call = APIClient.getInstance().getApiInterface().saveMis2(dutyslipnum,beverages_charges,
+                entrance_charge,guide_charge,driver_ta);
+        call.request().url();
+        Log.d("TAG", "rakhi: "+call.request().url());
+        new ResponseListner(this,getContext()).getResponse( call);
     }
 
 }

@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import com.ktcdriver.R;
 import com.ktcdriver.activities.home.HomeActivity;
 import com.ktcdriver.model.LoginResponse;
+import com.ktcdriver.model.NewUserResponse;
 import com.ktcdriver.service.Config;
 import com.ktcdriver.utils.AppbaseActivity;
 import com.ktcdriver.utils.Utility;
@@ -77,7 +78,7 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
                 }
             }
         };
-        displayFirebaseRegId();
+     displayFirebaseRegId();
         checkSelfPermission();
 
         init();
@@ -89,14 +90,14 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
         String regId = pref.getString("regId", null);
 
+        Toast.makeText(this, regId + "", Toast.LENGTH_SHORT).show();
         Log.e(TAG, "Firebase reg id: " + regId);
 
         if (!TextUtils.isEmpty(regId))
             token = regId;
         else{
-
+           // Utility.showToast(getApplicationContext(),"Token not generated");
         }
-           // txtRegId.setText("Firebase Reg Id is not received yet!");
     }
 
     private final int PERMISSION_READ_PHONE_STATE = 1;
@@ -191,15 +192,15 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
         Call<LoginResponse> call = APIClient.getInstance().getApiInterface().getLoginDetails(driverId,pass);
         call.request().url();
         Log.d("TAG", "rakhi: "+call.request().url());
+
         new ResponseListner(this,getApplicationContext()).getResponse( call);
     }
 
     private void registerNewUser(String imei, String token,  String driverId){
-        new Utility().showProgressDialog(getApplicationContext());
-
-        Call<LoginResponse> call = APIClient.getInstance().getApiInterface().registerNewUser(driverId,imei,token);
+        new Utility().showProgressDialog(LoginActivity.this);
+        Call<NewUserResponse> call = APIClient.getInstance().getApiInterface().registerNewUser(driverId,imei,token);
         call.request().url();
-        Log.d("TAG", "rakhi: "+call.request().url());
+        Log.d("TAG", "rakhi: " + call.request().url());
         new ResponseListner(this,getApplicationContext()).getResponse( call);
     }
 
@@ -213,13 +214,23 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
                     tinyDB.putString("password",pass);
                     tinyDB.putString("driver_id",driverId);
                     tinyDB.putString("login_data",new Gson().toJson(loginResponse));
-                    Utility.showToast(getApplicationContext(),"Login successfully");
-                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    registerNewUser(imei,token,driverId);
                 }
                 else if (loginResponse.getStatus().equals("0")){
                     Utility.showToast(getApplicationContext(),loginResponse.getMessage());
                 }
+            } else if (response instanceof NewUserResponse){
+                new Utility().hideDialog();
+                NewUserResponse newUserResponse = (NewUserResponse) response;
+                if (newUserResponse.getResponse().get(0).getResponse().equals("Success")){
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    finish();
+                } else {
+                    Utility.showToast(getApplicationContext(),getResources().getString(R.string.error));
+                }
             }
+        } else {
+            Utility.showToast(getApplicationContext(),getResources().getString(R.string.error));
         }
     }
 
@@ -228,7 +239,7 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
         new Utility().hideDialog();
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint({"MissingPermission", "HardwareIds"})
     public String getDeviceIMEI() {
         String deviceUniqueIdentifier = null;
         TelephonyManager tm = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
@@ -238,6 +249,7 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
         if (null == deviceUniqueIdentifier || 0 == deviceUniqueIdentifier.length()) {
             deviceUniqueIdentifier = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         }
+        Log.d(TAG, "getDeviceIMEI: "+deviceUniqueIdentifier);
         return deviceUniqueIdentifier;
     }
 

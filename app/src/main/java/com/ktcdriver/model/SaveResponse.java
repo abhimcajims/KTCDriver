@@ -1,14 +1,17 @@
 package com.ktcdriver.model;
 
 /**
- * Created by Rakhi on 10/15/2018.
+ * Created by Rakhi on 10/24/2018.
  */
-public class ApiResponse {
+public class SaveResponse {
+
+    /**
+     * status : 1
+     * message : Successful.
+     */
 
     private String status;
     private String message;
-    public LoginResponse loginResponse;
-
 
     public String getStatus() {
         return status;

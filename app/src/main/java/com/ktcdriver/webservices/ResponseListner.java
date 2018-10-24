@@ -18,10 +18,9 @@ public class ResponseListner {
         this.context = context;
     }
 
-    public void getResponse( Call call) {
+    public void getResponse(Call call) {
 
         call.enqueue(new Callback() {
-
             @Override
             public void onResponse(Call call, Response response) {
                 message = response.message();
@@ -33,7 +32,6 @@ public class ResponseListner {
                 onResponseInterface.onApiFailure(message);
             }
         });
-
     }
 
     public void getResponse1(Activity context, Call call) {
@@ -57,4 +55,6 @@ public class ResponseListner {
         });
 
     }
+
+
 }

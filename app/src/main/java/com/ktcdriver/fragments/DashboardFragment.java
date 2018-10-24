@@ -47,7 +47,6 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Dash
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -78,11 +77,8 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Dash
         recyclerView.setAdapter(dashboardAdapter);
     }
 
-    private ProgressDialog progressDialog;
     private void fetchLoginData(final String driverId, String pass) {
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+        new Utility().showProgressDialog(getContext());
         Call<LoginResponse> call = APIClient.getInstance().getApiInterface().getLoginDetails(driverId,pass);
         call.request().url();
         Log.d("TAG", "fetchLoginData: "+call.request().url());
@@ -117,31 +113,29 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Dash
                 fm.popBackStack();
             }
         }
-
     }
 
     @Override
     public void onApiResponse(Object response) {
         jobListBeans = new ArrayList<>();
-        progressDialog.dismiss();
+        new Utility().hideDialog();
         if (response!=null){
             LoginResponse loginResponse = (LoginResponse) response;
             if (loginResponse.getStatus().equals("1")){
-                tinyDB.putString("password",pass);
-                tinyDB.putString("driver_id",driverId);
-                tinyDB.putString("login_data",new Gson().toJson(loginResponse));
                 jobListBeans = loginResponse.getJob_list();
                 setDashboardAdapter();
             }
             else if (loginResponse.getStatus().equals("0")){
                 Utility.showToast(getActivity(),loginResponse.getMessage());
             }
+        } else {
+            Utility.showToast(getContext(),getResources().getString(R.string.error));
         }
     }
 
     @Override
     public void onApiFailure(String message) {
+        new Utility().hideDialog();
         Utility.showToast(getContext(),getContext().getResources().getString(R.string.error));
-        progressDialog.dismiss();
     }
 }

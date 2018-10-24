@@ -44,6 +44,7 @@
                     android:layout_height="35dp"
                     android:padding="10dp"
                     android:textSize="@dimen/size_12"
+                    android:id="@+id/duty_slip_charge2_edt_night"
                     android:singleLine="true"
                     android:background="@drawable/edittext_bg" />
 
@@ -60,6 +61,7 @@
                     android:padding="10dp"
                     android:textSize="@dimen/size_12"
                     android:singleLine="true"
+                    android:id="@+id/duty_slip_charge2_edt_toll"
                     android:background="@drawable/edittext_bg" />
 
                 <com.ktcdriver.customtext.CustomTextView
@@ -75,6 +77,7 @@
                     android:padding="10dp"
                     android:textSize="@dimen/size_12"
                     android:singleLine="true"
+                    android:id="@+id/duty_slip_charge2_edt_parking"
                     android:background="@drawable/edittext_bg" />
 
                 <com.ktcdriver.customtext.CustomTextView
@@ -90,12 +93,14 @@
                     android:padding="10dp"
                     android:textSize="@dimen/size_12"
                     android:singleLine="true"
+                    android:id="@+id/duty_slip_charge2_edt_e_toll"
                     android:background="@drawable/edittext_bg" />
 
                 <com.ktcdriver.customtext.CustomTextView
-                    android:text="Entrance Tax"
+                    android:text="Interstate Tax"
                     android:layout_width="wrap_content"
                     android:padding="5dp"
+                    android:textSize="@dimen/size_12"
                     android:layout_height="wrap_content" />
 
                 <com.ktcdriver.customtext.CustomEditText
@@ -103,6 +108,7 @@
                     android:layout_height="35dp"
                     android:padding="10dp"
                     android:textSize="@dimen/size_12"
+                    android:id="@+id/duty_slip_charge2_edt_entrance"
                     android:singleLine="true"
                     android:background="@drawable/edittext_bg" />
 
@@ -119,6 +125,7 @@
                     android:padding="10dp"
                     android:textSize="@dimen/size_12"
                     android:singleLine="true"
+                    android:id="@+id/duty_slip_charge2_edt_other"
                     android:background="@drawable/edittext_bg" />
 
                 <com.ktcdriver.customtext.CustomTextView
