@@ -25,7 +25,18 @@
                 android:text="Ratings"
                 android:textSize="@dimen/size_16"
                 android:padding="10dp" />
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rating="0"
+                android:scaleY=".7"
+                android:scaleX=".7"
+                android:id="@+id/fragment_feedback_rating"
+                android:theme="@style/AppThemeRatingBar"/>
+
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -57,14 +68,6 @@
                     android:src="@drawable/ic_star_b"/>
 
             </LinearLayout>
-            <RatingBar
-                android:visibility="gone"
-                android:paddingLeft="10dp"
-                android:id="@+id/ratingBar1"
-                style="@style/foodRatingBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </RatingBar>
 
             <View
                 android:layout_width="match_parent"
@@ -86,6 +89,7 @@
                 android:layout_height="100dp"
                 android:layout_margin="10dp"
                 android:textSize="@dimen/size_12"
+                android:id="@+id/fragment_feedback_edtMsg"
                 android:background="@drawable/duty_slip_bg"/>
 
             <View

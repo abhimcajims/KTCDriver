@@ -20,9 +20,9 @@ public class APIClient {
 
     private APIClient() {
         OkHttpClient client =new OkHttpClient.Builder()
-                .writeTimeout(10000, TimeUnit.SECONDS)
-                .readTimeout(10000,TimeUnit.SECONDS)
-                .connectTimeout(10000,TimeUnit.SECONDS)
+                .writeTimeout(5000, TimeUnit.SECONDS)
+                .readTimeout(5000,TimeUnit.SECONDS)
+                .connectTimeout(5000,TimeUnit.SECONDS)
                 .addInterceptor(new Interceptor() {
                     @Override
                     public Response intercept(Chain chain) throws IOException {

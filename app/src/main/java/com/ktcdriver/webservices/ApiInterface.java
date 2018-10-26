@@ -53,7 +53,6 @@ public interface ApiInterface {
                                    @Field("interstate_tax")String interstate_tax,
                                    @Field("others")String others);
 
-
     @FormUrlEncoded
     @POST("misc_charge2.php")
     Call<SaveResponse> saveMis2(@Field("dutyslipnum")String dutyslipnum,
@@ -62,4 +61,10 @@ public interface ApiInterface {
                                    @Field("guide_charge")String guide_charge,
                                    @Field("driver_ta")String driver_ta);
 
+    @FormUrlEncoded
+    @POST("end_job.php")
+    Call<SaveResponse> sendFeedback(@Field("dutyslipnum")String dutyslipnum,
+                                @Field("signature")String signature,
+                                @Field("rating")String rating,
+                                @Field("duty_remarks")String duty_remarks);
 }

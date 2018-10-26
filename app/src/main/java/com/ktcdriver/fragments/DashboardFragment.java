@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -41,6 +42,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Dash
     private DashboardAdapter dashboardAdapter;
     private TinyDB tinyDB;
     private String driverId, pass;
+    private LinearLayout  no_recordLayout;
     private List<LoginResponse.JobListBean>jobListBeans;
 
     public DashboardFragment() {
@@ -63,7 +65,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Dash
     private void init(){
         tinyDB = new TinyDB(getContext());
         recyclerView = getView().findViewById(R.id.fragment_dashboard_recycler);
-
+        no_recordLayout = getView().findViewById(R.id.fragment_dashboard_no_record);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(linearLayoutManager);
         driverId = tinyDB.getString("driver_id");
@@ -107,12 +109,6 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Dash
             }
         });
 
-        if (getActivity().getSupportFragmentManager()!=null){
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-                fm.popBackStack();
-            }
-        }
     }
 
     @Override
@@ -123,7 +119,13 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Dash
             LoginResponse loginResponse = (LoginResponse) response;
             if (loginResponse.getStatus().equals("1")){
                 jobListBeans = loginResponse.getJob_list();
-                setDashboardAdapter();
+                if (jobListBeans.size()>0){
+                    no_recordLayout.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    setDashboardAdapter();
+                } else {
+                    no_recordLayout.setVisibility(View.VISIBLE);
+                }
             }
             else if (loginResponse.getStatus().equals("0")){
                 Utility.showToast(getActivity(),loginResponse.getMessage());

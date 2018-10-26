@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/top_bg_round"
+    android:layout_margin="20dp">
+
+    <com.ktcdriver.customtext.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textColor="@color/colorBlack"
+        android:text="Are you sure, want to close your duty ?"/>
+
+
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <com.ktcdriver.customtext.CustomTextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="OK"
+            android:id="@+id/dialog_end_meter_confim_ok"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="15dp"
+            android:background="@drawable/button_bg"
+            android:textColor="@color/colorWhite"/>
+
+        <com.ktcdriver.customtext.CustomTextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:id="@+id/dialog_end_meter_confim_cancel"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="15dp"
+            android:background="@drawable/button_grey_bg"
+            android:textColor="@color/colorWhite"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -17,4 +17,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="error">Sorry, we are facing some connectivity error, please try again or report us.</string>
+    <string name="duty_has_been_closed_please_make_sure_to_enter_meter_reading_at_garrage_to_complete_job">Duty has been closed , Please make sure to enter meter reading at Garrage to complete job.</string>
 </resources>

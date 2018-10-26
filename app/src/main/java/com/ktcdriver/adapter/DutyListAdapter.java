@@ -14,10 +14,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ktcdriver.R;
-
 import java.util.ArrayList;
 
 /**
@@ -30,15 +28,19 @@ public class DutyListAdapter extends RecyclerView.Adapter<DutyListAdapter.MyView
     private ArrayList<String>title1List;
     private ArrayList<String> title2ListValue;
     private ArrayList<String>title1ListValue;
+    private boolean isEndMeter, isEndTime;
 
     public DutyListAdapter(Context context, DutyListInterface dashboardInterface, ArrayList<String> title2List,
-                           ArrayList<String> title1List, ArrayList<String> title2ListValue, ArrayList<String> title1ListValue) {
+                           ArrayList<String> title1List, ArrayList<String> title2ListValue,
+                           ArrayList<String> title1ListValue, boolean isEndMeter, boolean isEndTime) {
         this.context = context;
         this.dashboardInterface = dashboardInterface;
         this.title2List = title2List;
         this.title1List = title1List;
         this.title2ListValue = title2ListValue;
         this.title1ListValue = title1ListValue;
+        this.isEndMeter = isEndMeter;
+        this.isEndTime = isEndTime;
     }
 
     public interface  DutyListInterface{
@@ -63,7 +65,31 @@ public class DutyListAdapter extends RecyclerView.Adapter<DutyListAdapter.MyView
         myViewHolder.edtValue.setText(title1ListValue.get(i));
         if (title2ListValue.get(i)!=null)
         myViewHolder.txtTime.setText(title2ListValue.get(i));
+        if (isEndMeter && isEndTime){
+            if (i<3){
+                for (i=0;i<3;i++){
+                    myViewHolder. edtValue.setEnabled(false);
+                    myViewHolder.imgClock.setClickable(false);
+                }
+            }
+            else {
+                if (i==4){
+                    myViewHolder. edtValue.setEnabled(false);
+                    myViewHolder.imgClock.setClickable(false);
+                }else {
+                    myViewHolder.edtValue.setEnabled(true);
+                    myViewHolder.imgClock.setClickable(true);
+                }
+            }
+        } else {
+
+                myViewHolder.edtValue.setEnabled(true);
+                myViewHolder.imgClock.setClickable(true);
+        }
+
     }
+
+
 
     @Override
     public int getItemViewType(int position) {
@@ -87,6 +113,8 @@ public class DutyListAdapter extends RecyclerView.Adapter<DutyListAdapter.MyView
             edtValue = itemView.findViewById(R.id.item_duty_slip_edt);
             txtTime = itemView.findViewById(R.id.item_duty_cal_value);
             imgClock = itemView.findViewById(R.id.item_duty_slip_img_clock);
+
+
             edtValue.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -97,6 +125,7 @@ public class DutyListAdapter extends RecyclerView.Adapter<DutyListAdapter.MyView
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     String s = charSequence.toString();
                     Log.d("TAG", "onTextChanged: "+s);
+
                     dashboardInterface.onTextChanged(getAdapterPosition(), edtValue.getText().toString().trim());
                 }
 

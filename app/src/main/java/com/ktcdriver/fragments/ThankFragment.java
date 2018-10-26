@@ -18,7 +18,7 @@ import com.ktcdriver.utils.Utility;
  * A simple {@link Fragment} subclass.
  */
 public class ThankFragment extends Fragment implements View.OnClickListener{
-    private TextView txtNextDuty;
+    private TextView txtNextDuty,txtDesc;
 
     public ThankFragment() {
         // Required empty public constructor
@@ -40,6 +40,9 @@ public class ThankFragment extends Fragment implements View.OnClickListener{
 
     private void init() {
         txtNextDuty = getView().findViewById(R.id.fragment_thank_txt_next_Duty);
+        txtDesc = getView().findViewById(R.id.fragment_thank_txt);
+
+        txtDesc.setText("Your Duty No "+DutySlipFragment.dutyslipnum+" has been completed.Please go for");
 
         txtNextDuty.setOnClickListener(this);
     }

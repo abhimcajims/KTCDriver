@@ -20,4 +20,10 @@
         <item name="android:progressDrawable">@drawable/food_rating_bar_full</item>
         <item name="android:minHeight">23dip</item>
         <item name="android:maxHeight">25dip</item>
-    </style></resources>
+    </style>
+    <style name="AppThemeRatingBar" parent="Theme.AppCompat">
+        <item name="colorAccent">#eacb00</item>
+        <item name="android:colorControlNormal">#9f9f9d</item>
+    </style>
+
+</resources>

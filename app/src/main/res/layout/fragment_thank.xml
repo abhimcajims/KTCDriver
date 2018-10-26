@@ -28,6 +28,7 @@
         android:gravity="center"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:id="@+id/fragment_thank_txt"
         android:text="Your Duty No 232332 has been completed. Please go for"
         android:textColor="@color/colorBlack"
         android:layout_width="wrap_content"
