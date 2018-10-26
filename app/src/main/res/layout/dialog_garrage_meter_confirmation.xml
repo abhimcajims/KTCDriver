@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:textColor="@color/colorBlack"
-        android:text="Are you sure, want to close your duty ?"/>
+        android:text="@string/duty_has_been_closed_please_make_sure_to_enter_meter_reading_at_garrage_to_complete_job"/>
 
 
     <LinearLayout

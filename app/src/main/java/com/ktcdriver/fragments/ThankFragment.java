@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,8 +68,14 @@ public class ThankFragment extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.fragment_thank_txt_next_Duty:
-                new Utility().callFragment(new DashboardFragment(),getFragmentManager(),R.id.fragment_container,DashboardFragment.class.getName());
+
+//                getFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
+                Log.d("TAG", "onClick: "+getFragmentManager().getBackStackEntryCount());
+
+                getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 break;
         }
     }
+
+
 }

@@ -3,11 +3,13 @@ package com.ktcdriver.utils;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Base64;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.ktcdriver.R;
 import com.ktcdriver.activities.setup.LoginActivity;
 
+import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.util.regex.Pattern;
 
@@ -36,9 +39,17 @@ public class Utility {
         return false;
     }
 
-    public static boolean isValidMobile(String phone) {
-        return android.util.Patterns.PHONE.matcher(phone).matches();
+    public static String BitMapToString(Bitmap bitmap){
+        String temp="";
+        if(bitmap!=null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100, baos);
+            byte[] b = baos.toByteArray();
+            temp = Base64.encodeToString(b, Base64.DEFAULT);
+        }
+        return temp;
     }
+
 
     private static ProgressDialog progressDialog;
     public void showProgressDialog(Context context){

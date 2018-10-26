@@ -837,9 +837,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 saveDutySlip();
             }
         });
-
     }
-
-
 
 }

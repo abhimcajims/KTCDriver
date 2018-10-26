@@ -4,138 +4,151 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:focusableInTouchMode="false"
     android:background="@color/colorBg"
     tools:context=".fragments.FeedbackFragment">
 
+<!--
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp">
 
-        <LinearLayout
-            android:focusableInTouchMode="false"
+
+    </ScrollView>
+-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:background="@drawable/top_bg">
+        <com.ktcdriver.customtext.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:background="@drawable/top_bg">
-            <com.ktcdriver.customtext.CustomTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ratings"
-                android:textSize="@dimen/size_16"
-                android:padding="10dp" />
+            android:text="Ratings"
+            android:textSize="@dimen/size_16"
+            android:padding="10dp" />
 
-            <RatingBar
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rating="0"
+            android:scaleY=".7"
+            android:scaleX=".7"
+            android:id="@+id/fragment_feedback_rating"
+            android:theme="@style/AppThemeRatingBar"/>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_marginLeft="3dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:rating="0"
-                android:scaleY=".7"
-                android:scaleX=".7"
-                android:id="@+id/fragment_feedback_rating"
-                android:theme="@style/AppThemeRatingBar"/>
-
-            <LinearLayout
-                android:visibility="gone"
-                android:layout_width="match_parent"
+                android:src="@drawable/ic_star"/>
+            <ImageView
+                android:layout_marginLeft="3dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_marginLeft="3dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star"/>
-                <ImageView
-                    android:layout_marginLeft="3dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star"/>
+                android:src="@drawable/ic_star"/>
 
-                <ImageView
-                    android:layout_marginLeft="3dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star"/>
-                <ImageView
-                    android:layout_marginLeft="3dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star_b"/>
-                <ImageView
-                    android:layout_marginLeft="3dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star_b"/>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@color/colorDarkGrey"/>
-
-            <com.ktcdriver.customtext.CustomTextView
-                android:layout_width="match_parent"
+            <ImageView
+                android:layout_marginLeft="3dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Remarks(Optionals)"
-                android:textSize="@dimen/size_16"
-                android:padding="10dp" />
-
-            <com.ktcdriver.customtext.CustomEditText
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="10dp"
-                android:textSize="@dimen/size_12"
-                android:id="@+id/fragment_feedback_edtMsg"
-                android:background="@drawable/duty_slip_bg"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@color/colorDarkGrey"/>
-            <com.ktcdriver.customtext.CustomTextView
-                android:layout_width="match_parent"
+                android:src="@drawable/ic_star"/>
+            <ImageView
+                android:layout_marginLeft="3dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Signature"
-                android:textSize="@dimen/size_16"
-                android:padding="10dp" />
-
-            <com.ktcdriver.customtext.CustomEditText
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="10dp"
-                android:textSize="@dimen/size_12"
-                android:background="@drawable/duty_slip_bg"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@color/colorDarkGrey"/>
-
-            <com.ktcdriver.customtext.CustomTextViewBold
-                android:layout_width="match_parent"
+                android:src="@drawable/ic_star_b"/>
+            <ImageView
+                android:layout_marginLeft="3dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Submit"
-                android:id="@+id/fragment_feedback_submit"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:textColor="@color/colorWhite"
-                android:background="@drawable/button_bg"
-                android:padding="15dp" />
-
+                android:src="@drawable/ic_star_b"/>
 
         </LinearLayout>
 
-    </ScrollView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/colorDarkGrey"/>
+
+        <com.ktcdriver.customtext.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Remarks(Optionals)"
+            android:textSize="@dimen/size_16"
+            android:padding="10dp" />
+
+        <com.ktcdriver.customtext.CustomEditText
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_margin="10dp"
+            android:gravity="top|left"
+            android:maxLines="3"
+            android:textSize="@dimen/size_12"
+            android:id="@+id/fragment_feedback_edtMsg"
+            android:background="@drawable/duty_slip_bg"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/colorDarkGrey"/>
+        <com.ktcdriver.customtext.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Signature"
+            android:textSize="@dimen/size_16"
+            android:padding="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/duty_slip_bg">
+            <LinearLayout
+                android:padding="5dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:id="@+id/canvasLayout" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/colorDarkGrey"/>
+
+        <com.ktcdriver.customtext.CustomTextViewBold
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:id="@+id/fragment_feedback_submit"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/button_bg"
+            android:padding="15dp" />
+
+
+    </LinearLayout>
+
 </LinearLayout>
