@@ -659,7 +659,9 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                             && ending_time!=null && ending_date.length()>0){
                         calculateTime(starting_date,starting_time,ending_date,time_at_garage);
                     }
-
+                    if (starting_meter!=null && starting_meter.length()>0 && meter_at_garage!=null && meter_at_garage.length()>0){
+                        calculateMeter();
+                    }
                     setAdapter(title2ListValue,title1ListValue,isEndMeter, isEndTime);
                 }
             } else if (response instanceof SaveResponse){

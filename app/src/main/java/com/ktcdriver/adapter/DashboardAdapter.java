@@ -50,13 +50,18 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyVi
             myViewHolder.mainLayout.setAlpha((float) 0.5);
             myViewHolder.txtStartJob.setBackground(context.getResources().getDrawable(R.drawable.button_grey_bg));
         } else if (i==0){
-            if (jobListBeans.get(i).getColor()!=null)
-            myViewHolder.mainLayout.setBackgroundColor(Color.parseColor(jobListBeans.get(i).getColor()));
+            if (jobListBeans.get(i).getColor()!=null&&jobListBeans.get(i).getColor().length()>0){
+                myViewHolder.mainLayout.setBackgroundColor(Color.parseColor(jobListBeans.get(i).getColor()));
+            }
         }
         myViewHolder.txtEndDate.setText(jobListBeans.get(i).getReportingtoDate());
         myViewHolder.txtStartDate.setText(jobListBeans.get(i).getReportingDate());
         myViewHolder.txtCompanyName.setText(jobListBeans.get(i).getClientName());
         myViewHolder.txtDutySlip.setText(jobListBeans.get(i).getDutyslipnum());
+        myViewHolder.txtTime.setText(jobListBeans.get(i).getReportingTime());
+        myViewHolder.txtReprotingPlace.setText(jobListBeans.get(i).getReportingPlace());
+        myViewHolder.txtPayment.setText(jobListBeans.get(i).getPaymentmode());
+        myViewHolder.txtCarNo.setText(jobListBeans.get(i).getCarno());
     }
 
     @Override
@@ -71,7 +76,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyVi
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         LinearLayout mainLayout;
-        TextView txtStartJob, txtDutySlip,txtStartDate,txtEndDate,txtCompanyName;
+        TextView txtStartJob, txtDutySlip,txtStartDate,txtEndDate,txtCompanyName,txtTime,txtPayment,txtReprotingPlace, txtCarNo;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mainLayout = itemView.findViewById(R.id.item_dash_board_layout);
@@ -80,6 +85,10 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyVi
             txtStartDate = itemView.findViewById(R.id.item_dashboard_txtStartValue);
             txtCompanyName = itemView.findViewById(R.id.item_dashboard_txtComNameValue);
             txtEndDate = itemView.findViewById(R.id.item_dashboard_txtEndValue);
+            txtTime = itemView.findViewById(R.id.item_dashboard_txtTime);
+            txtPayment = itemView.findViewById(R.id.item_dashboard_txtPayment);
+            txtReprotingPlace = itemView.findViewById(R.id.item_dashboard_txtReportingPlace);
+            txtCarNo = itemView.findViewById(R.id.item_dashboard_txtCarNo);
 
             txtStartJob.setOnClickListener(new View.OnClickListener() {
                 @Override

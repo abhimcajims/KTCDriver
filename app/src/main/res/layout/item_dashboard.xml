@@ -101,6 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:orientation="vertical"
+            android:id="@+id/item_dashboard_end"
             android:layout_below="@+id/item_dashboard_view">
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -136,5 +137,132 @@
         </LinearLayout>
 
 
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height=".5dp"
+            android:layout_below="@+id/item_dashboard_end"
+            android:background="@color/colorDarkGrey"
+            android:layout_marginTop="8dp"
+            android:id="@+id/item_dashboard_view2"
+            android:layout_marginBottom="8dp"/>
+
+       <LinearLayout
+           android:id="@+id/item_dashboard_reportingLayout"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:layout_below="@+id/item_dashboard_view2">
+
+           <LinearLayout
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:orientation="vertical">
+               <com.ktcdriver.customtext.CustomTextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Reporting Place"
+                   android:paddingLeft="5dp"
+                   android:textSize="@dimen/size_16"
+                   android:textColor="@color/colorBlack"/>
+               <com.ktcdriver.customtext.CustomTextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="08-10-2018"
+                   android:paddingLeft="7dp"
+                   android:textSize="@dimen/size_12"
+                   android:id="@+id/item_dashboard_txtReportingPlace" />
+
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:orientation="vertical"
+               android:gravity="right">
+               <com.ktcdriver.customtext.CustomTextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Car No"
+                   android:paddingLeft="5dp"
+                   android:textSize="@dimen/size_16"
+                   android:textColor="@color/colorBlack"/>
+               <com.ktcdriver.customtext.CustomTextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="13323323"
+                   android:paddingLeft="7dp"
+                   android:textSize="@dimen/size_12"
+                   android:id="@+id/item_dashboard_txtCarNo" />
+
+           </LinearLayout>
+
+       </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height=".5dp"
+            android:layout_below="@+id/item_dashboard_reportingLayout"
+            android:background="@color/colorDarkGrey"
+            android:layout_marginTop="8dp"
+            android:id="@+id/item_dashboard_view3"
+            android:layout_marginBottom="8dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/item_dashboard_view3">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical">
+                <com.ktcdriver.customtext.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payment Mode"
+                    android:paddingLeft="5dp"
+                    android:textSize="@dimen/size_16"
+                    android:textColor="@color/colorBlack"/>
+                <com.ktcdriver.customtext.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Card"
+                    android:paddingLeft="7dp"
+                    android:textSize="@dimen/size_12"
+                    android:id="@+id/item_dashboard_txtPayment" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:orientation="vertical">
+                <com.ktcdriver.customtext.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reporting Time"
+                    android:paddingLeft="5dp"
+                    android:textSize="@dimen/size_16"
+                    android:textColor="@color/colorBlack"/>
+                <com.ktcdriver.customtext.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10:10AM"
+                    android:gravity="center"
+                    android:drawablePadding="5dp"
+                    android:textSize="@dimen/size_12"
+                    android:id="@+id/item_dashboard_txtTime" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
     </RelativeLayout>
+
 </LinearLayout>
