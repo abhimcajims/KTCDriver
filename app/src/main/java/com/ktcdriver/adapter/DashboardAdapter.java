@@ -1,6 +1,7 @@
 package com.ktcdriver.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -48,8 +49,10 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyVi
         if (i>0){
             myViewHolder.mainLayout.setAlpha((float) 0.5);
             myViewHolder.txtStartJob.setBackground(context.getResources().getDrawable(R.drawable.button_grey_bg));
+        } else if (i==0){
+            if (jobListBeans.get(i).getColor()!=null)
+            myViewHolder.mainLayout.setBackgroundColor(Color.parseColor(jobListBeans.get(i).getColor()));
         }
-
         myViewHolder.txtEndDate.setText(jobListBeans.get(i).getReportingtoDate());
         myViewHolder.txtStartDate.setText(jobListBeans.get(i).getReportingDate());
         myViewHolder.txtCompanyName.setText(jobListBeans.get(i).getClientName());

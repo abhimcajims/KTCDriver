@@ -27,10 +27,11 @@
         <activity
             android:name=".activities.home.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".activities.home.MainActivity">
 
         </activity>
+        <activity android:name=".activities.home.SignatureActivity"/>
 
         <!-- Firebase Notifications -->
         <service android:name=".service.MyFirebaseMessagingService">

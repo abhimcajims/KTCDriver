@@ -90,7 +90,7 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
         String regId = pref.getString("regId", null);
 
-        Toast.makeText(this, regId + "", Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(this, regId + "", Toast.LENGTH_SHORT).show();
         Log.e(TAG, "Firebase reg id: " + regId);
 
         if (!TextUtils.isEmpty(regId))

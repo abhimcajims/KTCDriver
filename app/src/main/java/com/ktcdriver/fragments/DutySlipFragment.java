@@ -195,6 +195,8 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 break;
             case 1:
                 reporting_meter = charSeq;
+//                dutyListAdapter.notifyItemChanged(1);
+
                 break;
             case 2:
                 ending_meter = charSeq;
@@ -310,24 +312,65 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         switch (view.getId()){
             case R.id.fragment_duty_slip_txtsave:
                 if (meter_at_garage!=null &&meter_at_garage.length()>0){
-                    showGarrageMeterDialog();
+                    if (Double.parseDouble(meter_at_garage) < Double.parseDouble(ending_meter)){
+                        Utility.showToast(getContext(), "Meter at garrage should be > than ending meter");
+                    } else {
+                        showGarrageMeterDialog();
+                    }
                 }  else if (ending_meter!=null &&ending_meter.length()>0){
                     if (isEndMeter && isEndTime){ }
                     else {
-                        showEndMeterDialog();
+                        if (Double.parseDouble(ending_meter) < Double.parseDouble(reporting_meter)){
+                            Utility.showToast(getContext(), "Ending meter should be > than reporting meter");
+                        }
+                        else {
+                            showEndMeterDialog();
+                        }
                     }
                 }
                 else {
-                    saveDutySlip();
+                    if (ending_date==null)
+                        ending_date="";
+                    if (starting_meter==null)
+                        starting_meter="";
+                    if (reporting_meter==null)
+                        reporting_meter="";
+                    if (starting_time==null)
+                        starting_time="";
+                    if (reporting_time==null)
+                        reporting_time="";
+                    if (ending_meter==null)
+                        ending_meter="";
+                    if (ending_time==null)
+                        ending_time="";
+                    if (meter_at_garage==null)
+                        meter_at_garage="";
+                    if (time_at_garage==null)
+                        time_at_garage="";
+                    if (total_meter==null)
+                        total_meter="";
+                    if (total_time==null)
+                        total_time="";
+
+                    if (reporting_meter.length() > 0 && Double.parseDouble(reporting_meter)
+                            < Double.parseDouble(starting_meter)){
+                        Utility.showToast(getContext(), "Reporting meter should be > than starting meter");
+                    }else {
+                        saveDutySlip();
+                    }
                 }
 
          //      new Utility().callFragment(new FeedbackFragment(),getFragmentManager(),R.id.fragment_container,FeedbackFragment.class.getName());
                 break;
             case R.id.fragment_duty_slip_txt_charge2:
-                showChargeDialog(R.layout.dialog_duty_slip_charge);
+                if (ending_meter==null && ending_meter.length()==0){
+                    showChargeDialog(R.layout.dialog_duty_slip_charge);
+                }
                 break;
             case R.id.fragment_duty_slip_txt_charge1:
-                showCharge2Dialog(R.layout.dialog_duty_slip_charge2);
+                if (ending_meter==null && ending_meter.length()==0){
+                    showCharge2Dialog(R.layout.dialog_duty_slip_charge2);
+                }
                 break;
             case R.id.fragment_duty_slip_txt_starting_clock:
                 if (starting_date==null){
@@ -611,6 +654,12 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                         driver_ta = viewDetailsData.getJob_detail().getMisc_charges2().getDriver_ta()+"";
                     }
                     calculateMischrage2();
+                    if (starting_date!=null&&starting_date.length()>0&&ending_date!=null &&
+                            ending_date.length()>0 && starting_time!=null && starting_time.length()>0
+                            && ending_time!=null && ending_date.length()>0){
+                        calculateTime(starting_date,starting_time,ending_date,time_at_garage);
+                    }
+
                     setAdapter(title2ListValue,title1ListValue,isEndMeter, isEndTime);
                 }
             } else if (response instanceof SaveResponse){
@@ -737,28 +786,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
 
     private void saveDutySlip(){
         new Utility().showProgressDialog(getContext());
-        if (ending_date==null)
-            ending_date="";
-        if (starting_meter==null)
-            starting_meter="";
-        if (reporting_meter==null)
-            reporting_meter="";
-        if (starting_time==null)
-            starting_time="";
-        if (reporting_time==null)
-            reporting_time="";
-        if (ending_meter==null)
-            ending_meter="";
-        if (ending_time==null)
-            ending_time="";
-        if (meter_at_garage==null)
-            meter_at_garage="";
-        if (time_at_garage==null)
-            time_at_garage="";
-        if (total_meter==null)
-            total_meter="";
-        if (total_time==null)
-            total_time="";
 
         Call<SaveResponse> call = APIClient.getInstance().getApiInterface().saveDutySlip(dutyslipnum,starting_date,ending_date,
                 starting_meter,reporting_meter,starting_time,reporting_time,ending_meter,ending_time,

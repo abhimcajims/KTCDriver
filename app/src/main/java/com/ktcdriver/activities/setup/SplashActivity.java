@@ -94,7 +94,7 @@ public class SplashActivity extends AppbaseActivity {
         String regId = pref.getString("regId", null);
         Log.e(TAG, "Firebase reg id: " + regId);
         if (!TextUtils.isEmpty(regId)){
-            Toast.makeText(this, regId + "ABC", Toast.LENGTH_SHORT).show();
+         //   Toast.makeText(this, regId + "ABC", Toast.LENGTH_SHORT).show();
             token = regId;
         }
         else{

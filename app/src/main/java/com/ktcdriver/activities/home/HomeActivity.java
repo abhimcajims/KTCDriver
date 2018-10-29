@@ -111,7 +111,7 @@ public class HomeActivity extends AppCompatActivity
 
 //        call dashboard fragment
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new FeedbackFragment()).commit();
 
     }
 

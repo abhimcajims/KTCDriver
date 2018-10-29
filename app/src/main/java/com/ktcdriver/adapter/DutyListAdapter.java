@@ -82,7 +82,6 @@ public class DutyListAdapter extends RecyclerView.Adapter<DutyListAdapter.MyView
                 }
             }
         } else {
-
                 myViewHolder.edtValue.setEnabled(true);
                 myViewHolder.imgClock.setClickable(true);
         }
@@ -113,7 +112,6 @@ public class DutyListAdapter extends RecyclerView.Adapter<DutyListAdapter.MyView
             edtValue = itemView.findViewById(R.id.item_duty_slip_edt);
             txtTime = itemView.findViewById(R.id.item_duty_cal_value);
             imgClock = itemView.findViewById(R.id.item_duty_slip_img_clock);
-
 
             edtValue.addTextChangedListener(new TextWatcher() {
                 @Override

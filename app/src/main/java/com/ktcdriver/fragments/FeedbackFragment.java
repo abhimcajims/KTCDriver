@@ -140,6 +140,22 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
                 if (bitmap == null) {
                     bitmap = Bitmap.createBitmap(mContent.getWidth(), mContent.getHeight(), Bitmap.Config.RGB_565);
                 }
+                Canvas canvas = new Canvas(bitmap);
+                try {
+                    // Output the file
+                    FileOutputStream mFileOutStream = new FileOutputStream(StoredPath);
+                    mContent.draw(canvas);
+
+                    // Convert the output file to Image such as .png
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, mFileOutStream);
+
+
+                    mFileOutStream.flush();
+                    mFileOutStream.close();
+
+                } catch (Exception e) {
+                    Log.v("log_tag", e.toString());
+                }
                 signature = Utility.BitMapToString(bitmap);
                 sendFeedback();
                 Log.d("TAG", "save:"+signature);
@@ -172,9 +188,6 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
         }
     }
 
-
-
-
     public boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -192,7 +205,7 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
     private void sendFeedback(){
         new Utility().showProgressDialog(getContext());
 
-        Call<SaveResponse> call = APIClient.getInstance().getApiInterface().sendFeedback(dutyslipno,
+        Call<SaveResponse> call = APIClient.getInstance().getApiInterface().sendFeedback("181928837",
                 signature,ratingBar.getRating()+"",duty_remarks);
         call.request().url();
         Log.d("TAG", "rakhi: "+call.request().url());
@@ -262,10 +275,6 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
                 // Convert the output file to Image such as .png
                 bitmap.compress(Bitmap.CompressFormat.PNG, 90, mFileOutStream);
 
-              /*  Intent intent = new Intent(SignatureActivity.this, BillDetailsActivity.class);
-                intent.putExtra("imagePath", StoredPath);
-                startActivity(intent);
-                finish();*/
                 mFileOutStream.flush();
                 mFileOutStream.close();
 
