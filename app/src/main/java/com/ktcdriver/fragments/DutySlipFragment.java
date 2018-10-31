@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.ktcdriver.R;
 import com.ktcdriver.activities.home.HomeActivity;
+import com.ktcdriver.adapter.AdapterDutySlipUploadDocument;
 import com.ktcdriver.adapter.DocAdapter;
 import com.ktcdriver.adapter.DutyListAdapter;
 import com.ktcdriver.model.SaveResponse;
@@ -53,6 +54,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     private ArrayList<String> title2ListValue;
     private ArrayList<String>title1ListValue;
     private boolean isEndMeter,isEndTime;
+
     private TextView txtCompanyName;
     private TextView txtComapAdd;
     private TextView txtCompMobile;
@@ -100,6 +102,11 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         super.onActivityCreated(savedInstanceState);
         init();
     }
+
+    private EditText edt_upload_document;
+    private TextView tv_upload_document;
+
+    private RecyclerView rv_upload_document;
 
     private void init(){
         title1List = new ArrayList<>();
@@ -171,6 +178,14 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         endClock.setOnClickListener(this);
        // reservationId = "709180043";
         fetchDetails(reservationId);
+
+        //Upload Document Stuffs
+//        tv_upload_document = getView().findViewById(R.id.fragment_duty_slip_upload_document);
+        edt_upload_document = getView().findViewById(R.id.fragment_duty_slip_edt_upload_document);
+        rv_upload_document = getView().findViewById(R.id.fragment_duty_slip_upload_document_rv);
+        rv_upload_document.setLayoutManager(new LinearLayoutManager(getContext()));
+        rv_upload_document.setAdapter(new AdapterDutySlipUploadDocument(getContext()));
+//        tv_upload_document.setOnClickListener(this);
     }
 
     private DutyListAdapter dutyListAdapter;
@@ -404,6 +419,19 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             case R.id.fragment_duty_slip_txt_end_clock:
                 openDateTicker(2);
                 break;
+
+            case R.id.fragment_duty_slip_upload_document:
+
+                if(!edt_upload_document.getText().toString().trim().isEmpty()){
+
+
+                } else {
+                    Utility.showToast(getContext(), "Please enter text");
+                }
+                break;
+
+                default:
+                    break;
         }
     }
 
