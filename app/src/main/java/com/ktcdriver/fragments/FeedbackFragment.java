@@ -205,7 +205,7 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
     private void sendFeedback(){
         new Utility().showProgressDialog(getContext());
 
-        Call<SaveResponse> call = APIClient.getInstance().getApiInterface().sendFeedback("181928837",
+        Call<SaveResponse> call = APIClient.getInstance().getApiInterface().sendFeedback(dutyslipno,
                 signature,ratingBar.getRating()+"",duty_remarks);
         call.request().url();
         Log.d("TAG", "rakhi: "+call.request().url());

@@ -10,6 +10,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.ktcdriver.activities.home.MainActivity;
 import com.ktcdriver.activities.setup.LoginActivity;
+import com.ktcdriver.activities.setup.SplashActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -95,7 +96,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 notificationUtils.playNotificationSound();
             } else {
                 // app is in background, show the notification in notification tray
-                Intent resultIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                Intent resultIntent = new Intent(getApplicationContext(), SplashActivity.class);
                 resultIntent.putExtra("message", message);
 
                 // check for image attachment

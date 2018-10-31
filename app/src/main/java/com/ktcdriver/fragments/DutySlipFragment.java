@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.ktcdriver.R;
 import com.ktcdriver.activities.home.HomeActivity;
+import com.ktcdriver.adapter.DocAdapter;
 import com.ktcdriver.adapter.DutyListAdapter;
 import com.ktcdriver.model.SaveResponse;
 import com.ktcdriver.model.ViewDetailsData;
@@ -46,7 +47,7 @@ import retrofit2.Call;
 public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyListInterface, View.OnClickListener,
         OnResponseInterface{
     private LinearLayout main_Layout;
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView, recyclerViewAddMore;
     private ArrayList<String> title2List;
     private ArrayList<String>title1List;
     private ArrayList<String> title2ListValue;
@@ -71,7 +72,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     private TextView txtEdndingDate;
     private TextView txtcity;
     private TextView txtVehicleReq;
-    private TextView txtUserName,txtMisc1Value, txtMisc2Value;
+    private TextView txtUserName,txtMisc1Value, txtMisc2Value, txtAddmore;
     private LinearLayout txtCharge1, txtCharge2;
     public static String dutyslipnum;
     private String reservationId,  starting_date, ending_date, starting_meter,
@@ -119,6 +120,8 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         title2List.add("Time at Garrage");
         title2List.add("Total Time");
 
+        txtAddmore = getView().findViewById(R.id.duty_slip_add_more);
+        recyclerViewAddMore = getView().findViewById(R.id.fragment_duty_slip_photos_recycler);
         main_Layout = getView().findViewById(R.id.fragment_duty_slip_layout);
         main_Layout.setVisibility(View.GONE);
         txtMisc1Value = getView().findViewById(R.id.fragment_duty_slip_misc1_value);
@@ -151,8 +154,15 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         txtStartingDate = getView().findViewById(R.id.fragment_duty_slip_txt_starting_date);
         txtEdndingDate = getView().findViewById(R.id.fragment_duty_slip_txt_end_date);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,
+                false);
         recyclerView.setLayoutManager(linearLayoutManager);
+        LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,
+                false);
+        recyclerViewAddMore.setLayoutManager(linearLayoutManager1);
+
+        DocAdapter docAdapter = new DocAdapter(getContext());
+        recyclerViewAddMore.setAdapter(docAdapter);
 
         txtSave.setOnClickListener(this);
         txtCharge2.setOnClickListener(this);
@@ -162,6 +172,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
        // reservationId = "709180043";
         fetchDetails(reservationId);
     }
+
     private DutyListAdapter dutyListAdapter;
     private void setAdapter(ArrayList<String> title2ListValue, ArrayList<String> titleListValue,
                             boolean isEndMeter, boolean isEndTime){
@@ -196,7 +207,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             case 1:
                 reporting_meter = charSeq;
 //                dutyListAdapter.notifyItemChanged(1);
-
                 break;
             case 2:
                 ending_meter = charSeq;
@@ -216,8 +226,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 +Double.parseDouble(ending_meter)+Double.parseDouble(meter_at_garage);
         if (total_meter!=null && total_meter.length()>0)
         total_meter=Double.parseDouble(total_meter)+"";
-        if(!String.valueOf(total).trim().equals(total_meter))
-        {
+        if(!String.valueOf(total).trim().equals(total_meter)) {
             total_meter= total+"";
             title1ListValue.set(4,total_meter);
             dutyListAdapter.notifyItemChanged(4);
@@ -279,11 +288,26 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+               /* Calendar datetime = Calendar.getInstance();
+                Calendar c = Calendar.getInstance();
+                datetime.set(Calendar.HOUR_OF_DAY, selectedHour);
+                datetime.set(Calendar.MINUTE, selectedMinute);
+                if (datetime.getTimeInMillis() >= c.getTimeInMillis()) {
+                    //it's after current
+                    int hour = selectedHour % 12;
+                    timeText.setText(String.format("%02d:%02d %s", hour == 0 ? 12 : hour,
+                            selectedMinute, selectedHour < 12 ? "am" : "pm"));
+                } else {
+                    //it's before current'
+                    Toast.makeText(getContext(), "Invalid Time", Toast.LENGTH_LONG).show();
+                }
+                */
+
                 time = String.format("%02d:%02d", selectedHour, selectedMinute);
                 switch (i){
                     case 0:
                         starting_time = time;
-                        timeText.setText(time );
+                        timeText.setText(time);
                         break;
                     case 1:
                         reporting_time = time;

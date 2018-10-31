@@ -1,20 +1,28 @@
 package com.ktcdriver.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ktcdriver.R;
 import com.ktcdriver.model.LoginResponse;
+import com.ktcdriver.utils.Utility;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,6 +70,8 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyVi
         myViewHolder.txtReprotingPlace.setText(jobListBeans.get(i).getReportingPlace());
         myViewHolder.txtPayment.setText(jobListBeans.get(i).getPaymentmode());
         myViewHolder.txtCarNo.setText(jobListBeans.get(i).getCarno());
+
+
     }
 
     @Override
@@ -77,6 +87,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyVi
     public class MyViewHolder extends RecyclerView.ViewHolder {
         LinearLayout mainLayout;
         TextView txtStartJob, txtDutySlip,txtStartDate,txtEndDate,txtCompanyName,txtTime,txtPayment,txtReprotingPlace, txtCarNo;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mainLayout = itemView.findViewById(R.id.item_dash_board_layout);
@@ -90,14 +101,50 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyVi
             txtReprotingPlace = itemView.findViewById(R.id.item_dashboard_txtReportingPlace);
             txtCarNo = itemView.findViewById(R.id.item_dashboard_txtCarNo);
 
+            if (jobListBeans.size()>0){
+                String reporting_time =jobListBeans.get(0).getReportingDate()+" "+ jobListBeans.get(0).getReportingTime();
+                Date currentTime = Calendar.getInstance().getTime();
+                @SuppressLint("SimpleDateFormat")
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+                String date = format.format(currentTime);
+                hours= calculateTime(date,reporting_time);
+            }
+
             txtStartJob.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (getAdapterPosition()==0)
-                    dashboardInterface.startJob(getAdapterPosition());
+                    if (getAdapterPosition()==0){
+                       /* if (hours>=3){
+                            dashboardInterface.startJob(getAdapterPosition());
+                        }*//* else if (hours<0){
+                            Utility.showToast(context,"Your journey has been expired");
+                        }*//* else {
+                            Utility.showToast(context,"You can't access before 3 hours");
+                        }*/
+                        dashboardInterface.startJob(getAdapterPosition());
+                    }
                 }
             });
-
         }
+    }
+
+    private Date date1,date2;
+    private int days,hours,min;
+    private int calculateTime(String date, String reporting_time){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        try {
+            date1 = simpleDateFormat.parse(date);
+            date2 = simpleDateFormat.parse(reporting_time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        long difference = date2.getTime() - date1.getTime();
+        days = (int) (difference / (1000*60*60*24));
+        hours = (int) ((difference - (1000*60*60*24*days)) / (1000*60*60));
+        min = (int) (difference - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
+      //  hours = (hours < 0 ? -hours : hours);
+        Log.i("======= Hours"," :: "+hours);
+        return hours;
     }
 }

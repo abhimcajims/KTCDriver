@@ -741,6 +741,35 @@
                     android:layout_marginTop="5dp"
                     android:background="@color/colorDarkGrey"/>
 
+               <com.ktcdriver.customtext.CustomTextViewBold
+                    android:layout_width="0dp"
+                    android:layout_weight=".8"
+                    android:layout_height="wrap_content"
+                    android:text="Upload Document(S)"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:textSize="@dimen/size_16"
+                    android:layout_gravity="center_vertical" />
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/fragment_duty_slip_photos_recycler"
+                    android:layout_marginTop="20dp" />
+
+                <com.ktcdriver.customtext.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/duty_slip_add_more"
+                    android:text="Add more"
+                    android:textSize="10sp"
+                    android:background="@drawable/button_bg"
+                    android:textColor="@color/colorWhite"
+                    android:layout_gravity="center"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"/>
+
                 <com.ktcdriver.customtext.CustomTextViewBold
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

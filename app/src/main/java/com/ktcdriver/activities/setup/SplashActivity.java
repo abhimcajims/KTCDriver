@@ -106,8 +106,7 @@ public class SplashActivity extends AppbaseActivity {
     protected void onResume() {
         super.onResume();
 
-
-        int TIME_INTERVAL = 3000;
+        int TIME_INTERVAL = 4000;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -124,9 +123,7 @@ public class SplashActivity extends AppbaseActivity {
             }
         }, TIME_INTERVAL);
 
-
-
-
-
     }
+
+
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="100dp"
+    android:layout_height="wrap_content">
+
+    <com.ktcdriver.customtext.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/duty_slip_bg"
+        android:padding="10dp"
+        android:text="Slip 1"
+        android:layout_margin="10dp"/>
+
+    <LinearLayout
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/button_border_blue_round"
+        android:gravity="center"
+        android:id="@+id/duty_slip_charge1_cross"
+        android:layout_alignParentRight="true">
+
+        <com.ktcdriver.customtext.CustomTextView
+            android:id="@+id/dialog_location_tv_cross"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/size_16"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
