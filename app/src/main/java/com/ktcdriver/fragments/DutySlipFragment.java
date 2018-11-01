@@ -1,12 +1,22 @@
 package com.ktcdriver.fragments;
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,11 +40,14 @@ import com.ktcdriver.adapter.DocAdapter;
 import com.ktcdriver.adapter.DutyListAdapter;
 import com.ktcdriver.model.SaveResponse;
 import com.ktcdriver.model.ViewDetailsData;
+import com.ktcdriver.utils.ChoosePhoto;
 import com.ktcdriver.utils.Utility;
 import com.ktcdriver.webservices.APIClient;
 import com.ktcdriver.webservices.OnResponseInterface;
 import com.ktcdriver.webservices.ResponseListner;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,7 +59,7 @@ import retrofit2.Call;
  * A simple {@link Fragment} subclass.
  */
 public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyListInterface, View.OnClickListener,
-        OnResponseInterface{
+        OnResponseInterface, AdapterDutySlipUploadDocument.UploadDocInterface{
     private LinearLayout main_Layout;
     private RecyclerView recyclerView, recyclerViewAddMore;
     private ArrayList<String> title2List;
@@ -74,15 +87,16 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     private TextView txtEdndingDate;
     private TextView txtcity;
     private TextView txtVehicleReq;
+    private ChoosePhoto choosePhoto=null;
     private TextView txtUserName,txtMisc1Value, txtMisc2Value, txtAddmore;
     private LinearLayout txtCharge1, txtCharge2;
     public static String dutyslipnum;
     private String reservationId,  starting_date, ending_date, starting_meter,
             starting_time, reporting_meter, reporting_time, ending_meter, ending_time, meter_at_garage,
             time_at_garage, total_meter, total_time,night_halt,toll,parking,e_toll,interstate_tax,others,
-            beverages_charges,entrance_charge,guide_charge,driver_ta;
+            beverages_charges,entrance_charge,guide_charge,driver_ta, base_64;
     private int end_status;
-
+    private ArrayList<String>arr_img;
     private ImageView startClock, endClock;
 
     public DutySlipFragment() {
@@ -109,6 +123,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     private RecyclerView rv_upload_document;
 
     private void init(){
+        arr_img = new ArrayList<>();
         title1List = new ArrayList<>();
         title2List = new ArrayList<>();
         title1ListValue = new ArrayList<>();
@@ -184,7 +199,19 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         edt_upload_document = getView().findViewById(R.id.fragment_duty_slip_edt_upload_document);
         rv_upload_document = getView().findViewById(R.id.fragment_duty_slip_upload_document_rv);
         rv_upload_document.setLayoutManager(new LinearLayoutManager(getContext()));
-        rv_upload_document.setAdapter(new AdapterDutySlipUploadDocument(getContext()));
+        arr_img.add("Photo");
+        final AdapterDutySlipUploadDocument adapterDutySlipUploadDocument = new
+                AdapterDutySlipUploadDocument(getContext(),arr_img,this);
+        rv_upload_document.setAdapter(adapterDutySlipUploadDocument);
+
+        txtAddmore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                arr_img.add("Photo");
+                adapterDutySlipUploadDocument.notifyDataSetChanged();
+            }
+        });
+
 //        tv_upload_document.setOnClickListener(this);
     }
 
@@ -402,12 +429,12 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
          //      new Utility().callFragment(new FeedbackFragment(),getFragmentManager(),R.id.fragment_container,FeedbackFragment.class.getName());
                 break;
             case R.id.fragment_duty_slip_txt_charge2:
-                if (ending_meter==null && ending_meter.length()==0){
+                if (ending_meter==null || ending_meter.length()==0){
                     showChargeDialog(R.layout.dialog_duty_slip_charge);
                 }
                 break;
             case R.id.fragment_duty_slip_txt_charge1:
-                if (ending_meter==null && ending_meter.length()==0){
+                if (ending_meter==null || ending_meter.length()==0){
                     showCharge2Dialog(R.layout.dialog_duty_slip_charge2);
                 }
                 break;
@@ -630,7 +657,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                     title1ListValue.add(reporting_meter);
                     if (viewDetailsData.getJob_detail().getEnding_meter()!=null
                             &&viewDetailsData.getJob_detail().getEnding_meter().length()>0){
-                        isEndMeter =true;
+//                        isEndMeter =true;
                         ending_meter = viewDetailsData.getJob_detail().getEnding_meter();
                     }
                     title1ListValue.add(ending_meter);
@@ -647,7 +674,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                         reporting_time = viewDetailsData.getJob_detail().getReporting_time();
                     title2ListValue.add(reporting_time);
                     if (viewDetailsData.getJob_detail().getEnding_time()!=null&&viewDetailsData.getJob_detail().getEnding_time().length()>0){
-                        isEndTime = true;
+//                        isEndTime = true;
                         ending_time = viewDetailsData.getJob_detail().getEnding_time();
                     }
 
@@ -783,7 +810,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         else txtMisc2Value.setText("None");
     }
 
-
     private void calculateMischrage1(){
         if (night_halt==null || night_halt.length()==0){
             night_halt = "0";
@@ -826,7 +852,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         txtMisc1Value.setText(price+"");
         else txtMisc1Value.setText("None");
     }
-
 
     @Override
     public void onApiFailure(String message) {
@@ -919,5 +944,52 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             }
         });
     }
+
+    @Override
+    public void browse(View view, int pos) {
+        choosePhoto = new ChoosePhoto(getActivity());
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Toast.makeText(getContext(), "ABC", Toast.LENGTH_SHORT).show();
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == ChoosePhoto.CHOOSE_PHOTO_INTENT) {
+                if (data != null && data.getData() != null) {
+                    choosePhoto.handleGalleryResult(data);
+                } else {
+                    choosePhoto.handleCameraResult(choosePhoto.getCameraUri());
+                }
+            } else if (requestCode == ChoosePhoto.SELECTED_IMG_CROP) {
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), choosePhoto.getCropImageUrl());
+                    // bitmap = bm;
+                    base_64 = Utility.BitMapToString(bitmap);
+                    Toast.makeText(getContext(), base_64, Toast.LENGTH_SHORT).show();
+                    /*if (base != null) {
+                        base.set(pos, bitmapString);
+                    }*/
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            Toast.makeText(getContext(), "fdgdg", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                                     @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == ChoosePhoto.SELECT_PICTURE_CAMERA&& requestCode == ChoosePhoto.CHOOSE_PHOTO_INTENT) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                choosePhoto.showAlertDialog();
+        }
+    }
+
 
 }

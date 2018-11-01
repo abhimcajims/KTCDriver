@@ -63,7 +63,7 @@
                     android:layout_width="0dp"
                     android:layout_weight=".8"
                     android:layout_height="wrap_content"
-                    android:text="Card Number"
+                    android:text="Happy Card"
                     android:textSize="@dimen/size_16"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/colorPrimary"/>

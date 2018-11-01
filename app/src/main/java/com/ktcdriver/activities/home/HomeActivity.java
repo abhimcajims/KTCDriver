@@ -1,12 +1,16 @@
 package com.ktcdriver.activities.home;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.Display;
@@ -35,10 +39,14 @@ import com.google.gson.Gson;
 import com.ktcdriver.R;
 import com.ktcdriver.fragments.DashboardFragment;
 import com.ktcdriver.fragments.FeedbackFragment;
+import com.ktcdriver.fragments.OrderHistoryFragment;
 import com.ktcdriver.fragments.ProfileFragment;
 import com.ktcdriver.model.LoginResponse;
+import com.ktcdriver.utils.ChoosePhoto;
 import com.ktcdriver.utils.Utility;
 import com.mukesh.tinydb.TinyDB;
+
+import java.io.IOException;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -114,6 +122,37 @@ public class HomeActivity extends AppCompatActivity
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
 
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Toast.makeText(this, "ABC", Toast.LENGTH_SHORT).show();
+
+     /*   if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == ChoosePhoto.CHOOSE_PHOTO_INTENT) {
+                if (data != null && data.getData() != null) {
+                    choosePhoto.handleGalleryResult(data);
+                } else {
+                    choosePhoto.handleCameraResult(choosePhoto.getCameraUri());
+                }
+            } else if (requestCode == ChoosePhoto.SELECTED_IMG_CROP) {
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), choosePhoto.getCropImageUrl());
+                    // bitmap = bm;
+                    base_64 = Utility.BitMapToString(bitmap);
+                    Toast.makeText(getContext(), base_64, Toast.LENGTH_SHORT).show();
+                    *//*if (base != null) {
+                        base.set(pos, bitmapString);
+                    }*//*
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            Toast.makeText(getContext(), "fdgdg", Toast.LENGTH_SHORT).show();
+        }
+*/
     }
 
     @Override
@@ -193,6 +232,9 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_profile){
             new Utility().callFragment(new ProfileFragment(),getSupportFragmentManager(),
                     R.id.fragment_container,ProfileFragment.class.getName());
+        } else if (id == R.id.nav_order_history){
+            new Utility().callFragment(new OrderHistoryFragment(),getSupportFragmentManager(),
+                    R.id.fragment_container,OrderHistoryFragment.class.getName());
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

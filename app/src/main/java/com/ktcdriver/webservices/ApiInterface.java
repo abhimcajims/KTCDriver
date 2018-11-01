@@ -67,4 +67,11 @@ public interface ApiInterface {
                                 @Field("signature")String signature,
                                 @Field("rating")String rating,
                                 @Field("duty_remarks")String duty_remarks);
+
+    @FormUrlEncoded
+    @POST("job_history.php")
+    Call<LoginResponse> getHistory(@Field("driverId")String driverId,
+                                        @Field("limit")String limit);
+
 }
+

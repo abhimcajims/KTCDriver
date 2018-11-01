@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/fragment_duty_slip_edt_upload_document"
-                android:hint="Upload Document"
+                android:hint="Document "
                 android:textSize="@dimen/size_12"
                 android:paddingHorizontal="10dp"
                 android:background="@android:color/transparent"/>

@@ -187,8 +187,6 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
 
     private void fetchLoginData(final String driverId, String pass) {
         new Utility().showProgressDialog(LoginActivity.this);
-
-
         Call<LoginResponse> call = APIClient.getInstance().getApiInterface().getLoginDetails(driverId,pass);
          call.request().url();
         Log.d("TAG", "rakhi: "+call.request().url());

@@ -118,6 +118,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Dash
         if (response!=null){
             LoginResponse loginResponse = (LoginResponse) response;
             if (loginResponse.getStatus().equals("1")){
+                tinyDB.putString("login_data",new Gson().toJson(loginResponse));
                 jobListBeans = loginResponse.getJob_list();
                 if (jobListBeans.size()>0){
                     no_recordLayout.setVisibility(View.GONE);

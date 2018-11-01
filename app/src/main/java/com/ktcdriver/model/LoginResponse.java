@@ -10,8 +10,8 @@ public class LoginResponse {
     /**
      * status : 1
      * message : Login Successful
-     * profileInfo : {"driverId":"20905","userName":"BAHADUR SINGH","email":"","photoURL":"http://gst.fleet.ktcindia.com/uploads/profile.png"}
-     * job_list : [{"color":"","Reservationid":"1110180039","dutyslipnum":"181926742","ReportingDate":"15-10-2018","ReportingtoDate":"15-10-2018","ReportingTime":"05:00","ReportingPlace":"Patel Nagar Metro Station","carno":"DL 1NA 2483","ClientName":"DESTINOS INDIA GURUS PRIVATE LIMITED","Paymentmode":"Credit"},{"color":"","Reservationid":"1110180032","dutyslipnum":"181926735","ReportingDate":"16-10-2018","ReportingtoDate":"16-10-2018","ReportingTime":"09:30","ReportingPlace":"TBC","carno":"DL 1NA 2483","ClientName":"DESTINOS INDIA GURUS PRIVATE LIMITED","Paymentmode":"Credit"}]
+     * profileInfo : {"driverId":"20905","userName":"BAHADUR SINGH","email":"","photoURL":"http://gst.fleet.ktcindia.com/uploads/profile.png","happay_card":"2021-2515-5122-5151","issue_date":"11-05-2018","deactivate_date":"12-12-2018","job_history":"1"}
+     * job_list : [{"color":"#ff9900","Reservationid":"401180347","dutyslipnum":"171826672","ReportingDate":"01-11-2018","ReportingtoDate":"01-11-2018","ReportingTime":"06:30","ReportingPlace":"HOTEL'S","carno":"DL1NA -1944","ClientName":"TRAVELITE (INDIA)","Paymentmode":"Credit"}]
      */
 
     private String status;
@@ -57,12 +57,20 @@ public class LoginResponse {
          * userName : BAHADUR SINGH
          * email :
          * photoURL : http://gst.fleet.ktcindia.com/uploads/profile.png
+         * happay_card : 2021-2515-5122-5151
+         * issue_date : 11-05-2018
+         * deactivate_date : 12-12-2018
+         * job_history : 1
          */
 
         private String driverId;
         private String userName;
         private String email;
         private String photoURL;
+        private String happay_card;
+        private String issue_date;
+        private String deactivate_date;
+        private String job_history;
 
         public String getDriverId() {
             return driverId;
@@ -95,19 +103,51 @@ public class LoginResponse {
         public void setPhotoURL(String photoURL) {
             this.photoURL = photoURL;
         }
+
+        public String getHappay_card() {
+            return happay_card;
+        }
+
+        public void setHappay_card(String happay_card) {
+            this.happay_card = happay_card;
+        }
+
+        public String getIssue_date() {
+            return issue_date;
+        }
+
+        public void setIssue_date(String issue_date) {
+            this.issue_date = issue_date;
+        }
+
+        public String getDeactivate_date() {
+            return deactivate_date;
+        }
+
+        public void setDeactivate_date(String deactivate_date) {
+            this.deactivate_date = deactivate_date;
+        }
+
+        public String getJob_history() {
+            return job_history;
+        }
+
+        public void setJob_history(String job_history) {
+            this.job_history = job_history;
+        }
     }
 
     public static class JobListBean {
         /**
-         * color :
-         * Reservationid : 1110180039
-         * dutyslipnum : 181926742
-         * ReportingDate : 15-10-2018
-         * ReportingtoDate : 15-10-2018
-         * ReportingTime : 05:00
-         * ReportingPlace : Patel Nagar Metro Station
-         * carno : DL 1NA 2483
-         * ClientName : DESTINOS INDIA GURUS PRIVATE LIMITED
+         * color : #ff9900
+         * Reservationid : 401180347
+         * dutyslipnum : 171826672
+         * ReportingDate : 01-11-2018
+         * ReportingtoDate : 01-11-2018
+         * ReportingTime : 06:30
+         * ReportingPlace : HOTEL'S
+         * carno : DL1NA -1944
+         * ClientName : TRAVELITE (INDIA)
          * Paymentmode : Credit
          */
 
