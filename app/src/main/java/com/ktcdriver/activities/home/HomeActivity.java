@@ -35,6 +35,7 @@ import com.google.gson.Gson;
 import com.ktcdriver.R;
 import com.ktcdriver.fragments.DashboardFragment;
 import com.ktcdriver.fragments.FeedbackFragment;
+import com.ktcdriver.fragments.ProfileFragment;
 import com.ktcdriver.model.LoginResponse;
 import com.ktcdriver.utils.Utility;
 import com.mukesh.tinydb.TinyDB;
@@ -189,6 +190,9 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_feedback) {
             new Utility().callFragment(new FeedbackFragment(),getSupportFragmentManager(),
                     R.id.fragment_container,FeedbackFragment.class.getName());
+        } else if (id == R.id.nav_profile){
+            new Utility().callFragment(new ProfileFragment(),getSupportFragmentManager(),
+                    R.id.fragment_container,ProfileFragment.class.getName());
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

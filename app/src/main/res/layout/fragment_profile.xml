@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBg"
+    tools:context=".fragments.ProfileFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp">
+
+            <ImageView
+                android:paddingTop="20dp"
+                android:background="@drawable/top_bg"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:id="@+id/fragment_profile_img"
+                android:src="@drawable/placeholder"
+                android:paddingBottom="10dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:background="@drawable/top_bg">
+
+                <com.ktcdriver.customtext.CustomTextViewBold
+                    android:layout_width="0dp"
+                    android:layout_weight=".8"
+                    android:layout_height="wrap_content"
+                    android:text="Driver Details"
+                    android:textSize="@dimen/size_16"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/colorPrimary"/>
+                <com.ktcdriver.customtext.CustomTextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/size_12"
+                    android:id="@+id/fragment_profile_driver_detail"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent"
+                    android:text="Pradeep Kumar Gupta"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:background="@drawable/top_bg">
+
+                <com.ktcdriver.customtext.CustomTextViewBold
+                    android:layout_width="0dp"
+                    android:layout_weight=".8"
+                    android:layout_height="wrap_content"
+                    android:text="Card Number"
+                    android:textSize="@dimen/size_16"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/colorPrimary"/>
+                <com.ktcdriver.customtext.CustomTextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/size_12"
+                    android:id="@+id/fragment_profile_card_no"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent"
+                    android:text="372463"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:background="@drawable/top_bg">
+
+                <com.ktcdriver.customtext.CustomTextViewBold
+                    android:layout_width="0dp"
+                    android:layout_weight=".8"
+                    android:layout_height="wrap_content"
+                    android:text="Issue Date"
+                    android:textSize="@dimen/size_16"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/colorPrimary"/>
+                <com.ktcdriver.customtext.CustomTextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/size_12"
+                    android:id="@+id/fragment_profile_issue_date"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent"
+                    android:text="31/10/2018"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:background="@drawable/top_bg">
+
+                <com.ktcdriver.customtext.CustomTextViewBold
+                    android:layout_width="0dp"
+                    android:layout_weight=".8"
+                    android:layout_height="wrap_content"
+                    android:text = "Deactivate date"
+                    android:textSize="@dimen/size_16"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/colorPrimary"/>
+                <com.ktcdriver.customtext.CustomTextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/size_12"
+                    android:id="@+id/fragment_profile_deactivate"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent"
+                    android:text="12/11/2018"/>
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
