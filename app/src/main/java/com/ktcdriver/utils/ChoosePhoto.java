@@ -55,6 +55,7 @@ public class ChoosePhoto {
                 showAlertDialog();
             else {
                 ActivityCompat.requestPermissions((Activity) mContext, permissionUtil.getCameraPermissions(), SELECT_PICTURE_CAMERA);
+                showAlertDialog();
             }
         } else {
             showAlertDialog();

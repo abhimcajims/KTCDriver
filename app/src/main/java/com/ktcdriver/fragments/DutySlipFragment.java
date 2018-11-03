@@ -1,10 +1,13 @@
 package com.ktcdriver.fragments;
 
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,12 +16,16 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -41,12 +48,17 @@ import com.ktcdriver.adapter.DutyListAdapter;
 import com.ktcdriver.model.SaveResponse;
 import com.ktcdriver.model.ViewDetailsData;
 import com.ktcdriver.utils.ChoosePhoto;
+import com.ktcdriver.utils.ImageInputHelper;
 import com.ktcdriver.utils.Utility;
 import com.ktcdriver.webservices.APIClient;
 import com.ktcdriver.webservices.OnResponseInterface;
 import com.ktcdriver.webservices.ResponseListner;
+import com.mukesh.permissions.AppPermissions;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,6 +75,8 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     private LinearLayout main_Layout;
     private RecyclerView recyclerView, recyclerViewAddMore;
     private ArrayList<String> title2List;
+    private ArrayList<String> img_base_64;
+    private ArrayList<String> slip_name;
     private ArrayList<String>title1List;
     private ArrayList<String> title2ListValue;
     private ArrayList<String>title1ListValue;
@@ -87,7 +101,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     private TextView txtEdndingDate;
     private TextView txtcity;
     private TextView txtVehicleReq;
-    private ChoosePhoto choosePhoto=null;
     private TextView txtUserName,txtMisc1Value, txtMisc2Value, txtAddmore;
     private LinearLayout txtCharge1, txtCharge2;
     public static String dutyslipnum;
@@ -98,9 +111,29 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     private int end_status;
     private ArrayList<String>arr_img;
     private ImageView startClock, endClock;
+    private ImageInputHelper imageInputHelper;
+    private AppPermissions appPermissions;
+    private String userChoosenTask;
 
     public DutySlipFragment() {
         // Required empty public constructor
+
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (ActivityCompat.checkSelfPermission(getContext(),
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(),
+                        Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.CAMERA,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_CAMERA );
+        }
 
     }
 
@@ -123,11 +156,17 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     private RecyclerView rv_upload_document;
 
     private void init(){
+        appPermissions = new AppPermissions(getActivity());
         arr_img = new ArrayList<>();
         title1List = new ArrayList<>();
         title2List = new ArrayList<>();
         title1ListValue = new ArrayList<>();
         title2ListValue = new ArrayList<>();
+        img_base_64 = new ArrayList<>();
+        slip_name = new ArrayList<>();
+
+        imageInputHelper = new ImageInputHelper(this);
+
         if (getArguments()!=null){
             reservationId = getArguments().getString("reservationid");
         }
@@ -945,51 +984,147 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         });
     }
 
+    int pos;
     @Override
     public void browse(View view, int pos) {
-        choosePhoto = new ChoosePhoto(getActivity());
+        this.pos=pos;
+        selectImage();
     }
 
+    private boolean result;
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case REQUEST_CAMERA:
+                if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(getActivity(), "Camera Permissions not granted", Toast.LENGTH_SHORT).show();
+                } else {
+                    result =true;
+                    cameraIntent();
+                }
+                break;
+            case SELECT_FILE:
+                if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(getActivity(), "file Permissions not granted", Toast.LENGTH_SHORT).show();
+                } else {
+                    result =true;
+                    galleryIntent();
+                }
+                break;
+        }
+    }
+
+    private void selectImage() {
+        final CharSequence[] items = { "Take Photo", "Choose from Library",
+                "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Add Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (items[item].equals("Take Photo")) {
+                    userChoosenTask ="Take Photo";
+                    if (appPermissions.hasPermission( Manifest.permission.CAMERA)){
+                        result = true;
+                        cameraIntent();
+                    } else {
+                        appPermissions.requestPermission(getActivity(),  Manifest.permission.CAMERA, REQUEST_CAMERA);
+                    }
+                } else if (items[item].equals("Choose from Library")) {
+                    userChoosenTask ="Choose from Library";
+                    if (appPermissions.hasPermission( Manifest.permission.READ_EXTERNAL_STORAGE)){
+                        result = true;
+                        galleryIntent();
+                        Toast.makeText(getContext(), "All granted gal"+result, Toast.LENGTH_SHORT).show();
+                    } else {
+                        appPermissions.requestPermission(getActivity(),  Manifest.permission.READ_EXTERNAL_STORAGE, SELECT_FILE);
+                    }
+
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void galleryIntent()
+    {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);
+    }
+
+    private void cameraIntent()
+    {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_CAMERA);
+    }
+
+    private void onCaptureImageResult(Intent data) {
+        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+
+        File destination = new File(Environment.getExternalStorageDirectory(),
+                System.currentTimeMillis() + ".jpg");
+
+        FileOutputStream fo;
+        try {
+            destination.createNewFile();
+            fo = new FileOutputStream(destination);
+            fo.write(bytes.toByteArray());
+            fo.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        base_64 = Utility.BitMapToString(thumbnail);
+        if (pos>img_base_64.size())
+        img_base_64.set(pos,base_64);
+        else img_base_64.add(pos,base_64);
+        Toast.makeText(getActivity(), ""+img_base_64.size(), Toast.LENGTH_SHORT).show();
+//        endClock.setImageBitmap(thumbnail);
+    }
+
+    @SuppressWarnings("deprecation")
+    private void onSelectFromGalleryResult(Intent data) {
+
+        Bitmap bm=null;
+        if (data != null) {
+            try {
+                bm = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
+                base_64 = Utility.BitMapToString(bm);
+                if (pos>img_base_64.size())
+                    img_base_64.set(pos,base_64);
+                else img_base_64.add(pos,base_64);
+                Toast.makeText(getActivity(), ""+img_base_64.size(), Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    //   endClock.setImageBitmap(bm);
+    }
+
+    private final int  REQUEST_CAMERA=0, SELECT_FILE = 1;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Toast.makeText(getContext(), "ABC", Toast.LENGTH_SHORT).show();
+
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == ChoosePhoto.CHOOSE_PHOTO_INTENT) {
-                if (data != null && data.getData() != null) {
-                    choosePhoto.handleGalleryResult(data);
-                } else {
-                    choosePhoto.handleCameraResult(choosePhoto.getCameraUri());
-                }
-            } else if (requestCode == ChoosePhoto.SELECTED_IMG_CROP) {
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), choosePhoto.getCropImageUrl());
-                    // bitmap = bm;
-                    base_64 = Utility.BitMapToString(bitmap);
-                    Toast.makeText(getContext(), base_64, Toast.LENGTH_SHORT).show();
-                    /*if (base != null) {
-                        base.set(pos, bitmapString);
-                    }*/
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            Toast.makeText(getContext(), "fdgdg", Toast.LENGTH_SHORT).show();
+            if (requestCode == SELECT_FILE)
+                onSelectFromGalleryResult(data);
+            else if (requestCode == REQUEST_CAMERA)
+                onCaptureImageResult(data);
         }
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                                     @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == ChoosePhoto.SELECT_PICTURE_CAMERA&& requestCode == ChoosePhoto.CHOOSE_PHOTO_INTENT) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                choosePhoto.showAlertDialog();
-        }
-    }
-
 
 }

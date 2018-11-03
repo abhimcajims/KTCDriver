@@ -2,6 +2,8 @@ package com.ktcdriver.webservices;
 
 import com.ktcdriver.model.LoginResponse;
 import com.ktcdriver.model.NewUserResponse;
+import com.ktcdriver.model.NotificationData;
+import com.ktcdriver.model.OrderHistroyData;
 import com.ktcdriver.model.SaveResponse;
 import com.ktcdriver.model.ViewDetailsData;
 
@@ -70,8 +72,13 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("job_history.php")
-    Call<LoginResponse> getHistory(@Field("driverId")String driverId,
-                                        @Field("limit")String limit);
+    Call<OrderHistroyData> getHistory(@Field("driverId")String driverId,
+                                      @Field("limit")String limit);
 
+
+    @FormUrlEncoded
+    @POST("notification.php")
+    Call<NotificationData> getNotification(@Field("driverId")String driverId,
+                                           @Field("limit")String limit);
 }
 

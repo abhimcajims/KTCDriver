@@ -1,13 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.OrderHistoryFragment">
 
     <!-- TODO: Update blank fragment layout -->
+<!--
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:id="@+id/fragment_order_no_record">
+
+            <com.ktcdriver.customtext.CustomTextViewBold
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="You don't have any order"
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:padding="10dp"
+                android:textSize="@dimen/size_16"/>
+
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fragment_order_progressbar"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fragment_order_load_more"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            android:layout_marginTop="30dp"/>
+
+    </RelativeLayout>
+-->
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fragment_order_history_recycler"/>
-</FrameLayout>
+        android:id="@+id/fragment_order_recycler"/>
+
+</RelativeLayout>

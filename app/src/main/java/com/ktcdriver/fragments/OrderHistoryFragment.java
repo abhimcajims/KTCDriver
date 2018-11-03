@@ -6,32 +6,40 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 import com.ktcdriver.R;
 import com.ktcdriver.activities.home.HomeActivity;
 import com.ktcdriver.activities.setup.LoginActivity;
 import com.ktcdriver.adapter.DashboardAdapter;
+import com.ktcdriver.adapter.OrderHistoryAdapter;
 import com.ktcdriver.model.LoginResponse;
+import com.ktcdriver.model.OrderHistroyData;
 import com.ktcdriver.utils.Utility;
 import com.ktcdriver.webservices.APIClient;
 import com.ktcdriver.webservices.OnResponseInterface;
 import com.ktcdriver.webservices.ResponseListner;
 import com.mukesh.tinydb.TinyDB;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 
 
-public class OrderHistoryFragment extends Fragment implements DashboardAdapter.DashboardInterface,OnResponseInterface{
+public class OrderHistoryFragment extends Fragment implements OrderHistoryAdapter.DashboardInterface,OnResponseInterface{
     private RecyclerView recyclerView;
     private TinyDB tinyDB;
+    private int min=0, max=5;
+    private String limit = min + "," + max, driverID;
+    private ProgressBar pb_load_more,pb_main;
 
 
     @Override
@@ -46,38 +54,45 @@ public class OrderHistoryFragment extends Fragment implements DashboardAdapter.D
         super.onActivityCreated(savedInstanceState);
         init();
     }
-    private List<LoginResponse.JobListBean> jobListBeans;
+
+    private List<OrderHistroyData.JobListBean> jobListBeans;
+
     private void init(){
         tinyDB = new TinyDB(getContext());
-        recyclerView = getView().findViewById(R.id.fragment_order_history_recycler);
         String login = tinyDB.getString("login_data");
 
         LoginResponse loginResponse = new Gson().fromJson(login,LoginResponse.class);
-        if (loginResponse.getStatus().equals("1")){
-            tinyDB.putString("login_data",new Gson().toJson(loginResponse));
-            jobListBeans = loginResponse.getJob_list();
-            if (jobListBeans.size()>0){
-              //  no_recordLayout.setVisibility(View.GONE);
-                setDashboardAdapter();
-            } else {
-                //no_recordLayout.setVisibility(View.VISIBLE);
-            }
-        }
-        else if (loginResponse.getStatus().equals("0")){
-            Utility.showToast(getActivity(),loginResponse.getMessage());
-        }
-
+        driverID = loginResponse.getProfileInfo().getDriverId();
+        jobListBeans = new ArrayList<>();
+        recyclerView = getView().findViewById(R.id.fragment_order_recycler);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+      /*  pb_main = getView().findViewById(R.id.fragment_order_progressbar);
+        pb_load_more = getView().findViewById(R.id.fragment_order_load_more);*/
     }
 
-    private DashboardAdapter dashboardAdapter;
-    private void setDashboardAdapter(){
-        dashboardAdapter= new DashboardAdapter(getContext(),this,jobListBeans);
-        recyclerView.setAdapter(dashboardAdapter);
+    private OrderHistoryAdapter dashboardAdapter;
+
+    private void setDashboardAdapter(List<OrderHistroyData.JobListBean> jobListBeans){
+        if (dashboardAdapter == null){
+            dashboardAdapter= new OrderHistoryAdapter(getContext(),this, this.jobListBeans);
+            recyclerView.setAdapter(dashboardAdapter);
+        } else{
+            dashboardAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void startJob(int i) {
 
+    }
+
+    @Override
+    public void onScrollPage(int i) {
+        min = min+5;
+        max = max+5;
+        limit = min+","+max;
+        fetchHistoryData(driverID,limit);
     }
 
     @Override
@@ -91,11 +106,16 @@ public class OrderHistoryFragment extends Fragment implements DashboardAdapter.D
                 HomeActivity.drawer.openDrawer(GravityCompat.START);
             }
         });
+
+        fetchHistoryData(driverID,limit);
     }
 
-    private void fetchHistoryData(final String driverId, String pass) {
+    private void fetchHistoryData(final String driverId, String limit) {
+        if (min==0&&max==5){
+            jobListBeans.clear();
+        }
         new Utility().showProgressDialog(getContext());
-        Call<LoginResponse> call = APIClient.getInstance().getApiInterface().getHistory(driverId,pass);
+        Call<OrderHistroyData> call = APIClient.getInstance().getApiInterface().getHistory(driverId,limit);
         call.request().url();
         Log.d("TAG", "rakhi: "+call.request().url());
 
@@ -104,11 +124,29 @@ public class OrderHistoryFragment extends Fragment implements DashboardAdapter.D
 
     @Override
     public void onApiResponse(Object response) {
-
+        new Utility().hideDialog();
+        if (response!=null){
+            try {
+                if (response instanceof OrderHistroyData){
+                    OrderHistroyData orderHistroyData = (OrderHistroyData) response;
+                    Log.d("TAG", "rakhi: "+new Gson().toJson(orderHistroyData));
+                    if (orderHistroyData.getStatus().equals("1")){
+                        jobListBeans.addAll(orderHistroyData.getJob_list());
+                        setDashboardAdapter(jobListBeans);
+                    } else {
+                        Utility.showToast(getContext(),orderHistroyData.getMessage());
+                    }
+                }
+            } catch (Exception e){
+                Log.d("TAG", "onApiResponse: "+e.getMessage());
+            }
+        }
     }
 
     @Override
     public void onApiFailure(String message) {
-
+        new Utility().hideDialog();
+        Utility.showToast(getContext(),getString(R.string.error));
     }
+
 }

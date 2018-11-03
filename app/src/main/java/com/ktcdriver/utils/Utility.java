@@ -113,5 +113,8 @@ public class Utility {
 
         manager.beginTransaction().replace(container, fragment).addToBackStack(tag).commit();
     }
+    public void callFragment1(Fragment fragment, FragmentManager manager, int container, String tag){
 
+        manager.beginTransaction().replace(container, fragment).addToBackStack(tag).commit();
+    }
 }
