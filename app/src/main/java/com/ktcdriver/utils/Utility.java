@@ -51,7 +51,7 @@ public class Utility {
     }
 
 
-    private static ProgressDialog progressDialog;
+    public static ProgressDialog progressDialog;
     public void showProgressDialog(Context context){
         progressDialog = new ProgressDialog(context);
         progressDialog.setCanceledOnTouchOutside(false);

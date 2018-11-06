@@ -3,6 +3,7 @@ package com.ktcdriver.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -70,19 +71,17 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
                 LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        NotificationData notificationData = new Gson().fromJson(tinyDB.getString("notifi"),NotificationData.class);
-        List<NotificationData.NotificationDataBean> notificationDataBeanList =
-                new ArrayList<>(notificationData.getNotification_data());
-
-        setNotiAdapter(recyclerView,notificationDataBeanList);
         getNotification(driverID, limit);
 
     }
 
     private NotificationAdapter notificationAdapter;
     private void setNotiAdapter(RecyclerView recyclerView, List<NotificationData.NotificationDataBean> notificationDataBeanList){
-        notificationAdapter = new NotificationAdapter(getContext(),notificationDataBeanList,this);
-        recyclerView.setAdapter(notificationAdapter);
+        if (notificationAdapter==null){
+            notificationAdapter = new NotificationAdapter(getContext(),notificationDataBeanList,this);
+            recyclerView.setAdapter(notificationAdapter);
+        } else notificationAdapter.notifyDataSetChanged();
+
     }
 
 
@@ -109,8 +108,6 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
                 HomeActivity.drawer.openDrawer(GravityCompat.START);
             }
         });
-
-
     }
 
     @Override
@@ -125,7 +122,8 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
                     NotificationData notificationData = (NotificationData) response;
                     if (notificationData.getStatus().equals("1")){
                         notificationDataBeans.addAll(notificationData.getNotification_data());
-//                        tinyDB.putString("notifi",new Gson().toJson(notificationData));
+                      //  tinyDB.putString("notification_list",new Gson().toJson(notificationData));
+                        setNotiAdapter(recyclerView,notificationDataBeans);
 
                     } else {
                         Utility.showToast(getContext(),notificationData.getMessage());
@@ -145,16 +143,39 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
 
     @Override
     public void onClick(int pos) {
-
+        readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
+/*
+        if (notificationDataBeans.get(pos).getType().equals("DUTY")){
+            getFragmentManager().popBackStackImmediate();
+            new Utility().callFragment(new DashboardFragment(),getFragmentManager(),
+                    R.id.fragment_container,DashboardFragment.class.getName());
+        } else {
+            readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
+        }*/
     }
 
     @Override
     public void onLast(int pos) {
-        min = min+5;
+      /*  min = min+5;
         max = max+5;
         limit = min+","+max;
-        getNotification(driverID,limit);
+        getNotification(driverID,limit);*/
 
     }
+
+    private void readNotification(String driverID, String limit, String notification_id){
+        if (min==0&&max==5){
+            notificationDataBeans.clear();
+        }
+        new Utility().showProgressDialog(getContext());
+        Call<NotificationData> call = APIClient.getInstance().getApiInterface().readNotification(driverID,
+                limit, notification_id);
+        call.request().url();
+        Log.d("TAG", "rakhi: "+call.request().url());
+
+        new ResponseListner(this,getContext()).getResponse( call);
+    }
+
+
 
 }

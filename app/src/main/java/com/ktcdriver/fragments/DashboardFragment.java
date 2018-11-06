@@ -41,7 +41,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Dash
     private RecyclerView recyclerView;
     private DashboardAdapter dashboardAdapter;
     private TinyDB tinyDB;
-    private String driverId, pass;
+    public static String driverId, pass;
     private LinearLayout  no_recordLayout;
     private List<LoginResponse.JobListBean>jobListBeans;
 

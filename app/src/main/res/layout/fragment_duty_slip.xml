@@ -756,19 +756,40 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/fragment_duty_slip_upload_document_rv"/>
 
-                <com.ktcdriver.customtext.CustomTextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/duty_slip_add_more"
-                    android:text="Add more"
-                    android:textSize="10sp"
-                    android:background="@drawable/button_bg"
-                    android:textColor="@color/colorWhite"
-                    android:layout_gravity="center"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"/>
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <com.ktcdriver.customtext.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/duty_slip_add_more"
+                        android:text="Add more"
+                        android:textSize="10sp"
+                        android:background="@drawable/button_bg"
+                        android:textColor="@color/colorWhite"
+                        android:layout_gravity="center"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"/>
+                    <com.ktcdriver.customtext.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/duty_slip_save"
+                        android:text="Save Document"
+                        android:textSize="10sp"
+                        android:background="@drawable/button_bg"
+                        android:textColor="@color/colorWhite"
+                        android:layout_gravity="center"
+                        android:paddingTop="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"/>
+
+                </LinearLayout>
 
                 <com.ktcdriver.customtext.CustomTextViewBold
                     android:layout_width="match_parent"

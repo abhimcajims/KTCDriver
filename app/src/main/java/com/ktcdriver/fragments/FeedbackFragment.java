@@ -221,8 +221,9 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
                 SaveResponse saveResponse = (SaveResponse) response;
                 if (saveResponse.getStatus().equals("1")){
                     Utility.showToast(getContext(), "Thank you for your valuable Feedback.");
-                    new Utility().callFragment(new PaymentFragment(),getFragmentManager(),R.id.fragment_container,
-                            PaymentFragment.class.getName());
+                    /*new Utility().callFragment(new PaymentFragment(),getFragmentManager(),R.id.fragment_container,
+                            PaymentFragment.class.getName());*/
+                    getFragmentManager().popBackStack();
                 } else {
                     Utility.showToast(getContext(),saveResponse.getMessage());
                 }

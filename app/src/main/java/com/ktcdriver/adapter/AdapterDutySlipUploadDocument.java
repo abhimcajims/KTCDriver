@@ -5,9 +5,13 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ktcdriver.R;
@@ -31,6 +35,7 @@ public class AdapterDutySlipUploadDocument extends RecyclerView.Adapter<AdapterD
 
     public interface UploadDocInterface{
         void browse(View view, int pos);
+        void getText(int pos, String value);
     }
 
     @NonNull
@@ -62,6 +67,27 @@ public class AdapterDutySlipUploadDocument extends RecyclerView.Adapter<AdapterD
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            final EditText edtName = itemView.findViewById(R.id.fragment_duty_slip_edt_upload_document);
+            edtName.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    String s = charSequence.toString();
+                    Log.d("TAG", "onTextChanged: "+s);
+                    uploadDocInterface.getText(getAdapterPosition(), edtName.getText().toString().trim());
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+
+
             TextView txtUpload = itemView.findViewById(R.id.fragment_duty_slip_upload_document);
 
             txtUpload.setOnClickListener(new View.OnClickListener() {

@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/duty_slip_bg"
         android:padding="10dp"
+        android:id="@+id/item_doc_name"
         android:text="Slip 1"
         android:layout_margin="10dp"/>
 
@@ -17,7 +18,7 @@
         android:layout_height="25dp"
         android:background="@drawable/button_border_blue_round"
         android:gravity="center"
-        android:id="@+id/duty_slip_charge1_cross"
+        android:id="@+id/item_doc_cross"
         android:layout_alignParentRight="true">
 
         <com.ktcdriver.customtext.CustomTextView

@@ -1,21 +1,24 @@
 package com.ktcdriver.model;
 
-import com.google.gson.annotations.SerializedName;
+import java.util.List;
 
 /**
  * Created by Rakhi on 10/16/2018.
  */
 public class ViewDetailsData {
 
+
     /**
      * status : 1
      * message : Success
-     * job_detail : {"Reservationid":"709180043","dutyslipnum":"181920298","Drivername":"SURESH KUMAR","Carno":"DL 1NA 0577","Carname":"MERCEDES E CLASS","Guestname":"For Fitness DL 1NA 0577","Guestcontacto":"NA","ReportingPlace":"Burari ","Reportingfrom":"08-10-2018","Reporingto":"08-10-2018","Reporingtime":"08:00","Bookername":"Mahesh Kumar","Bookercontactno":"","Assignment":"LOCAL RUN FULL DAY","City of usage":"Delhi/NCR","Vehiclerequest":"MERCEDES C CLASS","Paymentmode":"Credit","Details":"Local Run","Company Name":"KTC INDIA INTERNAL USE","starting_date":"2018-10-08","ending_date":"2018-10-08","starting_meter":"75414","starting_time":"08:45","reporting_meter":"","reporting_time":"","ending_meter":"75456","ending_time":"15:00","meter_at_garage":"75456","time_at_garage":"15:00","total_meter":"42","total_time":"6:15","misc_charges1":{"night_halt":null,"toll":null,"parking":null,"e_toll":null,"interstate_tax":null,"others":null},"misc_charges2":{"beverage_charge":null,"entrance_charge":null,"parking":null,"driver_ta":null}}
+     * job_detail : {"Reservationid":"401180349","dutyslipnum":"171826674","Drivername":"BAHADUR SINGH","Carno":"DL1NA -1944","Carname":"TOYOTA CAMRY HYBRID ","Guestname":"GROUP TOUR AGRA","Guestcontacto":"NA","ReportingPlace":"HOTEL'S","Reportingfrom":"03-11-2018","Reporingto":"03-11-2018","Reporingtime":"06:30","Bookername":"MR. SSA","Bookercontactno":"","Assignment":"OUTSTATION","City_of_usage":"Delhi/NCR","Vehiclerequest":"TOYOTA INNOVA","Paymentmode":"Credit","Details":"SAME DAY AGRA","Company_Name":"TRAVELITE (INDIA)","starting_date":null,"ending_date":null,"starting_meter":null,"starting_time":null,"reporting_meter":null,"reporting_time":null,"ending_meter":null,"ending_time":null,"meter_at_garage":null,"time_at_garage":null,"total_meter":null,"total_time":null,"misc_charges1":{"night_halt":null,"toll":null,"parking":null,"e_toll":null,"interstate_tax":null,"others":null},"misc_charges2":{"beverage_charge":null,"entrance_charge":null,"guide_charge":null,"driver_ta":null}}
+     * imagelist : [{"name":"Slip1","id":"5"},{"name":"Slip2","id":"6"}]
      */
 
     private String status;
     private String message;
     private JobDetailBean job_detail;
+    private List<ImagelistBean> imagelist;
 
     public String getStatus() {
         return status;
@@ -41,41 +44,49 @@ public class ViewDetailsData {
         this.job_detail = job_detail;
     }
 
+    public List<ImagelistBean> getImagelist() {
+        return imagelist;
+    }
+
+    public void setImagelist(List<ImagelistBean> imagelist) {
+        this.imagelist = imagelist;
+    }
+
     public static class JobDetailBean {
         /**
-         * Reservationid : 709180043
-         * dutyslipnum : 181920298
-         * Drivername : SURESH KUMAR
-         * Carno : DL 1NA 0577
-         * Carname : MERCEDES E CLASS
-         * Guestname : For Fitness DL 1NA 0577
+         * Reservationid : 401180349
+         * dutyslipnum : 171826674
+         * Drivername : BAHADUR SINGH
+         * Carno : DL1NA -1944
+         * Carname : TOYOTA CAMRY HYBRID
+         * Guestname : GROUP TOUR AGRA
          * Guestcontacto : NA
-         * ReportingPlace : Burari
-         * Reportingfrom : 08-10-2018
-         * Reporingto : 08-10-2018
-         * Reporingtime : 08:00
-         * Bookername : Mahesh Kumar
+         * ReportingPlace : HOTEL'S
+         * Reportingfrom : 03-11-2018
+         * Reporingto : 03-11-2018
+         * Reporingtime : 06:30
+         * Bookername : MR. SSA
          * Bookercontactno :
-         * Assignment : LOCAL RUN FULL DAY
-         * City of usage : Delhi/NCR
-         * Vehiclerequest : MERCEDES C CLASS
+         * Assignment : OUTSTATION
+         * City_of_usage : Delhi/NCR
+         * Vehiclerequest : TOYOTA INNOVA
          * Paymentmode : Credit
-         * Details : Local Run
-         * Company Name : KTC INDIA INTERNAL USE
-         * starting_date : 2018-10-08
-         * ending_date : 2018-10-08
-         * starting_meter : 75414
-         * starting_time : 08:45
-         * reporting_meter :
-         * reporting_time :
-         * ending_meter : 75456
-         * ending_time : 15:00
-         * meter_at_garage : 75456
-         * time_at_garage : 15:00
-         * total_meter : 42
-         * total_time : 6:15
+         * Details : SAME DAY AGRA
+         * Company_Name : TRAVELITE (INDIA)
+         * starting_date : null
+         * ending_date : null
+         * starting_meter : null
+         * starting_time : null
+         * reporting_meter : null
+         * reporting_time : null
+         * ending_meter : null
+         * ending_time : null
+         * meter_at_garage : null
+         * time_at_garage : null
+         * total_meter : null
+         * total_time : null
          * misc_charges1 : {"night_halt":null,"toll":null,"parking":null,"e_toll":null,"interstate_tax":null,"others":null}
-         * misc_charges2 : {"beverage_charge":null,"entrance_charge":null,"parking":null,"driver_ta":null}
+         * misc_charges2 : {"beverage_charge":null,"entrance_charge":null,"guide_charge":null,"driver_ta":null}
          */
 
         private String Reservationid;
@@ -92,13 +103,11 @@ public class ViewDetailsData {
         private String Bookername;
         private String Bookercontactno;
         private String Assignment;
-        @SerializedName("City of usage")
-        private String _$CityOfUsage184; // FIXME check this code
+        private String City_of_usage;
         private String Vehiclerequest;
         private String Paymentmode;
         private String Details;
-        @SerializedName("Company Name")
-        private String _$CompanyName59; // FIXME check this code
+        private String Company_Name;
         private String starting_date;
         private String ending_date;
         private String starting_meter;
@@ -226,12 +235,12 @@ public class ViewDetailsData {
             this.Assignment = Assignment;
         }
 
-        public String get_$CityOfUsage184() {
-            return _$CityOfUsage184;
+        public String getCity_of_usage() {
+            return City_of_usage;
         }
 
-        public void set_$CityOfUsage184(String _$CityOfUsage184) {
-            this._$CityOfUsage184 = _$CityOfUsage184;
+        public void setCity_of_usage(String City_of_usage) {
+            this.City_of_usage = City_of_usage;
         }
 
         public String getVehiclerequest() {
@@ -258,12 +267,12 @@ public class ViewDetailsData {
             this.Details = Details;
         }
 
-        public String get_$CompanyName59() {
-            return _$CompanyName59;
+        public String getCompany_Name() {
+            return Company_Name;
         }
 
-        public void set_$CompanyName59(String _$CompanyName59) {
-            this._$CompanyName59 = _$CompanyName59;
+        public void setCompany_Name(String Company_Name) {
+            this.Company_Name = Company_Name;
         }
 
         public String getStarting_date() {
@@ -448,7 +457,7 @@ public class ViewDetailsData {
             /**
              * beverage_charge : null
              * entrance_charge : null
-             * parking : null
+             * guide_charge : null
              * driver_ta : null
              */
 
@@ -473,12 +482,12 @@ public class ViewDetailsData {
                 this.entrance_charge = entrance_charge;
             }
 
-            public Object getParking() {
+            public Object getGuide_charge() {
                 return guide_charge;
             }
 
-            public void setParking(Object parking) {
-                this.guide_charge = parking;
+            public void setGuide_charge(Object guide_charge) {
+                this.guide_charge = guide_charge;
             }
 
             public Object getDriver_ta() {
@@ -488,6 +497,32 @@ public class ViewDetailsData {
             public void setDriver_ta(Object driver_ta) {
                 this.driver_ta = driver_ta;
             }
+        }
+    }
+
+    public static class ImagelistBean {
+        /**
+         * name : Slip1
+         * id : 5
+         */
+
+        private String name;
+        private String id;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
         }
     }
 }

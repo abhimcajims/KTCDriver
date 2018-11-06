@@ -7,6 +7,7 @@ import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +34,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.ktcdriver.R;
 import com.ktcdriver.adapter.NotificationAdapter;
 import com.ktcdriver.fragments.DashboardFragment;
@@ -49,7 +49,6 @@ import com.ktcdriver.webservices.OnResponseInterface;
 import com.ktcdriver.webservices.ResponseListner;
 import com.mukesh.tinydb.TinyDB;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,8 +73,8 @@ public class HomeActivity extends AppCompatActivity
         tinyDB = new TinyDB(getApplicationContext());
         notificationDataBeans = new ArrayList<>();
         String login = tinyDB.getString("login_data");
-        if (tinyDB.contains("notifi"))
-            tinyDB.remove("notifi");
+       /* if (tinyDB.contains("notifi"))
+            tinyDB.remove("notifi");*/
         loginResponse = new Gson().fromJson(login,LoginResponse.class);
         driverID = loginResponse.getProfileInfo().getDriverId();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -91,6 +90,13 @@ public class HomeActivity extends AppCompatActivity
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header=navigationView.getHeaderView(0);
+        Menu nav_Menu = navigationView.getMenu();
+        if (loginResponse.getProfileInfo().getJob_history().equals("0")){
+            nav_Menu.findItem(R.id.nav_order_history).setVisible(false);
+        } else {
+            nav_Menu.findItem(R.id.nav_order_history).setVisible(true);
+        }
+
         /*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
         TextView name = (TextView)header.findViewById(R.id.nav_header_name);
         TextView email = (TextView)header.findViewById(R.id.nav_header_email);
@@ -132,7 +138,7 @@ public class HomeActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
 
 //        call dashboard fragment
-        getNotification();
+        getNotification(driverID, limit);
 
     }
 
@@ -203,13 +209,19 @@ public class HomeActivity extends AppCompatActivity
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(),
                 LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(linearLayoutManager);
+        if (tinyDB.contains("notification_list")){
+            String data = tinyDB.getString("notification_list");
 
-        NotificationData notificationData = new Gson().fromJson(tinyDB.getString("notifi"),NotificationData.class);
-        List<NotificationData.NotificationDataBean> notificationDataBeanList =
-                new ArrayList<>(notificationData.getNotification_data());
-        mNotificationCount = Integer.parseInt(notificationData.getCount_notification());
+            NotificationData notificationData = new Gson().fromJson(data,NotificationData.class);
+            if (notificationData.getNotification_data()!=null){
+                List<NotificationData.NotificationDataBean> notificationDataBeanList =
+                        new ArrayList<>(notificationData.getNotification_data());
+                mNotificationCount = Integer.parseInt(notificationData.getCount_notification());
+                setNotiAdapter(recyclerView,notificationDataBeanList);
+                setupBadge(mNotificationCount);
+            }
+        }
 
-        setNotiAdapter(recyclerView,notificationDataBeanList);
         popupWindow.setFocusable(true);
         popupWindow.setWidth(width - 150);
         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
@@ -293,17 +305,19 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    private void getNotification(){
+    private void getNotification(String driverID, String limit){
         if (min==0&&max==5){
             notificationDataBeans.clear();
         }
         new Utility().showProgressDialog(HomeActivity.this);
-        Call<NotificationData> call = APIClient.getInstance().getApiInterface().getNotification(driverID,limit);
+        Call<NotificationData> call = APIClient.getInstance().getApiInterface().getNotification(driverID, limit);
         call.request().url();
         Log.d("TAG", "rakhi: "+call.request().url());
 
         new ResponseListner(this,getApplicationContext()).getResponse( call);
     }
+
+
 
 
     @Override
@@ -315,17 +329,17 @@ public class HomeActivity extends AppCompatActivity
                     if (notificationDataBeans!=null){
                         notificationDataBeans.clear();
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
                     NotificationData notificationData = (NotificationData) response;
                     if (notificationData.getStatus().equals("1")){
                         notificationDataBeans.addAll(notificationData.getNotification_data());
-                        tinyDB.putString("notifi",new Gson().toJson(notificationData));
+                        tinyDB.putString("notification_list",new Gson().toJson(notificationData));
                         if (notificationData.getCount_notification()!=null )
                         mNotificationCount = Integer.parseInt(notificationData.getCount_notification());
                         setupBadge(mNotificationCount);
                     } else {
                         Utility.showToast(getApplicationContext(),notificationData.getMessage());
                     }
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
                 }
             } catch (Exception e){
                 Log.d("TAG", "error: "+e.getMessage());
@@ -341,21 +355,33 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onClick(int pos) {
-        Toast.makeText(this, ""+pos, Toast.LENGTH_SHORT).show();
         if (notificationDataBeans.get(pos).getType().equals("DUTY")){
             if (popupwindow_obj!=null)
             popupwindow_obj.dismiss();
+     //       readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
         } else {
             if (popupwindow_obj!=null)
                 popupwindow_obj.dismiss();
-            new Utility().callFragment(new NotificationFragment(),getSupportFragmentManager(),
-                    R.id.fragment_container,NotificationFragment.class.getName());
-        }
+       //     readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
 
+            Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            if(f instanceof NotificationFragment){
+
+            }
+            else {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotificationFragment())
+                        .addToBackStack(NotificationFragment.class.getName()).commit();
+//                new Utility().callFragment(new NotificationFragment(),getSupportFragmentManager(),
+//                        R.id.fragment_container,NotificationFragment.class.getName());
+            }
+        }
     }
 
     @Override
     public void onLast(int pos) {
-
+      /*  min = min+5;
+        max = max+5;
+        limit = min+","+max;
+        getNotification(driverID,limit);*/
     }
 }

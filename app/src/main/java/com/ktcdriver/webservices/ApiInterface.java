@@ -5,9 +5,11 @@ import com.ktcdriver.model.NewUserResponse;
 import com.ktcdriver.model.NotificationData;
 import com.ktcdriver.model.OrderHistroyData;
 import com.ktcdriver.model.SaveResponse;
+import com.ktcdriver.model.UploadDocRequest;
 import com.ktcdriver.model.ViewDetailsData;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
@@ -75,10 +77,26 @@ public interface ApiInterface {
     Call<OrderHistroyData> getHistory(@Field("driverId")String driverId,
                                       @Field("limit")String limit);
 
-
     @FormUrlEncoded
     @POST("notification.php")
     Call<NotificationData> getNotification(@Field("driverId")String driverId,
                                            @Field("limit")String limit);
+    @FormUrlEncoded
+    @POST("notification.php")
+    Call<NotificationData> readNotification(@Field("driverId")String driverId,
+                                           @Field("limit")String limit,
+                                            @Field("notification_id ")String notification_id );
+
+    @FormUrlEncoded
+    @POST("upload_ds_docuement.php")
+    Call<SaveResponse> deleteDoc(@Field("dutyslipnum") String dutyslipnum,
+                                 @Field("driverId") String driverId,
+                                 @Field("action") String action,
+                                 @Field("remove_id") String remove_id);
+
+    @FormUrlEncoded
+    @POST("close_ds.php")
+    Call<SaveResponse> closeDs(@Field("dutyslipnum")String dutyslipnum);
+
 }
 
