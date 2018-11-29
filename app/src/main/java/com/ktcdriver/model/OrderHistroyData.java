@@ -63,6 +63,15 @@ public class OrderHistroyData {
         private String ReportingPlace;
         private String ClientName;
         private String Paymentmode;
+        private String carno;
+
+        public String getCarno() {
+            return carno;
+        }
+
+        public void setCarno(String carno) {
+            this.carno = carno;
+        }
 
         public String getColor() {
             return color;

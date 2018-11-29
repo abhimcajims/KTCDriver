@@ -191,7 +191,7 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
          call.request().url();
         Log.d("TAG", "rakhi: "+call.request().url());
 
-         new ResponseListner(this,getApplicationContext()).getResponse( call);
+         new ResponseListner(this,getApplicationContext()).getResponse(call);
     }
 
     private void registerNewUser(String imei, String token,  String driverId){

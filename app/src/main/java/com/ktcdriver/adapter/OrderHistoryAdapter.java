@@ -69,11 +69,11 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         myViewHolder.txtEndDate.setText(jobListBeans.get(i).getReportingtoDate());
         myViewHolder.txtStartDate.setText(jobListBeans.get(i).getReportingDate());
         myViewHolder.txtCompanyName.setText(jobListBeans.get(i).getClientName());
-        myViewHolder.txtDutySlip.setText(jobListBeans.get(i).getDutyslipnum());
+        myViewHolder.txtDutySlip.setText("#"+jobListBeans.get(i).getDutyslipnum());
         myViewHolder.txtTime.setText(jobListBeans.get(i).getReportingTime());
         myViewHolder.txtReprotingPlace.setText(jobListBeans.get(i).getReportingPlace());
         myViewHolder.txtPayment.setText(jobListBeans.get(i).getPaymentmode());
-        /*myViewHolder.txtCarNo.setText(jobListBeans.get(i).getCarno());*/
+        myViewHolder.txtCarNo.setText(jobListBeans.get(i).getCarno());
 
         if (i==jobListBeans.size()-1){
             dashboardInterface.onScrollPage(i);

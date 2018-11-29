@@ -120,6 +120,16 @@ public class ViewDetailsData {
         private String time_at_garage;
         private String total_meter;
         private String total_time;
+        private String signature;
+
+        public String getSignature() {
+            return signature;
+        }
+
+        public void setSignature(String signature) {
+            this.signature = signature;
+        }
+
         private MiscCharges1Bean misc_charges1;
         private MiscCharges2Bean misc_charges2;
 

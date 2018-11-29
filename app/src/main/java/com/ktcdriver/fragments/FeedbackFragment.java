@@ -52,7 +52,7 @@ import retrofit2.Call;
  */
 public class FeedbackFragment extends Fragment implements View.OnClickListener,OnResponseInterface{
     private TextView txtSubmit;
-    private String dutyslipno,duty_remarks,signature="uytiutyiu";
+    private String dutyslipno,duty_remarks,signature="",no_signature;
     private RatingBar ratingBar;
     private EditText edtComment;
     View view;
@@ -107,6 +107,8 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
         mContent.addView(mSignature, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         view = mContent;
 
+
+
         // Method to create Directory, if the Directory doesn't exists
         file = new File(DIRECTORY);
         if (!file.exists()) {
@@ -137,26 +139,33 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
                     duty_remarks = "";
                 }
 
-                if (bitmap == null) {
-                    bitmap = Bitmap.createBitmap(mContent.getWidth(), mContent.getHeight(), Bitmap.Config.RGB_565);
+                if (mSignature.isTouch()){
+                    if (bitmap == null) {
+                        bitmap = Bitmap.createBitmap(mContent.getWidth(), mContent.getHeight(), Bitmap.Config.RGB_565);
+                    }
+                    Canvas canvas = new Canvas(bitmap);
+                    try {
+                        // Output the file
+                        FileOutputStream mFileOutStream = new FileOutputStream(StoredPath);
+                        mContent.draw(canvas);
+
+                        // Convert the output file to Image such as .png
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 90, mFileOutStream);
+
+                        mFileOutStream.flush();
+                        mFileOutStream.close();
+
+                    } catch (Exception e) {
+                        Log.v("log_tag", e.toString());
+                    }
+                    no_signature="";
+                    signature = Utility.BitMapToString(bitmap);
                 }
-                Canvas canvas = new Canvas(bitmap);
-                try {
-                    // Output the file
-                    FileOutputStream mFileOutStream = new FileOutputStream(StoredPath);
-                    mContent.draw(canvas);
-
-                    // Convert the output file to Image such as .png
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, mFileOutStream);
-
-
-                    mFileOutStream.flush();
-                    mFileOutStream.close();
-
-                } catch (Exception e) {
-                    Log.v("log_tag", e.toString());
+                else {
+                    no_signature = "no signature";
+                    Toast.makeText(getContext(), "No sig", Toast.LENGTH_SHORT).show();
                 }
-                signature = Utility.BitMapToString(bitmap);
+
                 sendFeedback();
                 Log.d("TAG", "save:"+signature);
 /*
@@ -205,8 +214,8 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
     private void sendFeedback(){
         new Utility().showProgressDialog(getContext());
 
-        Call<SaveResponse> call = APIClient.getInstance().getApiInterface().sendFeedback(dutyslipno,
-                signature,ratingBar.getRating()+"",duty_remarks);
+        Call<SaveResponse> call = APIClient.getInstance().getApiInterface().sendFeedback("171826700",
+                signature,ratingBar.getRating()+"",duty_remarks,no_signature);
         call.request().url();
         Log.d("TAG", "rakhi: "+call.request().url());
         new ResponseListner(this,getContext()).getResponse( call);
@@ -259,11 +268,16 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
             paint.setStrokeWidth(STROKE_WIDTH);
         }
 
+        boolean isSignature;
+        public boolean isTouch(){
+            return isSignature;
+        }
         Bitmap bitmap;
 
         public void save(View v, String StoredPath) {
             Log.v("log_tag", "Width: " + v.getWidth());
             Log.v("log_tag", "Height: " + v.getHeight());
+
             if (bitmap == null) {
                 bitmap = Bitmap.createBitmap(mContent.getWidth(), mContent.getHeight(), Bitmap.Config.RGB_565);
             }
@@ -296,11 +310,12 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
             canvas.drawPath(path, paint);
         }
 
+
         @Override
         public boolean onTouchEvent(MotionEvent event) {
             float eventX = event.getX();
             float eventY = event.getY();
-
+            isSignature = true;
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:

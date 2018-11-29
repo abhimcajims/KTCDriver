@@ -24,12 +24,14 @@ import java.util.ArrayList;
 public class AdapterDutySlipUploadDocument extends RecyclerView.Adapter<AdapterDutySlipUploadDocument.MyViewHolder> {
 
     private Context context;
-    private ArrayList<String>array_img;
+    private ArrayList<String>array_img, arr_name;
     private UploadDocInterface uploadDocInterface;
 
-    public AdapterDutySlipUploadDocument(Context context, ArrayList<String> array_img, UploadDocInterface uploadDocInterface) {
+    public AdapterDutySlipUploadDocument(Context context, ArrayList<String> array_img, ArrayList<String> arr_name,
+                                         UploadDocInterface uploadDocInterface) {
         this.context = context;
         this.array_img = array_img;
+        this.arr_name = arr_name;
         this.uploadDocInterface = uploadDocInterface;
     }
 
@@ -50,6 +52,15 @@ public class AdapterDutySlipUploadDocument extends RecyclerView.Adapter<AdapterD
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
 
+//        if(array_img.get(i).equals("Show Error Message")){
+//            myViewHolder.edtName.setError("This field required.");
+//        }
+
+        if(arr_name.get(i).equals("Photo1")){
+            myViewHolder.txtUpload.setText("Selected");
+        } else {
+            myViewHolder.txtUpload.setText("Choose Document");
+        }
 
     }
 
@@ -65,9 +76,12 @@ public class AdapterDutySlipUploadDocument extends RecyclerView.Adapter<AdapterD
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
+        public EditText edtName;
+        public TextView txtUpload;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            final EditText edtName = itemView.findViewById(R.id.fragment_duty_slip_edt_upload_document);
+            edtName = itemView.findViewById(R.id.fragment_duty_slip_edt_upload_document);
             edtName.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -88,12 +102,12 @@ public class AdapterDutySlipUploadDocument extends RecyclerView.Adapter<AdapterD
             });
 
 
-            TextView txtUpload = itemView.findViewById(R.id.fragment_duty_slip_upload_document);
+            txtUpload = itemView.findViewById(R.id.fragment_duty_slip_upload_document);
 
             txtUpload.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    uploadDocInterface.browse(view,getAdapterPosition());
+                    uploadDocInterface.browse(view, getAdapterPosition());
                 }
             });
         }

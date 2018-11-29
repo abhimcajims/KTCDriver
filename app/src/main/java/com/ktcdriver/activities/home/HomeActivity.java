@@ -66,6 +66,8 @@ public class HomeActivity extends AppCompatActivity
     private String limit = min + "," + max, driverID;
     private List<NotificationData.NotificationDataBean>notificationDataBeans;
 
+    private boolean notification_clicked = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +142,10 @@ public class HomeActivity extends AppCompatActivity
 //        call dashboard fragment
         getNotification(driverID, limit);
 
+
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
+
+        notification_clicked = false;
     }
 
     @Override
@@ -211,6 +217,7 @@ public class HomeActivity extends AppCompatActivity
         recyclerView.setLayoutManager(linearLayoutManager);
         if (tinyDB.contains("notification_list")){
             String data = tinyDB.getString("notification_list");
+            Log.e("MyNotifications", data);
 
             NotificationData notificationData = new Gson().fromJson(data,NotificationData.class);
             if (notificationData.getNotification_data()!=null){
@@ -318,8 +325,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
 
-
-
     @Override
     public void onApiResponse(Object response) {
         new Utility().hideDialog();
@@ -339,7 +344,19 @@ public class HomeActivity extends AppCompatActivity
                     } else {
                         Utility.showToast(getApplicationContext(),notificationData.getMessage());
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
+              /*      getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
+             */
+              if(notification_clicked) {
+                  Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                  if (f instanceof NotificationFragment) {
+
+                  } else {
+                      getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationFragment())
+                              .addToBackStack(NotificationFragment.class.getName()).commit();
+                  }
+              } else {
+                  getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
+              }
                 }
             } catch (Exception e){
                 Log.d("TAG", "error: "+e.getMessage());
@@ -355,26 +372,25 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onClick(int pos) {
+
+        notification_clicked = true;
         if (notificationDataBeans.get(pos).getType().equals("DUTY")){
             if (popupwindow_obj!=null)
             popupwindow_obj.dismiss();
-     //       readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
+            readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
         } else {
-            if (popupwindow_obj!=null)
+            if (popupwindow_obj != null)
                 popupwindow_obj.dismiss();
-       //     readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
-
-            Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-            if(f instanceof NotificationFragment){
-
-            }
-            else {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotificationFragment())
-                        .addToBackStack(NotificationFragment.class.getName()).commit();
-//                new Utility().callFragment(new NotificationFragment(),getSupportFragmentManager(),
-//                        R.id.fragment_container,NotificationFragment.class.getName());
-            }
+            readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
         }
+
+       /* Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if(f instanceof NotificationFragment){
+
+        } else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new NotificationFragment())
+                    .addToBackStack(NotificationFragment.class.getName()).commit();
+        }*/
     }
 
     @Override
@@ -383,5 +399,18 @@ public class HomeActivity extends AppCompatActivity
         max = max+5;
         limit = min+","+max;
         getNotification(driverID,limit);*/
+    }
+
+    private void readNotification(String driverID, String limit, String notification_id){
+        if (min==0&&max==5){
+            notificationDataBeans.clear();
+        }
+        new Utility().showProgressDialog(HomeActivity.this);
+        Call<NotificationData> call = APIClient.getInstance().getApiInterface().readNotification(driverID,
+                limit, notification_id);
+        call.request().url();
+        Log.d("TAG", "rakhi: "+call.request().url());
+
+        new ResponseListner(this,getApplicationContext()).getResponse( call);
     }
 }

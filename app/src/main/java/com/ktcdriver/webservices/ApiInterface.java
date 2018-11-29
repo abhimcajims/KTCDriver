@@ -3,6 +3,7 @@ package com.ktcdriver.webservices;
 import com.ktcdriver.model.LoginResponse;
 import com.ktcdriver.model.NewUserResponse;
 import com.ktcdriver.model.NotificationData;
+import com.ktcdriver.model.NotificationRequest;
 import com.ktcdriver.model.OrderHistroyData;
 import com.ktcdriver.model.SaveResponse;
 import com.ktcdriver.model.UploadDocRequest;
@@ -60,17 +61,18 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("misc_charge2.php")
     Call<SaveResponse> saveMis2(@Field("dutyslipnum")String dutyslipnum,
-                                   @Field("beverages_charges")String beverages_charges,
-                                   @Field("entrance_charge")String entrance_charge,
-                                   @Field("guide_charge")String guide_charge,
-                                   @Field("driver_ta")String driver_ta);
+                                @Field("beverages_charges")String beverages_charges,
+                                @Field("entrance_charge")String entrance_charge,
+                                @Field("guide_charge")String guide_charge,
+                                @Field("driver_ta")String driver_ta);
 
     @FormUrlEncoded
     @POST("end_job.php")
     Call<SaveResponse> sendFeedback(@Field("dutyslipnum")String dutyslipnum,
-                                @Field("signature")String signature,
-                                @Field("rating")String rating,
-                                @Field("duty_remarks")String duty_remarks);
+                                    @Field("signature")String signature,
+                                    @Field("rating")String rating,
+                                    @Field("duty_remarks")String duty_remarks,
+                                    @Field("no_signature") String no_signature);
 
     @FormUrlEncoded
     @POST("job_history.php")
@@ -85,7 +87,11 @@ public interface ApiInterface {
     @POST("notification.php")
     Call<NotificationData> readNotification(@Field("driverId")String driverId,
                                            @Field("limit")String limit,
-                                            @Field("notification_id ")String notification_id );
+                                            @Field("notification_id")String notification_id );
+
+//    @FormUrlEncoded
+    @POST("notification.php")
+    Call<NotificationData> readNotification1(@Body NotificationRequest notificationRequest);
 
     @FormUrlEncoded
     @POST("upload_ds_docuement.php")

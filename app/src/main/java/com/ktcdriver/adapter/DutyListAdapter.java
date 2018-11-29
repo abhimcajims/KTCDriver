@@ -65,15 +65,23 @@ public class DutyListAdapter extends RecyclerView.Adapter<DutyListAdapter.MyView
         myViewHolder.edtValue.setText(title1ListValue.get(i));
         if (title2ListValue.get(i)!=null)
         myViewHolder.txtTime.setText(title2ListValue.get(i));
-        if (isEndMeter && isEndTime){
-            if (i<3){
-                for (i=0;i<3;i++){
+
+        if (i==4){
+            myViewHolder. edtValue.setEnabled(false);
+            myViewHolder.imgClock.setClickable(false);
+        }else {
+            myViewHolder.edtValue.setEnabled(true);
+            myViewHolder.imgClock.setClickable(true);
+        }
+     /*   if (isEndMeter && isEndTime){
+            if (i<=4){
+                for (i=0;i<4;i++){
                     myViewHolder. edtValue.setEnabled(false);
                     myViewHolder.imgClock.setClickable(false);
                 }
             }
             else {
-                if (i==4){
+                if (i==5){
                     myViewHolder. edtValue.setEnabled(false);
                     myViewHolder.imgClock.setClickable(false);
                 }else {
@@ -84,7 +92,7 @@ public class DutyListAdapter extends RecyclerView.Adapter<DutyListAdapter.MyView
         } else {
                 myViewHolder.edtValue.setEnabled(true);
                 myViewHolder.imgClock.setClickable(true);
-        }
+        }*/
 
     }
 

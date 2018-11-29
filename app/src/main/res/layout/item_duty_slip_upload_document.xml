@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/fragment_duty_slip_edt_upload_document"
-                android:hint="Document "
+                android:hint="Enter Slip Name "
                 android:textSize="@dimen/size_12"
                 android:paddingHorizontal="10dp"
                 android:background="@android:color/transparent"/>
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:id="@+id/fragment_duty_slip_upload_document"
-            android:text="Upload Document"
+            android:text="Choose Document"
             android:textSize="10sp"
             android:background="@drawable/button_bg"
             android:textColor="@color/colorWhite"

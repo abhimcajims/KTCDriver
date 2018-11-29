@@ -55,7 +55,6 @@
         <com.ktcdriver.customtext.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Askonlinesolutions"
             android:textSize="@dimen/size_12"
             android:layout_below="@+id/item_dashboard_txtComName"
             android:id="@+id/item_dashboard_txtComNameValue"
@@ -90,7 +89,6 @@
         <com.ktcdriver.customtext.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="08-10-2018"
             android:paddingLeft="7dp"
             android:textSize="@dimen/size_12"
             android:layout_below="@+id/item_dashboard_txtStart"
@@ -127,7 +125,6 @@
                 <com.ktcdriver.customtext.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="08-10-2018"
                     android:layout_below="@+id/item_dashboard_txtEnd"
                     android:paddingLeft="25dp"
                     android:textSize="@dimen/size_12"
@@ -170,7 +167,6 @@
                <com.ktcdriver.customtext.CustomTextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="08-10-2018"
                    android:paddingLeft="7dp"
                    android:textSize="@dimen/size_12"
                    android:id="@+id/item_dashboard_txtReportingPlace" />
@@ -193,7 +189,6 @@
                <com.ktcdriver.customtext.CustomTextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="13323323"
                    android:paddingLeft="7dp"
                    android:textSize="@dimen/size_12"
                    android:id="@+id/item_dashboard_txtCarNo" />

@@ -106,7 +106,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyVi
                 @SuppressLint("SimpleDateFormat")
                 SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm");
                 String date = format.format(currentTime);
-                hours= calculateTime(date,reporting_time);
+//                hours= calculateTime(date,reporting_time);
             }
 
             txtStartJob.setOnClickListener(new View.OnClickListener() {

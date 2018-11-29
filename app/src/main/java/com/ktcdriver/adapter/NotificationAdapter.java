@@ -49,6 +49,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.txtMsg.setText(notificationDataBeans.get(i).getMessage_data());
+
         if (notificationDataBeans.get(i).getStatus().equals("0")){
             myViewHolder.layout.setBackgroundColor(context.getResources().getColor(R.color.colorDarkGrey));
         } else {

@@ -116,8 +116,7 @@
                     android:textSize="@dimen/size_12"
                     android:id="@+id/fragment_duty_slip_txt_driver_detail"
                     android:gravity="center_vertical"
-                    android:layout_height="match_parent"
-                    android:text="Pradeep Kumar Gupta"/>
+                    android:layout_height="match_parent" />
 
             </LinearLayout>
 
@@ -132,8 +131,9 @@
                 <com.ktcdriver.customtext.CustomTextViewBold
                     android:layout_width="0dp"
                     android:layout_weight=".8"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="Car Details"
+                    android:gravity="center_vertical"
                     android:textSize="@dimen/size_16"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/colorPrimary"/>
@@ -142,9 +142,8 @@
                     android:layout_weight="1"
                     android:textSize="@dimen/size_12"
                     android:id="@+id/fragment_duty_slip_txt_car_detail"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:text="Toyata Hiace(DL 1VC 3195)"
                     android:textAllCaps="true" />
 
             </LinearLayout>
@@ -191,7 +190,6 @@
                             <com.ktcdriver.customtext.CustomTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="3144552115"
                                 android:layout_marginTop="3dp"
                                 android:paddingBottom="5dp"
                                 android:textSize="@dimen/size_12"
@@ -205,7 +203,37 @@
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:background="@color/colorDarkGrey"/>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <com.ktcdriver.customtext.CustomTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="User's Name"
+                                android:gravity="center_horizontal"
+                                android:paddingTop="5dp"
+                                android:textSize="@dimen/size_16"
+                                android:textColor="@color/colorBlack"/>
+                            <com.ktcdriver.customtext.CustomTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/fragment_duty_slip_txt_user_name"
+                                android:gravity="center_horizontal"
+                                android:paddingTop="3dp"
+                                android:textColor="@color/colorGreen"
+                                android:textSize="@dimen/size_12"
+                                android:paddingBottom="5dp" />
 
+                        </LinearLayout>
+
+
+                        <View
+                            android:layout_marginTop="10dp"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorDarkGrey"/>
                         <LinearLayout
 
                             android:layout_width="0dp"
@@ -215,7 +243,7 @@
                             <com.ktcdriver.customtext.CustomTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Booker No"
+                                android:text="User's No"
                                 android:paddingTop="5dp"
                                 android:textSize="@dimen/size_16"
                                 android:gravity="center_horizontal"
@@ -223,7 +251,6 @@
                             <com.ktcdriver.customtext.CustomTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="099887553"
                                 android:gravity="center_horizontal"
                                 android:paddingTop="3dp"
                                 android:id="@+id/fragment_duty_slip_txt_booker_no"
@@ -233,36 +260,7 @@
 
                         </LinearLayout>
 
-                        <View
-                            android:layout_marginTop="10dp"
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/colorDarkGrey"/>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-                            <com.ktcdriver.customtext.CustomTextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Payment Mode"
-                                android:gravity="center_horizontal"
-                                android:paddingTop="5dp"
-                                android:textSize="@dimen/size_16"
-                                android:textColor="@color/colorBlack"/>
-                            <com.ktcdriver.customtext.CustomTextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Credit"
-                                android:id="@+id/fragment_duty_slip_txt_payment"
-                                android:gravity="center_horizontal"
-                                android:paddingTop="3dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="@dimen/size_12"
-                                android:textColor="@color/colorGreen"/>
 
-                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -292,7 +290,6 @@
                             <com.ktcdriver.customtext.CustomTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Delhi/NCR"
                                 android:id="@+id/fragment_duty_slip_txt_city"
                                 android:gravity="center_horizontal"
                                 android:paddingTop="3dp"
@@ -322,7 +319,6 @@
                             <com.ktcdriver.customtext.CustomTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="TOYOTA HIACE"
                                 android:gravity="center_horizontal"
                                 android:paddingTop="3dp"
                                 android:id="@+id/fragment_duty_slip_txt_vehicle_req"
@@ -345,7 +341,7 @@
                             <com.ktcdriver.customtext.CustomTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="User's Name"
+                                android:text="Payment Mode"
                                 android:gravity="center_horizontal"
                                 android:paddingTop="5dp"
                                 android:textSize="@dimen/size_16"
@@ -353,12 +349,11 @@
                             <com.ktcdriver.customtext.CustomTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="For Show"
-                                android:id="@+id/fragment_duty_slip_txt_user_name"
+                                android:id="@+id/fragment_duty_slip_txt_payment"
                                 android:gravity="center_horizontal"
                                 android:paddingTop="3dp"
-                                android:textSize="@dimen/size_12"
-                                android:paddingBottom="5dp" />
+                                android:paddingBottom="5dp"
+                                android:textSize="@dimen/size_12" />
 
                         </LinearLayout>
 
@@ -386,8 +381,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:layout_height="match_parent"
-                        android:text="KTC INDIA INTERNAL USE"
+                        android:layout_height="wrap_content"
                         android:paddingTop="5dp"
                         android:id="@+id/fragment_duty_slip_txt_companyName2"
                         android:paddingBottom="5dp"
@@ -400,6 +394,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/colorDarkGrey"/>
+
                 <LinearLayout
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
@@ -411,7 +406,7 @@
                         android:layout_width="0dp"
                         android:layout_weight=".8"
                         android:layout_height="wrap_content"
-                        android:text="Booked Name"
+                        android:text="Booker Name"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
                         android:textSize="@dimen/size_16" />
@@ -421,7 +416,6 @@
                         android:textSize="@dimen/size_12"
                         android:id="@+id/fragment_duty_slip_txt_bookedName"
                         android:layout_height="wrap_content"
-                        android:text="Mr. Abhishek Batham"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp" />
 
@@ -430,6 +424,38 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/colorDarkGrey"/>
+
+                <LinearLayout
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.ktcdriver.customtext.CustomTextViewBold
+                        android:layout_width="0dp"
+                        android:layout_weight=".8"
+                        android:layout_height="wrap_content"
+                        android:text="Booker's No"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:textSize="@dimen/size_16" />
+                    <com.ktcdriver.customtext.CustomTextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/size_12"
+                        android:id="@+id/fragment_duty_slip_txt_bookerNo"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorDarkGrey"/>
+
                 <LinearLayout
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
@@ -452,7 +478,6 @@
                         android:textSize="@dimen/size_12"
                         android:id="@+id/fragment_duty_slip_txt_report_place"
                         android:layout_height="wrap_content"
-                        android:text="212-213 Verdham Crown Mall, Sector 19-Dwarka,New Delhi"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"/>
                 </LinearLayout>
@@ -482,7 +507,6 @@
                         android:textSize="@dimen/size_12"
                         android:id="@+id/fragment_duty_slip_txt_assign"
                         android:layout_height="wrap_content"
-                        android:text="LOCAL RUN FULL DAY"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
                         android:textAllCaps="true" />
@@ -512,7 +536,6 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="For Show"
                         android:id="@+id/fragment_duty_slip_txt_details"
                         android:textSize="@dimen/size_12"
                         android:paddingTop="5dp"
@@ -566,9 +589,8 @@
                             android:background="@drawable/duty_slip_bg"
                             android:orientation="horizontal">
                             <com.ktcdriver.customtext.CustomTextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:text="10-09-2018"
                                 android:id="@+id/fragment_duty_slip_txt_starting_date"
                                 android:paddingLeft="5dp"
                                 android:textSize="@dimen/size_12"
@@ -611,7 +633,6 @@
                             <com.ktcdriver.customtext.CustomTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:text="10-09-2018"
                                 android:id="@+id/fragment_duty_slip_txt_end_date"
                                 android:textSize="@dimen/size_12"
                                 android:paddingLeft="5dp"
@@ -778,7 +799,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/duty_slip_save"
-                        android:text="Save Document"
+                        android:text="Upload Document"
                         android:textSize="10sp"
                         android:background="@drawable/button_bg"
                         android:textColor="@color/colorWhite"
