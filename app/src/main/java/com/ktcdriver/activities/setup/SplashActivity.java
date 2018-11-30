@@ -38,8 +38,6 @@ public class SplashActivity extends AppbaseActivity {
 
         tinyDB = new TinyDB(getApplicationContext());
 
-
-
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -88,7 +86,6 @@ public class SplashActivity extends AppbaseActivity {
     private String token;
     private static String TAG = LoginActivity.class.getName();
 
-
     private void displayFirebaseRegId() {
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
         String regId = pref.getString("regId", null);
@@ -119,7 +116,6 @@ public class SplashActivity extends AppbaseActivity {
                     overridePendingTransition(R.anim.enter, R.anim.exit);
                     finish();
                 }
-
             }
         }, TIME_INTERVAL);
 

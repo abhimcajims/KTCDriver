@@ -59,6 +59,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             // play notification sound
             NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
             notificationUtils.playNotificationSound();
+
+
         }else{
             // If the app is in background, firebase itself handles the notification
         }
@@ -84,7 +86,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.e(TAG, "imageUrl: " + imageUrl);
             Log.e(TAG, "timestamp: " + timestamp);
 
-
             if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
                 // app is in foreground, broadcast the push message
                 Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
@@ -94,6 +95,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 // play notification sound
                 NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
                 notificationUtils.playNotificationSound();
+
+
+
+
+
             } else {
                 // app is in background, show the notification in notification tray
                 Intent resultIntent = new Intent(getApplicationContext(), SplashActivity.class);

@@ -92,6 +92,7 @@ public class OrderHistoryFragment extends Fragment implements OrderHistoryAdapte
         min = min+5;
         max = max+5;
         limit = min+","+max;
+        if (!reachMax)
         fetchHistoryData(driverID,limit);
     }
 
@@ -109,6 +110,8 @@ public class OrderHistoryFragment extends Fragment implements OrderHistoryAdapte
 
         fetchHistoryData(driverID,limit);
     }
+
+    private boolean reachMax;
 
     private void fetchHistoryData(final String driverId, String limit) {
         if (min==0&&max==5){
@@ -131,7 +134,9 @@ public class OrderHistoryFragment extends Fragment implements OrderHistoryAdapte
                     OrderHistroyData orderHistroyData = (OrderHistroyData) response;
                     Log.d("TAG", "rakhi: "+new Gson().toJson(orderHistroyData));
                     if (orderHistroyData.getStatus().equals("1")){
+                        if (orderHistroyData.getJob_list()!=null && orderHistroyData.getJob_list().size()>0)
                         jobListBeans.addAll(orderHistroyData.getJob_list());
+                        else reachMax =true;
                         setDashboardAdapter(jobListBeans);
                     } else {
                         Utility.showToast(getContext(),orderHistroyData.getMessage());

@@ -97,7 +97,7 @@
         <com.ktcdriver.customtext.CustomEditText
             android:id="@+id/fragment_feedback_edtMsg"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:layout_margin="10dp"
             android:background="@drawable/duty_slip_bg"
             android:gravity="top|left"
@@ -113,26 +113,29 @@
             android:layout_marginTop="5dp"
             android:background="@color/colorDarkGrey" />
 
-        <com.ktcdriver.customtext.CustomTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="Signature"
-            android:textSize="@dimen/size_16" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp">
-
-            <LinearLayout
-                android:id="@+id/canvasLayout"
-                android:layout_width="match_parent"
-                android:layout_height="110dp"
-                android:orientation="vertical"
-                android:padding="5dp" />
-
+            android:orientation="horizontal">
+            <com.ktcdriver.customtext.CustomTextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Signature"
+                android:textSize="@dimen/size_16" />
+            <com.ktcdriver.customtext.CustomTextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Clear"
+                android:id="@+id/fragment_feedback_clear"
+                android:gravity="right"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/size_16" />
         </LinearLayout>
+
 
         <View
             android:layout_width="match_parent"
@@ -141,6 +144,50 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
             android:background="@color/colorDarkGrey" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:background="@color/colorDarkGrey" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/canvasLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_marginRight="10dp"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorDarkGrey" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/colorDarkGrey" />
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/fragment_feedback_check"
+            android:text="Not Sign"/>
 
         <com.ktcdriver.customtext.CustomTextViewBold
             android:id="@+id/fragment_feedback_submit"
@@ -154,7 +201,6 @@
             android:padding="15dp"
             android:text="Submit"
             android:textColor="@color/colorWhite" />
-
 
     </LinearLayout>
 

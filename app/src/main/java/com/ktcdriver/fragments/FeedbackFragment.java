@@ -25,6 +25,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -51,10 +53,11 @@ import retrofit2.Call;
  * A simple {@link Fragment} subclass.
  */
 public class FeedbackFragment extends Fragment implements View.OnClickListener,OnResponseInterface{
-    private TextView txtSubmit;
+    private TextView txtSubmit, txtClear;
     private String dutyslipno,duty_remarks,signature="",no_signature;
     private RatingBar ratingBar;
     private EditText edtComment;
+    private CheckBox notSignCheckBox;
     View view;
     signature mSignature;
     Bitmap bitmap;
@@ -65,6 +68,7 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
     String StoredPath = DIRECTORY + pic_name + ".png";
     LinearLayout mContent;
     File file;
+    boolean notSign;
 
     public FeedbackFragment() {
         // Required empty public constructor
@@ -86,17 +90,18 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
 
     private void init(){
        dutyslipno = DutySlipFragment.dutyslipnum;
-
+       txtClear = getView().findViewById(R.id.fragment_feedback_clear);
+        notSignCheckBox = getView().findViewById(R.id.fragment_feedback_check);
         txtSubmit = getView().findViewById(R.id.fragment_feedback_submit);
         ratingBar = getView().findViewById(R.id.fragment_feedback_rating);
         edtComment = getView().findViewById(R.id.fragment_feedback_edtMsg);
+
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener(){
 
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating,
                                         boolean fromUser) {
                 // TODO Auto-generated method stub
-                Toast.makeText(getContext(),Float.toString(rating), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -107,7 +112,14 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
         mContent.addView(mSignature, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         view = mContent;
 
-
+        notSignCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    notSign = true;
+                } else notSign = false;
+            }
+        });
 
         // Method to create Directory, if the Directory doesn't exists
         file = new File(DIRECTORY);
@@ -115,6 +127,8 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
             file.mkdir();
         }
         txtSubmit.setOnClickListener(this);
+        txtClear.setOnClickListener(this);
+
     }
 
     @Override
@@ -138,8 +152,7 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
                 if (duty_remarks==null){
                     duty_remarks = "";
                 }
-
-                if (mSignature.isTouch()){
+                if (mSignature.isTouch()|| !notSign){
                     if (bitmap == null) {
                         bitmap = Bitmap.createBitmap(mContent.getWidth(), mContent.getHeight(), Bitmap.Config.RGB_565);
                     }
@@ -154,21 +167,25 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
 
                         mFileOutStream.flush();
                         mFileOutStream.close();
-
                     } catch (Exception e) {
                         Log.v("log_tag", e.toString());
                     }
-                    no_signature="";
-                    signature = Utility.BitMapToString(bitmap);
                 }
                 else {
                     no_signature = "no signature";
-                    Toast.makeText(getContext(), "No sig", Toast.LENGTH_SHORT).show();
+                }
+
+                if (notSignCheckBox.isChecked()){
+                    no_signature = "no signature";
+                } else {
+                    no_signature="";
+                    signature = Utility.BitMapToString(bitmap);
                 }
 
                 sendFeedback();
                 Log.d("TAG", "save:"+signature);
-/*
+
+                /*
                 Log.v("log_tag", "Panel Saved");
                 if (Build.VERSION.SDK_INT >= 23) {
                     isStoragePermissionGranted();
@@ -176,6 +193,11 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
                     view.setDrawingCacheEnabled(true);
                     mSignature.save(view, StoredPath);
                 }*/
+
+                break;
+            case R.id.fragment_feedback_clear:
+                Log.v("log_tag", "Panel Cleared");
+                mSignature.clear();
                 break;
         }
     }
@@ -191,8 +213,7 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
             // Calling the same class
             getActivity().recreate();
         }
-        else
-        {
+        else {
             Toast.makeText(getContext(), "The app was not allowed to write to your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
         }
     }
@@ -213,8 +234,7 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
 
     private void sendFeedback(){
         new Utility().showProgressDialog(getContext());
-
-        Call<SaveResponse> call = APIClient.getInstance().getApiInterface().sendFeedback("171826700",
+        Call<SaveResponse> call = APIClient.getInstance().getApiInterface().sendFeedback(dutyslipno,
                 signature,ratingBar.getRating()+"",duty_remarks,no_signature);
         call.request().url();
         Log.d("TAG", "rakhi: "+call.request().url());
@@ -246,7 +266,6 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
     public void onApiFailure(String message) {
         Utility.showToast(getContext(), getResources().getString(R.string.error));
     }
-
 
     public class signature extends View {
 
@@ -382,8 +401,5 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,O
             dirtyRect.bottom = Math.max(lastTouchY, eventY);
         }
     }
-
-
-
 
 }

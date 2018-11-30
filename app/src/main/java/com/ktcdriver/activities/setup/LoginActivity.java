@@ -244,9 +244,11 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
         if (null != tm) {
             deviceUniqueIdentifier = tm.getDeviceId();
         }
+
         if (null == deviceUniqueIdentifier || 0 == deviceUniqueIdentifier.length()) {
             deviceUniqueIdentifier = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         }
+
         Log.d(TAG, "getDeviceIMEI: "+deviceUniqueIdentifier);
         return deviceUniqueIdentifier;
     }

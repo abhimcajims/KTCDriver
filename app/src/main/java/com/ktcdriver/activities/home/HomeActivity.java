@@ -141,10 +141,7 @@ public class HomeActivity extends AppCompatActivity
 
 //        call dashboard fragment
         getNotification(driverID, limit);
-
-
 //        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
-
         notification_clicked = false;
     }
 
@@ -223,7 +220,8 @@ public class HomeActivity extends AppCompatActivity
             if (notificationData.getNotification_data()!=null){
                 List<NotificationData.NotificationDataBean> notificationDataBeanList =
                         new ArrayList<>(notificationData.getNotification_data());
-                mNotificationCount = Integer.parseInt(notificationData.getCount_notification());
+                if (tinyDB.contains("notification_count"))
+                mNotificationCount = Integer.parseInt(tinyDB.getString("notification_count"));
                 setNotiAdapter(recyclerView,notificationDataBeanList);
                 setupBadge(mNotificationCount);
             }
@@ -267,8 +265,10 @@ public class HomeActivity extends AppCompatActivity
             new Utility().callFragment(new OrderHistoryFragment(),getSupportFragmentManager(),
                     R.id.fragment_container,OrderHistoryFragment.class.getName());
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 

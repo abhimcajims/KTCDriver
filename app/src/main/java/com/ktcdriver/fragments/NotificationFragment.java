@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
@@ -38,7 +39,7 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
     private RecyclerView recyclerView;
     private TinyDB tinyDB;
     private LoginResponse loginResponse;
-    private int min=0, max=5;
+    private int min=0, max=20;
     private String limit = min + "," + max, driverID;
     private List<NotificationData.NotificationDataBean> notificationDataBeans;
 
@@ -54,7 +55,6 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_notification, container, false);
     }
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -90,7 +90,7 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
     }
 
     private void getNotification(String driverID, String limit){
-        if (min==0&&max==5){
+        if (min==0&&max==20){
             notificationDataBeans.clear();
         }
         new Utility().showProgressDialog(getContext());
@@ -99,6 +99,7 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
         Log.d("TAG", "rakhi: "+call.request().url());
 
         new ResponseListner(this, getContext()).getResponse(call);
+
     }
 
     @Override
@@ -113,7 +114,7 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
             }
         });
     }
-
+    boolean reachmax ;
     @Override
     public void onApiResponse(Object response) {
         new Utility().hideDialog();
@@ -121,13 +122,15 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
         if (response!=null){
             try{
                 if (response instanceof NotificationData){
-                    if (notificationDataBeans!=null){
-                        notificationDataBeans.clear();
-                    }
                     NotificationData notificationData = (NotificationData) response;
                     if (notificationData.getStatus().equals("1")){
-                        notificationDataBeans.addAll(notificationData.getNotification_data());
-                        tinyDB.putString("notification_list",new Gson().toJson(notificationData));
+                        if (notificationData.getNotification_data()!=null&&notificationData.getNotification_data().size()>0){
+                            notificationDataBeans.addAll(notificationData.getNotification_data());
+                        } else {
+                            reachmax = true;
+                        }
+                        tinyDB.putString("notification_list_",new Gson().toJson(notificationDataBeans));
+                        tinyDB.putString("notification_count",notificationData.getCount_notification());
                         setNotiAdapter(recyclerView, notificationDataBeans);
                     } else {
                         Utility.showToast(getContext(),notificationData.getMessage());
@@ -156,14 +159,18 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
 
     @Override
     public void onLast(int pos) {
-      /*  min = min+5;
-        max = max+5;
+        min = min+20;
+        max = max+20;
         limit = min+","+max;
-        getNotification(driverID,limit);*/
+        if (!reachmax)
+        getNotification(driverID,limit);
+        else {
+//            Toast.makeText(getContext(), "no data", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void readNotification(String driverID, String limit, String notification_id){
-        if (min==0&&max==5){
+        if (min==0&&max==20){
             notificationDataBeans.clear();
         }
         new Utility().showProgressDialog(getContext());
@@ -173,5 +180,7 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
         Log.d("TAG", "rakhi: "+call.request().url());
 
         new ResponseListner(this, getContext()).getResponse(call);
+
     }
+
 }

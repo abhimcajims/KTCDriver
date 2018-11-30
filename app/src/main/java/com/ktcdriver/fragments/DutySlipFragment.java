@@ -172,7 +172,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         //Document Stuff
         arr_img = new ArrayList<>();
         arr_document_name = new ArrayList<>();
-
         title1List = new ArrayList<>();
         title2List = new ArrayList<>();
         title1ListValue = new ArrayList<>();
