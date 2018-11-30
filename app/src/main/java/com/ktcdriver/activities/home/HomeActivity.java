@@ -36,6 +36,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.ktcdriver.R;
 import com.ktcdriver.adapter.NotificationAdapter;
+import com.ktcdriver.customtext.CustomTextView;
 import com.ktcdriver.fragments.DashboardFragment;
 import com.ktcdriver.fragments.FeedbackFragment;
 import com.ktcdriver.fragments.NotificationFragment;
@@ -75,7 +76,7 @@ public class HomeActivity extends AppCompatActivity
         tinyDB = new TinyDB(getApplicationContext());
         notificationDataBeans = new ArrayList<>();
         String login = tinyDB.getString("login_data");
-       /* if (tinyDB.contains("notifi"))
+       /* if (tinyDB.contains("notifi"))b
             tinyDB.remove("notifi");*/
         loginResponse = new Gson().fromJson(login,LoginResponse.class);
         driverID = loginResponse.getProfileInfo().getDriverId();
@@ -212,6 +213,16 @@ public class HomeActivity extends AppCompatActivity
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(),
                 LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(linearLayoutManager);
+        CustomTextView txtSeeAll = view.findViewById(R.id.popup_notification_see_all);
+        txtSeeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationFragment())
+                        .addToBackStack(NotificationFragment.class.getName()).commit();
+                popupwindow_obj.dismiss();
+            }
+        });
+
         if (tinyDB.contains("notification_list")){
             String data = tinyDB.getString("notification_list");
             Log.e("MyNotifications", data);
@@ -374,15 +385,18 @@ public class HomeActivity extends AppCompatActivity
     public void onClick(int pos) {
 
         notification_clicked = true;
-        if (notificationDataBeans.get(pos).getType().equals("DUTY")){
-            if (popupwindow_obj!=null)
-            popupwindow_obj.dismiss();
-            readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
-        } else {
-            if (popupwindow_obj != null)
-                popupwindow_obj.dismiss();
-            readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
+        if (notificationDataBeans!=null&&notificationDataBeans.size()>0){
+            if (notificationDataBeans.get(pos).getType().equals("DUTY")){
+                if (popupwindow_obj!=null)
+                    popupwindow_obj.dismiss();
+                readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
+            } else {
+                if (popupwindow_obj != null)
+                    popupwindow_obj.dismiss();
+                readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
+            }
         }
+
 
        /* Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if(f instanceof NotificationFragment){

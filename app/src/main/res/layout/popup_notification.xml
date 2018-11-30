@@ -2,14 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="200dp"
-    android:layout_height="wrap_content"
+    android:layout_height="300dp"
     android:layout_margin="10dp"
     android:background="@drawable/notificatrion_bg_round">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/popup_notification_see_all"
         android:id="@+id/popup_notification_recycler"/>
 
+    <com.ktcdriver.customtext.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="See All"
+        android:background="@drawable/button_bg"
+        android:textColor="@color/colorWhite"
+        android:padding="5dp"
+        android:layout_gravity="right"
+        android:textSize="@dimen/size_12"
+        android:layout_margin="5dp"
+        android:id="@+id/popup_notification_see_all"
+        android:layout_alignParentRight="true" />
 
 </LinearLayout>
