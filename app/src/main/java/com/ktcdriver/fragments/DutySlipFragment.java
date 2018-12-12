@@ -255,12 +255,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         // Inititally setting one Document
         rv_upload_document = getView().findViewById(R.id.fragment_duty_slip_upload_document_rv);
         rv_upload_document.setLayoutManager(new LinearLayoutManager(getContext()));
-        arr_img.add("Photo");
-        arr_document_name.add("Enter Slip Name");
-        adapterDutySlipUploadDocument = new
-                AdapterDutySlipUploadDocument(getContext(), arr_img, arr_document_name, this);
-        rv_upload_document.setAdapter(adapterDutySlipUploadDocument);
-
+        setDocAdapter();
         txtAddmore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -272,7 +267,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
 
                     Toast.makeText(getContext(), "Please Enter Slip Name and Select Document first",
                             Toast.LENGTH_LONG).show();
-//                    Utility.showToast(getContext(), "Please Enter Slip Name and Select Document first");
 
                 } else {
                     arr_img.add("Photo");
@@ -285,17 +279,24 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         txtSaveDoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Utility.showToast(getContext(), "hii");
                 if (img_base_64!=null && img_base_64.size()>0 &&
                         !arr_document_name.get(arr_document_name.size()-1).equals("Enter Slip Name")){
                     saveDoc();
                 } else {
                     Toast.makeText(getContext(), "Please Enter Slip Name and Select Document first",
                             Toast.LENGTH_LONG).show();
-//                    Utility.showToast(getContext(),"Please Enter Slip Name and Upload Document first");
                 }
             }
         });
+    }
+
+    private void setDocAdapter(){
+        arr_img.add("Photo");
+        arr_document_name.add("Enter Slip Name");
+        adapterDutySlipUploadDocument = new
+                AdapterDutySlipUploadDocument(getContext(), arr_img, arr_document_name, this);
+        rv_upload_document.setAdapter(adapterDutySlipUploadDocument);
+
     }
 
     private DocAdapter docAdapter;
@@ -327,9 +328,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             }
         }
         arr_document_name.add(value);
-
-
-
 
     }
 
@@ -565,16 +563,8 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                             }
                     } else {
                         saveDutySlip();
-//                        Utility.showToast(getContext(), "Reporting meter should be > than starting meter");
                     }
                         }
-                        //      new Utility().callFragment(new FeedbackFragment(),getFragmentManager(),R.id.fragment_container,FeedbackFragment.class.getName());
-                   /* } else {
-                        Utility.showToast(getContext(), "All fields are required");
-                    }
-                } catch (Exception e){
-                    Log.e("MyException", e.getMessage());
-                }*/
                  break;
             case R.id.fragment_duty_slip_txt_charge2:
 /*
@@ -601,7 +591,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             case R.id.fragment_duty_slip_upload_document:
 
                 if (!edt_upload_document.getText().toString().trim().isEmpty()) {
-
 
                 } else {
                     Utility.showToast(getContext(), "Please enter text");
@@ -1443,37 +1432,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     private void saveDoc() {
         new Utility().showProgressDialog(getContext());
         String url = Constant.BASE_URL + "/upload_ds_docuement.php";
-       /* String jsonString = new Gson().toJson(uploadDocRequest);
-
-        okhttp3.RequestBody requestBody = okhttp3.RequestBody.create(JSON, jsonString);
-
-        final okhttp3.Request request = new okhttp3.Request.Builder()
-                .url(Constant.BASE_URL + "/upload_ds_docuement.php")
-                .post(requestBody)
-                .addHeader("Content-Type", "application/json")
-                .addHeader("cache-control", "no-cache")
-                .build();
-        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient.Builder()
-                .connectTimeout(10000, TimeUnit.SECONDS)
-                .writeTimeout(10000, TimeUnit.SECONDS)
-                .readTimeout(30000, TimeUnit.SECONDS)
-//                        .addNetworkInterceptor(new com.facebook.stetho.okhttp3.StethoInterceptor())
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-                new Utility().hideDialog();
-                Log.d("TAG", "onFailure: "+e.getMessage());
-            }
-
-            @Override
-            public void onResponse(okhttp3.Call call, Response response)  throws IOException {
-                new Utility().hideDialog();
-                Log.d("TAG", "onResponse: "+new Gson().toJson(response.body()));
-            }
-        });
-*/
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new com.android.volley.Response.Listener<String>() {
@@ -1493,11 +1451,14 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                             ilb.add(obj);
                         }
 
+                        if (slip_name!=null){
+                            slip_name.clear();
+                            arr_document_name.clear();
+                            arr_img.clear();
+                            img_base_64.clear();
+                        }
+                        setDocAdapter();
                         fetchDetails(reservationId);
-                      /*  imagelistBeans.addAll(ilb);
-                        setSlipAdapter();*/
-
-
                     } else {
                         Utility.showToast(getContext(),jsonObject.getString("message"));
                     }
@@ -1505,7 +1466,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                     e.printStackTrace();
                 }
                 Log.d("TAG", "onResponse: "+response);
-//
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override

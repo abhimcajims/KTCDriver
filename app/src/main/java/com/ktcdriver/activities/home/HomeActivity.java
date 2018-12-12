@@ -29,7 +29,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -57,7 +56,7 @@ import retrofit2.Call;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnResponseInterface,
-        NotificationAdapter.NotificationInterface {
+        NotificationAdapter.NotificationInterface, NotificationFragment.UpdateNotifi {
     private float lastTranslate = 0.0f;
     public static Toolbar toolbar;
     public static DrawerLayout drawer;
@@ -214,6 +213,7 @@ public class HomeActivity extends AppCompatActivity
                 LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(linearLayoutManager);
         CustomTextView txtSeeAll = view.findViewById(R.id.popup_notification_see_all);
+
         txtSeeAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -286,7 +286,7 @@ public class HomeActivity extends AppCompatActivity
     TextView textCartItemCount;
     int mNotificationCount = 0;
 
-    private void setupBadge(int mNotificationCount) {
+    public void setupBadge(int mNotificationCount) {
 
         if (textCartItemCount != null) {
             if (mNotificationCount == 0) {
@@ -294,7 +294,7 @@ public class HomeActivity extends AppCompatActivity
                     textCartItemCount.setVisibility(View.GONE);
                 }
             } else {
-                textCartItemCount.setText(String.valueOf(Math.min(this.mNotificationCount, 99)));
+                textCartItemCount.setText(String.valueOf(Math.min(mNotificationCount, 99)));
                 if (textCartItemCount.getVisibility() != View.VISIBLE) {
                     textCartItemCount.setVisibility(View.VISIBLE);
                 }
@@ -426,5 +426,10 @@ public class HomeActivity extends AppCompatActivity
         Log.d("TAG", "rakhi: "+call.request().url());
 
         new ResponseListner(this,getApplicationContext()).getResponse( call);
+    }
+
+    @Override
+    public void updateCount(int count) {
+        setupBadge(count);
     }
 }

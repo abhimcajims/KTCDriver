@@ -1,5 +1,6 @@
 package com.ktcdriver.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,16 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.Toast;
 
-import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.ktcdriver.R;
 import com.ktcdriver.activities.home.HomeActivity;
 import com.ktcdriver.adapter.NotificationAdapter;
 import com.ktcdriver.model.LoginResponse;
 import com.ktcdriver.model.NotificationData;
-import com.ktcdriver.model.NotificationRequest;
 import com.ktcdriver.utils.Utility;
 import com.ktcdriver.webservices.APIClient;
 import com.ktcdriver.webservices.OnResponseInterface;
@@ -42,6 +40,11 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
     private int min=0, max=20;
     private String limit = min + "," + max, driverID;
     private List<NotificationData.NotificationDataBean> notificationDataBeans;
+    private UpdateNotifi updateNotifi;
+
+    public interface UpdateNotifi {
+        void updateCount(int count);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,14 +82,9 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
 
     }
 
-    private NotificationAdapter notificationAdapter;
     private void setNotiAdapter(RecyclerView recyclerView, List<NotificationData.NotificationDataBean> notificationDataBeanList){
-        if (notificationAdapter==null){
-            notificationAdapter = new NotificationAdapter(getContext(),notificationDataBeanList,this);
-            recyclerView.setAdapter(notificationAdapter);
-        } else {
-            notificationAdapter.notifyDataSetChanged();
-        }
+        NotificationAdapter notificationAdapter = new NotificationAdapter(getContext(), notificationDataBeanList, this);
+        recyclerView.setAdapter(notificationAdapter);
     }
 
     private void getNotification(String driverID, String limit){
@@ -129,6 +127,7 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
                         } else {
                             reachmax = true;
                         }
+                        updateNotifi.updateCount(Integer.parseInt(notificationData.getCount_notification()));
                         tinyDB.putString("notification_list_",new Gson().toJson(notificationDataBeans));
                         tinyDB.putString("notification_count",notificationData.getCount_notification());
                         setNotiAdapter(recyclerView, notificationDataBeans);
@@ -182,5 +181,19 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
         new ResponseListner(this, getContext()).getResponse(call);
 
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try{
+            updateNotifi = (UpdateNotifi) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
+
+
 
 }

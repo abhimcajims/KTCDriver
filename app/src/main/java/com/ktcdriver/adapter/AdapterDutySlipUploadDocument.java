@@ -92,7 +92,10 @@ public class AdapterDutySlipUploadDocument extends RecyclerView.Adapter<AdapterD
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     String s = charSequence.toString();
                     Log.d("TAG", "onTextChanged: "+s);
-                    uploadDocInterface.getText(getAdapterPosition(), edtName.getText().toString().trim());
+                    if (edtName.getText().toString()!=null){
+                        uploadDocInterface.getText(getAdapterPosition(), edtName.getText().toString().trim());
+                    }
+
                 }
 
                 @Override
