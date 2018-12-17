@@ -37,7 +37,7 @@ public class SplashActivity extends AppbaseActivity {
         getSupportActionBar().hide();
 
         tinyDB = new TinyDB(getApplicationContext());
-
+//        tinyDB.putString("FromNoti","0");
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {

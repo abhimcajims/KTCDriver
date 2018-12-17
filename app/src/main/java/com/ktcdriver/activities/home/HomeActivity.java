@@ -63,7 +63,7 @@ public class HomeActivity extends AppCompatActivity
     private TinyDB tinyDB;
     private LoginResponse loginResponse;
     private int min=0, max=5;
-    private String limit = min + "," + max, driverID;
+    private String limit = min + "," + max, driverID,fromNoti;
     private List<NotificationData.NotificationDataBean>notificationDataBeans;
 
     private boolean notification_clicked = false;
@@ -75,6 +75,7 @@ public class HomeActivity extends AppCompatActivity
         tinyDB = new TinyDB(getApplicationContext());
         notificationDataBeans = new ArrayList<>();
         String login = tinyDB.getString("login_data");
+        fromNoti=tinyDB.getString("FromNoti");
        /* if (tinyDB.contains("notifi"))b
             tinyDB.remove("notifi");*/
         loginResponse = new Gson().fromJson(login,LoginResponse.class);
@@ -341,7 +342,11 @@ public class HomeActivity extends AppCompatActivity
         new Utility().hideDialog();
         if (response!=null){
             try{
-                if (response instanceof NotificationData){
+                if (response instanceof NotificationData)
+                {if (tinyDB.equals("1")){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationFragment())
+                            .addToBackStack(NotificationFragment.class.getName()).commit();
+                }else {
                     if (notificationDataBeans!=null){
                         notificationDataBeans.clear();
                     }
@@ -350,24 +355,26 @@ public class HomeActivity extends AppCompatActivity
                         notificationDataBeans.addAll(notificationData.getNotification_data());
                         tinyDB.putString("notification_list",new Gson().toJson(notificationData));
                         if (notificationData.getCount_notification()!=null )
-                        mNotificationCount = Integer.parseInt(notificationData.getCount_notification());
+                            mNotificationCount = Integer.parseInt(notificationData.getCount_notification());
                         setupBadge(mNotificationCount);
                     } else {
                         Utility.showToast(getApplicationContext(),notificationData.getMessage());
                     }
-              /*      getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
-             */
-              if(notification_clicked) {
-                  Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                  if (f instanceof NotificationFragment) {
+                    /*      getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
+                     */
+                    if(notification_clicked) {
+                        Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                        if (f instanceof NotificationFragment) {
 
-                  } else {
-                      getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationFragment())
-                              .addToBackStack(NotificationFragment.class.getName()).commit();
-                  }
-              } else {
-                  getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
-              }
+                        } else {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationFragment())
+                                    .addToBackStack(NotificationFragment.class.getName()).commit();
+                        }
+                    } else {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
+                    }
+                }
+
                 }
             } catch (Exception e){
                 Log.d("TAG", "error: "+e.getMessage());

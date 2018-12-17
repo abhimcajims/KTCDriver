@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -67,9 +68,10 @@ public class NotificationUtils {
 
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                 mContext);
-
+        MediaPlayer oneMedia = MediaPlayer.create(mContext, R.raw.sound);
+        oneMedia.start();
         final Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
-                + "://" + mContext.getPackageName() + "/raw/notification");
+                + "://" + mContext.getPackageName() + R.raw.sound);
 
         if (!TextUtils.isEmpty(imageUrl)) {
 
@@ -78,14 +80,18 @@ public class NotificationUtils {
                 Bitmap bitmap = getBitmapFromURL(imageUrl);
 
                 if (bitmap != null) {
-                    showBigNotification(bitmap, mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
+                    showBigNotification(bitmap, mBuilder, icon, title, message, timeStamp, resultPendingIntent,alarmSound);
                 } else {
-                    showSmallNotification(mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
+                    showSmallNotification(mBuilder, icon, title, message, timeStamp, resultPendingIntent,alarmSound);
                 }
             }
         } else {
             showSmallNotification(mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
-            playNotificationSound();
+            oneMedia = MediaPlayer.create(mContext, R.raw.sound);
+//                oneMedia.setVolume(1, 1);
+
+            oneMedia.start();
+//            playNotificationSound();
         }
     }
 
@@ -101,7 +107,6 @@ public class NotificationUtils {
                 .setAutoCancel(true)
                 .setContentTitle(title)
                 .setContentIntent(resultPendingIntent)
-                .setSound(alarmSound)
                 .setStyle(inboxStyle)
                 .setWhen(getTimeMilliSec(timeStamp))
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -111,9 +116,15 @@ public class NotificationUtils {
 
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(Config.NOTIFICATION_ID, notification);
+        MediaPlayer oneMedia = MediaPlayer.create(mContext, R.raw.sound);
+//                oneMedia.setVolume(1, 1);
+
+        oneMedia.start();
     }
 
-    private void showBigNotification(Bitmap bitmap, NotificationCompat.Builder mBuilder, int icon, String title, String message, String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
+    private void showBigNotification(Bitmap bitmap, NotificationCompat.Builder mBuilder, int icon,
+                                     String title, String message, String timeStamp,
+                                     PendingIntent resultPendingIntent, Uri alarmSound) {
         NotificationCompat.BigPictureStyle bigPictureStyle = new NotificationCompat.BigPictureStyle();
         bigPictureStyle.setBigContentTitle(title);
         bigPictureStyle.setSummaryText(Html.fromHtml(message).toString());
@@ -123,14 +134,17 @@ public class NotificationUtils {
                 .setAutoCancel(true)
                 .setContentTitle(title)
                 .setContentIntent(resultPendingIntent)
-                .setSound(alarmSound)
                 .setStyle(bigPictureStyle)
                 .setWhen(getTimeMilliSec(timeStamp))
+                .setSound(alarmSound)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
                 .setContentText(message)
                 .build();
+        MediaPlayer oneMedia = MediaPlayer.create(mContext, R.raw.sound);
+//                oneMedia.setVolume(1, 1);
 
+        oneMedia.start();
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(Config.NOTIFICATION_ID_BIG_IMAGE, notification);
     }
@@ -158,18 +172,18 @@ public class NotificationUtils {
     // Playing notification sound
     public void playNotificationSound() {
         try {
-          /*  try {
+            try {
                 Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 Ringtone r = RingtoneManager.getRingtone(mContext, notification);
                 r.play();
             } catch (Exception e) {
                 e.printStackTrace();
-            }*/
+            }
 
-            Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
+            /*Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
                     + "://" + mContext.getPackageName() + "/raw/notification");
             Ringtone r = RingtoneManager.getRingtone(mContext, alarmSound);
-            r.play();
+            r.play();*/
         } catch (Exception e) {
             e.printStackTrace();
         }
