@@ -83,7 +83,8 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
     }
 
     private void setNotiAdapter(RecyclerView recyclerView, List<NotificationData.NotificationDataBean> notificationDataBeanList){
-        NotificationAdapter notificationAdapter = new NotificationAdapter(getContext(), notificationDataBeanList, this);
+        NotificationAdapter notificationAdapter = new NotificationAdapter(getContext(), notificationDataBeanList,
+                this);
         recyclerView.setAdapter(notificationAdapter);
     }
 
@@ -149,8 +150,10 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
 
     @Override
     public void onClick(int pos) {
-        if (notificationDataBeans.get(pos).getStatus().equals("0"))
-        readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
+        if (notificationDataBeans.get(pos).getStatus().equals("0")){
+            notificationDataBeans.get(pos).setStatus("1");
+            readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
+        }
         else if (notificationDataBeans.get(pos).getType().equals("DUTY")){
             getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }

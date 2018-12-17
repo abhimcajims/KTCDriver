@@ -83,7 +83,7 @@ public class SplashActivity extends AppbaseActivity {
         }, TIME_INTERVAL);*/
     }
 
-    private String token;
+    public static String token;
     private static String TAG = LoginActivity.class.getName();
 
     private void displayFirebaseRegId() {

@@ -186,12 +186,12 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             reservationId = getArguments().getString("reservationid");
         }
 
-        title1List.add("Starting Meter");
+        title1List.add("Starting Meter(At Garrage)");
         title1List.add("Reporting Meter");
         title1List.add("Ending Meter");
         title1List.add("Meter at Garrage");
         title1List.add("Total Meter");
-        title2List.add("Starting Time");
+        title2List.add("Starting Time(At Garrage)");
         title2List.add("Reporting Time");
         title2List.add("Ending Time");
         title2List.add("Time at Garrage");

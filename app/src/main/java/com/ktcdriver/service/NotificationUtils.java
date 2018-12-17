@@ -47,11 +47,11 @@ public class NotificationUtils {
         showNotificationMessage(title, message, timeStamp, intent, null);
     }
 
-    public void showNotificationMessage(final String title, final String message, final String timeStamp, Intent intent, String imageUrl) {
+    public void showNotificationMessage(final String title, final String message, final String timeStamp,
+                                        Intent intent, String imageUrl) {
         // Check for empty push message
         if (TextUtils.isEmpty(message))
             return;
-
 
         // notification icon
         final int icon = R.mipmap.ic_launcher;
@@ -139,6 +139,7 @@ public class NotificationUtils {
      * Downloading push notification image before displaying it in
      * the notification tray
      */
+
     public Bitmap getBitmapFromURL(String strURL) {
         try {
             URL url = new URL(strURL);
@@ -157,6 +158,14 @@ public class NotificationUtils {
     // Playing notification sound
     public void playNotificationSound() {
         try {
+          /*  try {
+                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                Ringtone r = RingtoneManager.getRingtone(mContext, notification);
+                r.play();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }*/
+
             Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
                     + "://" + mContext.getPackageName() + "/raw/notification");
             Ringtone r = RingtoneManager.getRingtone(mContext, alarmSound);

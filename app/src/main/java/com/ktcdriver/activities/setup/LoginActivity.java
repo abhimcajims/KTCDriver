@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.ktcdriver.R;
@@ -30,6 +31,7 @@ import com.ktcdriver.activities.home.HomeActivity;
 import com.ktcdriver.model.LoginResponse;
 import com.ktcdriver.model.NewUserResponse;
 import com.ktcdriver.service.Config;
+import com.ktcdriver.service.MyFirebaseInstanceIDService;
 import com.ktcdriver.utils.AppbaseActivity;
 import com.ktcdriver.utils.Utility;
 import com.ktcdriver.webservices.APIClient;
@@ -96,6 +98,8 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
         if (!TextUtils.isEmpty(regId))
             token = regId;
         else{
+            String token = FirebaseInstanceId.getInstance().getToken();
+            Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
            // Utility.showToast(getApplicationContext(),"Token not generated");
         }
     }
@@ -201,18 +205,23 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
         Log.d("TAG", "rakhi: " + call.request().url());
         new ResponseListner(this,getApplicationContext()).getResponse( call);
     }
-
+    LoginResponse loginResponse;
     @Override
     public void onApiResponse(Object response) {
         new Utility().hideDialog();
         if (response!=null){
             if (response instanceof LoginResponse){
-                LoginResponse loginResponse = (LoginResponse) response;
+             loginResponse = (LoginResponse) response;
                 if (loginResponse.getStatus().equals("1")){
                     tinyDB.putString("password",pass);
                     tinyDB.putString("driver_id",driverId);
-                    tinyDB.putString("login_data",new Gson().toJson(loginResponse));
-                    registerNewUser(imei,token,driverId);
+                    if (token!=null && token.length()>0){
+                        registerNewUser(imei,token,driverId);
+                    }
+                    else {
+                        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                        registerNewUser(imei,refreshedToken,driverId);
+                    }
                 }
                 else if (loginResponse.getStatus().equals("0")){
                     Utility.showToast(getApplicationContext(),loginResponse.getMessage());
@@ -221,10 +230,19 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
                 new Utility().hideDialog();
                 NewUserResponse newUserResponse = (NewUserResponse) response;
                 if (newUserResponse.getResponse().get(0).getResponse().equals("Success")){
+                    tinyDB.putString("login_data",new Gson().toJson(loginResponse));
                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                     finish();
                 } else {
-                    Utility.showToast(getApplicationContext(),getResources().getString(R.string.error));
+                    i++;
+                    if (i==1){
+                        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                        registerNewUser(imei,refreshedToken,driverId);
+                    }
+                    else {
+                        Toast.makeText(this, "Token not generated ", Toast.LENGTH_SHORT).show();
+                    }
+                //    Utility.showToast(getApplicationContext(),getResources().getString(R.string.error));
                 }
             }
         } else {
@@ -232,6 +250,7 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
         }
     }
 
+    int i;
     @Override
     public void onApiFailure(String message) {
         new Utility().hideDialog();
