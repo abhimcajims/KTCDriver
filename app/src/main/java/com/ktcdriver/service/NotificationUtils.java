@@ -68,29 +68,29 @@ public class NotificationUtils {
 
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                 mContext);
-        MediaPlayer oneMedia = MediaPlayer.create(mContext, R.raw.sound);
+  /*      MediaPlayer oneMedia = MediaPlayer.create(mContext, R.raw.sound);
         oneMedia.start();
         final Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
                 + "://" + mContext.getPackageName() + R.raw.sound);
-
+*/
         if (!TextUtils.isEmpty(imageUrl)) {
 
             if (imageUrl != null && imageUrl.length() > 4 && Patterns.WEB_URL.matcher(imageUrl).matches()) {
 
                 Bitmap bitmap = getBitmapFromURL(imageUrl);
 
-                if (bitmap != null) {
+         /*       if (bitmap != null) {
                     showBigNotification(bitmap, mBuilder, icon, title, message, timeStamp, resultPendingIntent,alarmSound);
                 } else {
                     showSmallNotification(mBuilder, icon, title, message, timeStamp, resultPendingIntent,alarmSound);
-                }
+                }*/
             }
         } else {
-            showSmallNotification(mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
+        /*    showSmallNotification(mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
             oneMedia = MediaPlayer.create(mContext, R.raw.sound);
 //                oneMedia.setVolume(1, 1);
 
-            oneMedia.start();
+            oneMedia.start();*/
 //            playNotificationSound();
         }
     }
@@ -114,12 +114,12 @@ public class NotificationUtils {
                 .setContentText(message)
                 .build();
 
-        NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+      /*  NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(Config.NOTIFICATION_ID, notification);
         MediaPlayer oneMedia = MediaPlayer.create(mContext, R.raw.sound);
 //                oneMedia.setVolume(1, 1);
 
-        oneMedia.start();
+        oneMedia.start();*/
     }
 
     private void showBigNotification(Bitmap bitmap, NotificationCompat.Builder mBuilder, int icon,
@@ -141,10 +141,10 @@ public class NotificationUtils {
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
                 .setContentText(message)
                 .build();
-        MediaPlayer oneMedia = MediaPlayer.create(mContext, R.raw.sound);
-//                oneMedia.setVolume(1, 1);
+      /*  MediaPlayer oneMedia = MediaPlayer.create(mContext, R.raw.sound);
+//                oneMedia.setVolume(1, 1);*/
 
-        oneMedia.start();
+        /*oneMedia.start();*/
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(Config.NOTIFICATION_ID_BIG_IMAGE, notification);
     }
