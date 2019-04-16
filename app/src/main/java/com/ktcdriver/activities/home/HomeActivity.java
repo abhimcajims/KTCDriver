@@ -57,16 +57,17 @@ import retrofit2.Call;
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnResponseInterface,
         NotificationAdapter.NotificationInterface, NotificationFragment.UpdateNotifi {
-    private float lastTranslate = 0.0f;
     public static Toolbar toolbar;
     public static DrawerLayout drawer;
+    TextView textCartItemCount;
+    int mNotificationCount = 0;
+    private float lastTranslate = 0.0f;
     private TinyDB tinyDB;
-    private LoginResponse loginResponse;
-    private int min=0, max=5;
-    private String limit = min + "," + max, driverID,fromNoti;
-    private List<NotificationData.NotificationDataBean>notificationDataBeans;
-
+    private int min = 0, max = 5;
+    private String limit = min + "," + max,driverID;
+    private List<NotificationData.NotificationDataBean> notificationDataBeans;
     private boolean notification_clicked = false;
+    private PopupWindow popupwindow_obj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,60 +76,55 @@ public class HomeActivity extends AppCompatActivity
         tinyDB = new TinyDB(getApplicationContext());
         notificationDataBeans = new ArrayList<>();
         String login = tinyDB.getString("login_data");
-        fromNoti=tinyDB.getString("FromNoti");
+        String fromNoti = tinyDB.getString("FromNoti");
        /* if (tinyDB.contains("notifi"))b
             tinyDB.remove("notifi");*/
-        loginResponse = new Gson().fromJson(login,LoginResponse.class);
+        LoginResponse loginResponse = new Gson().fromJson(login, LoginResponse.class);
         driverID = loginResponse.getProfileInfo().getDriverId();
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon((R.drawable.ic_menu)); //set your own
         getSupportActionBar().setTitle("Dashboard");
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        View header=navigationView.getHeaderView(0);
+        View header = navigationView.getHeaderView(0);
         Menu nav_Menu = navigationView.getMenu();
-        if (loginResponse.getProfileInfo().getJob_history().equals("0")){
+        if (loginResponse.getProfileInfo().getJob_history().equals("0")) {
             nav_Menu.findItem(R.id.nav_order_history).setVisible(false);
         } else {
             nav_Menu.findItem(R.id.nav_order_history).setVisible(true);
         }
 
         /*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
-        TextView name = (TextView)header.findViewById(R.id.nav_header_name);
-        TextView email = (TextView)header.findViewById(R.id.nav_header_email);
-        if (loginResponse.getProfileInfo().getUserName()!=null)
-        name.setText(loginResponse.getProfileInfo().getUserName());
-        if (loginResponse.getProfileInfo().getEmail()!=null)
-        email.setText(loginResponse.getProfileInfo().getEmail());
+        TextView name = header.findViewById(R.id.nav_header_name);
+        TextView email = header.findViewById(R.id.nav_header_email);
+        if (loginResponse.getProfileInfo().getUserName() != null)
+            name.setText(loginResponse.getProfileInfo().getUserName());
+        if (loginResponse.getProfileInfo().getEmail() != null)
+            email.setText(loginResponse.getProfileInfo().getEmail());
         ImageView imgUser = header.findViewById(R.id.nav_header_img);
-        if (loginResponse.getProfileInfo().getPhotoURL()!=null)
-        Glide.with(getApplicationContext())
-                .load(loginResponse.getProfileInfo().getPhotoURL())
-                .apply(RequestOptions.circleCropTransform())
-                .into(imgUser);
-        final FrameLayout frameLayout = (FrameLayout) findViewById(R.id.container_frame);
+        if (loginResponse.getProfileInfo().getPhotoURL() != null)
+            Glide.with(getApplicationContext())
+                    .load(loginResponse.getProfileInfo().getPhotoURL())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(imgUser);
+        final FrameLayout frameLayout = findViewById(R.id.container_frame);
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close)
-        {
+                R.string.navigation_drawer_close) {
             @SuppressLint("NewApi")
-            public void onDrawerSlide(View drawerView, float slideOffset)
-            {
+            public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
                 float moveFactor = (navigationView.getWidth() * slideOffset);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                     frameLayout.setTranslationX(moveFactor);
-                }
-                else
-                {
+                } else {
                     TranslateAnimation anim = new TranslateAnimation(lastTranslate, moveFactor, 0.0f, 0.0f);
                     anim.setDuration(0);
                     anim.setFillAfter(true);
@@ -148,7 +144,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -163,7 +159,7 @@ public class HomeActivity extends AppCompatActivity
         final MenuItem menuItem = menu.findItem(R.id.action_settings);
 
         View actionView = MenuItemCompat.getActionView(menuItem);
-        textCartItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
+        textCartItemCount = actionView.findViewById(R.id.cart_badge);
 
 
         actionView.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +172,6 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
-    private PopupWindow popupwindow_obj;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -211,7 +206,7 @@ public class HomeActivity extends AppCompatActivity
         int height = size.y;
         RecyclerView recyclerView = view.findViewById(R.id.popup_notification_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(),
-                LinearLayoutManager.VERTICAL,false);
+                LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
         CustomTextView txtSeeAll = view.findViewById(R.id.popup_notification_see_all);
 
@@ -224,17 +219,17 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        if (tinyDB.contains("notification_list")){
+        if (tinyDB.contains("notification_list")) {
             String data = tinyDB.getString("notification_list");
             Log.e("MyNotifications", data);
 
-            NotificationData notificationData = new Gson().fromJson(data,NotificationData.class);
-            if (notificationData.getNotification_data()!=null){
+            NotificationData notificationData = new Gson().fromJson(data, NotificationData.class);
+            if (notificationData.getNotification_data() != null) {
                 List<NotificationData.NotificationDataBean> notificationDataBeanList =
                         new ArrayList<>(notificationData.getNotification_data());
                 if (tinyDB.contains("notification_count"))
-                mNotificationCount = Integer.parseInt(tinyDB.getString("notification_count"));
-                setNotiAdapter(recyclerView,notificationDataBeanList);
+                    mNotificationCount = Integer.parseInt(tinyDB.getString("notification_count"));
+                setNotiAdapter(recyclerView, notificationDataBeanList);
                 setupBadge(mNotificationCount);
             }
         }
@@ -248,10 +243,8 @@ public class HomeActivity extends AppCompatActivity
         return popupWindow;
     }
 
-    private NotificationAdapter notificationAdapter;
-
-    private void setNotiAdapter(RecyclerView recyclerView, List<NotificationData.NotificationDataBean> notificationDataBeanList){
-        notificationAdapter = new NotificationAdapter(getApplicationContext(),notificationDataBeanList,this);
+    private void setNotiAdapter(RecyclerView recyclerView, List<NotificationData.NotificationDataBean> notificationDataBeanList) {
+        NotificationAdapter notificationAdapter = new NotificationAdapter(getApplicationContext(), notificationDataBeanList, this);
         recyclerView.setAdapter(notificationAdapter);
     }
 
@@ -264,28 +257,25 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_job_list) {
 
 //        call dashboard fragment
-            new Utility().callFragment(new DashboardFragment(),getSupportFragmentManager(),
-                    R.id.fragment_container,DashboardFragment.class.getName());
+            new Utility().callFragment(new DashboardFragment(), getSupportFragmentManager(),
+                    R.id.fragment_container, DashboardFragment.class.getName());
             // Handle the camera action
         } else if (id == R.id.nav_feedback) {
-            new Utility().callFragment(new FeedbackFragment(),getSupportFragmentManager(),
-                    R.id.fragment_container,FeedbackFragment.class.getName());
-        } else if (id == R.id.nav_profile){
-            new Utility().callFragment(new ProfileFragment(),getSupportFragmentManager(),
-                    R.id.fragment_container,ProfileFragment.class.getName());
-        } else if (id == R.id.nav_order_history){
-            new Utility().callFragment(new OrderHistoryFragment(),getSupportFragmentManager(),
-                    R.id.fragment_container,OrderHistoryFragment.class.getName());
+            new Utility().callFragment(new FeedbackFragment(), getSupportFragmentManager(),
+                    R.id.fragment_container, FeedbackFragment.class.getName());
+        } else if (id == R.id.nav_profile) {
+            new Utility().callFragment(new ProfileFragment(), getSupportFragmentManager(),
+                    R.id.fragment_container, ProfileFragment.class.getName());
+        } else if (id == R.id.nav_order_history) {
+            new Utility().callFragment(new OrderHistoryFragment(), getSupportFragmentManager(),
+                    R.id.fragment_container, OrderHistoryFragment.class.getName());
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
     }
-
-    TextView textCartItemCount;
-    int mNotificationCount = 0;
 
     public void setupBadge(int mNotificationCount) {
 
@@ -307,7 +297,7 @@ public class HomeActivity extends AppCompatActivity
     public void onDestroy() {
         super.onDestroy();
 
-        if(popupwindow_obj != null) {
+        if (popupwindow_obj != null) {
             popupwindow_obj.dismiss();
             popupwindow_obj = null;
         }
@@ -317,67 +307,67 @@ public class HomeActivity extends AppCompatActivity
     public void onStop() {
         super.onStop();
 
-        if(popupwindow_obj != null) {
+        if (popupwindow_obj != null) {
             popupwindow_obj.dismiss();
             popupwindow_obj = null;
         }
 
     }
 
-    private void getNotification(String driverID, String limit){
-        if (min==0&&max==5){
+    private void getNotification(String driverID, String limit) {
+        if (min == 0 && max == 5) {
             notificationDataBeans.clear();
         }
         new Utility().showProgressDialog(HomeActivity.this);
         Call<NotificationData> call = APIClient.getInstance().getApiInterface().getNotification(driverID, limit);
         call.request().url();
-        Log.d("TAG", "rakhi: "+call.request().url());
+        Log.d("TAG", "rakhi: " + call.request().url());
 
-        new ResponseListner(this,getApplicationContext()).getResponse( call);
+        new ResponseListner(this, getApplicationContext()).getResponse(call);
     }
 
 
     @Override
     public void onApiResponse(Object response) {
         new Utility().hideDialog();
-        if (response!=null){
-            try{
-                if (response instanceof NotificationData)
-                {if (tinyDB.equals("1")){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationFragment())
-                            .addToBackStack(NotificationFragment.class.getName()).commit();
-                }else {
-                    if (notificationDataBeans!=null){
-                        notificationDataBeans.clear();
-                    }
-                    NotificationData notificationData = (NotificationData) response;
-                    if (notificationData.getStatus().equals("1")){
-                        notificationDataBeans.addAll(notificationData.getNotification_data());
-                        tinyDB.putString("notification_list",new Gson().toJson(notificationData));
-                        if (notificationData.getCount_notification()!=null )
-                            mNotificationCount = Integer.parseInt(notificationData.getCount_notification());
-                        setupBadge(mNotificationCount);
+        if (response != null) {
+            try {
+                if (response instanceof NotificationData) {
+                    if (tinyDB.equals("1")) {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationFragment())
+                                .addToBackStack(NotificationFragment.class.getName()).commit();
                     } else {
-                        Utility.showToast(getApplicationContext(),notificationData.getMessage());
-                    }
-                    /*      getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
-                     */
-                    if(notification_clicked) {
-                        Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                        if (f instanceof NotificationFragment) {
-
-                        } else {
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationFragment())
-                                    .addToBackStack(NotificationFragment.class.getName()).commit();
+                        if (notificationDataBeans != null) {
+                            notificationDataBeans.clear();
                         }
-                    } else {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
+                        NotificationData notificationData = (NotificationData) response;
+                        if (notificationData.getStatus().equals("1")) {
+                            notificationDataBeans.addAll(notificationData.getNotification_data());
+                            tinyDB.putString("notification_list", new Gson().toJson(notificationData));
+                            if (notificationData.getCount_notification() != null)
+                                mNotificationCount = Integer.parseInt(notificationData.getCount_notification());
+                            setupBadge(mNotificationCount);
+                        } else {
+                            Utility.showToast(getApplicationContext(), notificationData.getMessage());
+                        }
+                        /*      getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DashboardFragment()).commit();
+                         */
+                        if (notification_clicked) {
+                            Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                            if (f instanceof NotificationFragment) {
+
+                            } else {
+                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationFragment())
+                                        .addToBackStack(NotificationFragment.class.getName()).commit();
+                            }
+                        } else {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DashboardFragment()).commit();
+                        }
                     }
-                }
 
                 }
-            } catch (Exception e){
-                Log.d("TAG", "error: "+e.getMessage());
+            } catch (Exception e) {
+                Log.d("TAG", "error: " + e.getMessage());
             }
         }
     }
@@ -385,22 +375,22 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onApiFailure(String message) {
         new Utility().hideDialog();
-        Utility.showToast(getApplicationContext(),getResources().getString(R.string.error));
+        Utility.showToast(getApplicationContext(), getResources().getString(R.string.error));
     }
 
     @Override
     public void onClick(int pos) {
 
         notification_clicked = true;
-        if (notificationDataBeans!=null&&notificationDataBeans.size()>0){
-            if (notificationDataBeans.get(pos).getType().equals("DUTY")){
-                if (popupwindow_obj!=null)
+        if (notificationDataBeans != null && notificationDataBeans.size() > 0) {
+            if (notificationDataBeans.get(pos).getType().equals("DUTY")) {
+                if (popupwindow_obj != null)
                     popupwindow_obj.dismiss();
-                readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
+                readNotification(driverID, limit, notificationDataBeans.get(pos).getNotification_id());
             } else {
                 if (popupwindow_obj != null)
                     popupwindow_obj.dismiss();
-                readNotification(driverID,limit,notificationDataBeans.get(pos).getNotification_id());
+                readNotification(driverID, limit, notificationDataBeans.get(pos).getNotification_id());
             }
         }
 
@@ -422,17 +412,17 @@ public class HomeActivity extends AppCompatActivity
         getNotification(driverID,limit);*/
     }
 
-    private void readNotification(String driverID, String limit, String notification_id){
-        if (min==0&&max==5){
+    private void readNotification(String driverID, String limit, String notification_id) {
+        if (min == 0 && max == 5) {
             notificationDataBeans.clear();
         }
         new Utility().showProgressDialog(HomeActivity.this);
         Call<NotificationData> call = APIClient.getInstance().getApiInterface().readNotification(driverID,
                 limit, notification_id);
         call.request().url();
-        Log.d("TAG", "rakhi: "+call.request().url());
+        Log.d("TAG", "rakhi: " + call.request().url());
 
-        new ResponseListner(this,getApplicationContext()).getResponse( call);
+        new ResponseListner(this, getApplicationContext()).getResponse(call);
     }
 
     @Override

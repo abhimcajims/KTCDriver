@@ -24,36 +24,17 @@ public class ResponseListner {
             @Override
             public void onResponse(Call call, Response response) {
                 message = response.message();
-                onResponseInterface.onApiResponse(response.body());
+                if (response.code()==200)
+                    onResponseInterface.onApiResponse(response.body());
+                else onResponseInterface.onApiFailure(message);
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
+                message = t.getMessage();
                 onResponseInterface.onApiFailure(message);
             }
         });
-    }
-
-    public void getResponse1(Activity context, Call call) {
-
-        onResponseInterface = (OnResponseInterface) context;
-
-        call.enqueue(new Callback() {
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                message = response.message();
-                onResponseInterface.onApiResponse(response.body());
-            }
-
-            @Override
-            public void onFailure(Call call, Throwable t) {
-                onResponseInterface.onApiFailure(message);
-
-            }
-
-        });
-
     }
 
 

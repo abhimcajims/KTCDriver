@@ -67,22 +67,31 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
-import okhttp3.MediaType;
 import retrofit2.Call;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyListInterface, View.OnClickListener,
-        OnResponseInterface, AdapterDutySlipUploadDocument.UploadDocInterface,DocAdapter.DocInterface {
+        OnResponseInterface, AdapterDutySlipUploadDocument.UploadDocInterface, DocAdapter.DocInterface {
+    public static String dutyslipnum;
+    private final int REQUEST_CAMERA = 0, SELECT_FILE = 1;
+    DatePickerDialog datePickerDialog;
+    int year;
+    int month;
+    int dayOfMonth;
+    Calendar calendar;
+    int pos;
     private LinearLayout main_Layout;
     private RecyclerView recyclerView, recyclerViewAddMore;
     private ArrayList<String> title2List;
@@ -112,23 +121,43 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     private TextView txtEdndingDate;
     private TextView txtcity;
     private TextView txtVehicleReq;
-    private TextView txtUserName,txtBookerNo, txtMisc1Value, txtMisc2Value, txtAddmore,txtSaveDoc;
+    private TextView txtUserName, txtBookerNo, txtMisc1Value, txtMisc2Value, txtAddmore, txtSaveDoc;
     private LinearLayout txtCharge1, txtCharge2;
-    public static String dutyslipnum;
     private String reservationId, starting_date, ending_date, starting_meter,
             starting_time, reporting_meter, reporting_time, ending_meter, ending_time, meter_at_garage,
             time_at_garage, total_meter, total_time, night_halt, toll, parking, e_toll, interstate_tax, others,
-            beverages_charges, entrance_charge, guide_charge, driver_ta, base_64,remove_id, signature;
+            beverages_charges, entrance_charge, guide_charge, driver_ta, base_64, remove_id, signature;
     private int end_status;
     private ArrayList<String> arr_img, arr_document_name;
     private ImageView startClock, endClock;
     private ImageInputHelper imageInputHelper;
     private AppPermissions appPermissions;
     private String userChoosenTask;
+    private EditText edt_upload_document;
+    private TextView tv_upload_document;
+    private RecyclerView rv_upload_document;
+    private AdapterDutySlipUploadDocument adapterDutySlipUploadDocument;
+    private DocAdapter docAdapter;
+    private DutyListAdapter dutyListAdapter;
+    private TextView timeText;
+    private String time;
+    private Dialog charge1Dialog, charge2Dialog;
+    private EditText edtNight, edtEToll, edtParking, edttoll, edtinterstate, edtOther,
+            edtBeverage, edtEntrance, edtDTA, edtGuide;
+    private Dialog endMeterDialog, garageMeterDialog;
 
     public DutySlipFragment() {
         // Required empty public constructor
 
+    }
+
+    public static String formatDate(String date, String initDateFormat, String endDateFormat) throws ParseException {
+
+        Date initDate = new SimpleDateFormat(initDateFormat).parse(date);
+        SimpleDateFormat formatter = new SimpleDateFormat(endDateFormat);
+        String parsedDate = formatter.format(initDate);
+
+        return parsedDate;
     }
 
     @Override
@@ -160,11 +189,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         init();
     }
 
-    private EditText edt_upload_document;
-    private TextView tv_upload_document;
-
-    private RecyclerView rv_upload_document;
-    private AdapterDutySlipUploadDocument adapterDutySlipUploadDocument;
     private void init() {
         imagelistBeans = new ArrayList<>();
         appPermissions = new AppPermissions(getActivity());
@@ -279,8 +303,8 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         txtSaveDoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (img_base_64!=null && img_base_64.size()>0 &&
-                        !arr_document_name.get(arr_document_name.size()-1).equals("Enter Slip Name")){
+                if (img_base_64 != null && img_base_64.size() > 0 &&
+                        !arr_document_name.get(arr_document_name.size() - 1).equals("Enter Slip Name")) {
                     saveDoc();
                 } else {
                     Toast.makeText(getContext(), "Please Enter Slip Name and Select Document first",
@@ -290,7 +314,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         });
     }
 
-    private void setDocAdapter(){
+    private void setDocAdapter() {
         arr_img.add("Photo");
         arr_document_name.add("Enter Slip Name");
         adapterDutySlipUploadDocument = new
@@ -298,8 +322,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         rv_upload_document.setAdapter(adapterDutySlipUploadDocument);
 
     }
-
-    private DocAdapter docAdapter;
 
     private void setSlipAdapter(List<ViewDetailsData.ImagelistBean> imagelistBeans) {
         if (docAdapter == null) {
@@ -310,21 +332,17 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         }
     }
 
-    private DutyListAdapter dutyListAdapter;
-
     @Override
     public void getText(int pos, String value) {
-        if (value!=null&&pos==slip_name.size() && value.length()>0&& value.length()==1){
-            slip_name.add(pos,value);
+        if (value != null && pos == slip_name.size() && value.length() > 0 && value.length() == 1) {
+            slip_name.add(pos, value);
         } else {
-            slip_name.set(pos,value);
+            slip_name.set(pos, value);
         }
 
-        if(value != null && value.length()>0){
-            if(pos < arr_document_name.size()){
+        if (value != null && value.length() > 0) {
+            if (pos < arr_document_name.size()) {
                 arr_document_name.set(pos, value);
-            } else {
-
             }
         }
         arr_document_name.add(value);
@@ -352,8 +370,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         });
     }
 
-    private TextView timeText;
-
     @Override
     public void onTextChanged(int position, String charSeq) {
         Log.d("TAG", "onTextChanged: " + charSeq);
@@ -379,17 +395,17 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     }
 
     private void calculateMeter() {
-        if (meter_at_garage!=null&&meter_at_garage.length()>0){
+        if (meter_at_garage != null && meter_at_garage.length() > 0) {
             double total = (/*Double.parseDouble(reporting_meter)
-                    + Double.parseDouble(ending_meter) +*/ Double.parseDouble(meter_at_garage))-
+                    + Double.parseDouble(ending_meter) +*/ Double.parseDouble(meter_at_garage)) -
                     (Double.parseDouble(starting_meter));
             if (total_meter != null && total_meter.length() > 0)
                 total_meter = Double.parseDouble(total_meter) + "";
             if (!String.valueOf(total).trim().equals(total_meter)) {
                 total_meter = ((int) total) + "";
                 title1ListValue.set(4, total_meter);
-                if (dutyListAdapter!=null)
-                dutyListAdapter.notifyItemChanged(4);
+                if (dutyListAdapter != null)
+                    dutyListAdapter.notifyItemChanged(4);
             }
         }
     }
@@ -397,7 +413,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     public void calculateTime(String starting_date, String starting_time, String ending_date, String time_at_garage) {
         String dateStart = starting_date + " " + starting_time;
         String dateStop = ending_date + " " + time_at_garage;
-        if (time_at_garage!=null&&time_at_garage.length()>0){
+        if (time_at_garage != null && time_at_garage.length() > 0) {
             //HH converts hour in 24 hours format (0-23), day calculation
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -441,8 +457,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         openTimer(i);
     }
 
-    private String time;
-
     private void openTimer(final int i) {
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
@@ -451,38 +465,76 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-               /* Calendar datetime = Calendar.getInstance();
                 Calendar c = Calendar.getInstance();
+                Calendar datetime = Calendar.getInstance();
                 datetime.set(Calendar.HOUR_OF_DAY, selectedHour);
                 datetime.set(Calendar.MINUTE, selectedMinute);
-                if (datetime.getTimeInMillis() >= c.getTimeInMillis()) {
-                    //it's after current
-                    int hour = selectedHour % 12;
-                    timeText.setText(String.format("%02d:%02d %s", hour == 0 ? 12 : hour,
-                            selectedMinute, selectedHour < 12 ? "am" : "pm"));
-                } else {
-                    //it's before current'
-                    Toast.makeText(getContext(), "Invalid Time", Toast.LENGTH_LONG).show();
-                }
-                */
+                if (!ending_date.isEmpty()) {
+                    SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date myDate;
+                    try {
+                        myDate = timeFormat.parse(ending_date);
+                        String cDate = timeFormat.format(datetime.getTime());
+                        if (ending_date.equals(cDate)){
+                            Log.d("TAG", "onTimeSet: equal");
+                            if (datetime.getTimeInMillis() >= c.getTimeInMillis()) {
+                                //it's after current
+                                int hour1 = selectedHour % 12;
+                                timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
+                                        selectedMinute, selectedHour < 12 ? "am" : "pm"));
+                                time = String.format("%02d:%02d", selectedHour, selectedMinute);
 
-                time = String.format("%02d:%02d", selectedHour, selectedMinute);
+                            } else Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
+
+                        }
+                         else if (myDate.after(datetime.getTime())) {
+                           /* if (datetime.getTimeInMillis() >= c.getTimeInMillis()) {
+                                //it's after current
+                                int hour1 = selectedHour % 12;
+                                timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
+                                        selectedMinute, selectedHour < 12 ? "am" : "pm"));
+                                time = String.format("%02d:%02d", selectedHour, selectedMinute);
+
+                            } else {
+                                //it's before current'
+                                Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
+                            }*/
+                            int hour1 = selectedHour % 12;
+                            timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
+                                    selectedMinute, selectedHour < 12 ? "am" : "pm"));
+                            time = String.format("%02d:%02d", selectedHour, selectedMinute);
+                        } else {
+                            int hour1 = selectedHour % 12;
+                            Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
+                          /*  timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
+                                    selectedMinute, selectedHour < 12 ? "am" : "pm"));
+                            time = String.format("%02d:%02d", selectedHour, selectedMinute);*/
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 switch (i) {
                     case 0:
                         starting_time = time;
-                        timeText.setText(time);
+                        if (time != null && time.length() > 0)
+                            timeText.setText(time);
                         break;
                     case 1:
                         reporting_time = time;
-                        timeText.setText(time);
+                        if (time != null && time.length() > 0)
+                            timeText.setText(time);
                         break;
                     case 2:
                         ending_time = time;
-                        timeText.setText(time);
+                        if (time != null && time.length() > 0)
+                            timeText.setText(time);
                         break;
                     case 3:
                         time_at_garage = time;
-                        timeText.setText(time);
+                        if (time != null && time.length() > 0)
+                            timeText.setText(time);
                         if (time_at_garage != null && time_at_garage.length() > 0)
                             calculateTime(starting_date, starting_time, ending_date, time_at_garage);
                         break;
@@ -513,71 +565,64 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                    }
                }*/
 
-                        if (meter_at_garage != null && meter_at_garage.length() > 0) {
+                if (meter_at_garage != null && meter_at_garage.length() > 0) {
 
-                            if(ending_meter != null && ending_meter.length()>0){
+                    if (ending_meter != null && ending_meter.length() > 0) {
 
-                                if (Double.parseDouble(meter_at_garage) < Double.parseDouble(ending_meter)) {
-                                    Utility.showToast(getContext(), "Meter at garrage should be > than ending meter");
-                                } else {
-                                    showGarrageMeterDialog();
-                                }
-                            }
-
-//                            else {
-//                                        showGarrageMeterDialog();
-//                                Utility.showToast(getContext(), "Meter at garrage should be > than ending meter");
-//                            }
-                        } else if (ending_meter != null && ending_meter.length() > 0) {
-                            if (isEndMeter && isEndTime) {
+                        if (Double.parseDouble(meter_at_garage) < Double.parseDouble(ending_meter)) {
+                            Utility.showToast(getContext(), "Meter at garrage should be > than ending meter");
+                        } else {
+                            showGarrageMeterDialog();
+                        }
+                    }
+                } else if (ending_meter != null && ending_meter.length() > 0) {
+                    if (!isEndMeter || !isEndTime) {
+                        if (reporting_meter != null && reporting_meter.length() > 0) {
+                            if (Double.parseDouble(ending_meter) < Double.parseDouble(reporting_meter)) {
+                                Utility.showToast(getContext(), "Ending meter should be > than reporting meter");
                             } else {
 
-                        if(reporting_meter != null && reporting_meter.length()>0) {
-                                if (Double.parseDouble(ending_meter) < Double.parseDouble(reporting_meter)) {
-                                    Utility.showToast(getContext(), "Ending meter should be > than reporting meter");
+                                if (signature == null || signature.length() == 0) {
+                                    showEndMeterDialog();
                                 } else {
-
-                                    if (signature==null || signature.length()==0){
-                                        showEndMeterDialog();
-                                    } else {
-                                        saveDutySlip();
-                                    }
-//                                    showEndMeterDialog();
+                                    saveDutySlip();
                                 }
+//                                    showEndMeterDialog();
+                            }
                         } else {
-                            if (signature==null || signature.length()==0){
+                            if (signature == null || signature.length() == 0) {
                                 showEndMeterDialog();
                             } else {
                                 saveDutySlip();
                             }
 //                            showEndMeterDialog();
                         }
-                            }
+                    }
+                } else {
+                    if (starting_meter != null && starting_meter.length() > 0) {
+                        if (reporting_meter != null && reporting_meter.length() > 0 && Double.parseDouble(reporting_meter)
+                                < Double.parseDouble(starting_meter)) {
+                            Utility.showToast(getContext(), "Reporting meter should be > than starting meter");
                         } else {
-                    if(starting_meter != null && starting_meter.length()>0) {
-                            if (reporting_meter != null && reporting_meter.length() > 0 && Double.parseDouble(reporting_meter)
-                                    < Double.parseDouble(starting_meter)) {
-                                Utility.showToast(getContext(), "Reporting meter should be > than starting meter");
-                            } else {
-                                saveDutySlip();
-                            }
+                            saveDutySlip();
+                        }
                     } else {
                         saveDutySlip();
                     }
-                        }
-                 break;
+                }
+                break;
             case R.id.fragment_duty_slip_txt_charge2:
 /*
                 if (ending_meter == null || ending_meter.length() == 0) {
                 }
 */
-                showChargeDialog(R.layout.dialog_duty_slip_charge);
+                showChargeDialog();
                 break;
             case R.id.fragment_duty_slip_txt_charge1:/*
                 if (ending_meter == null || ending_meter.length() == 0) {
 
                 }*/
-                showCharge2Dialog(R.layout.dialog_duty_slip_charge2);
+                showCharge2Dialog();
                 break;
             case R.id.fragment_duty_slip_txt_starting_clock:
                 if (starting_date == null) {
@@ -590,9 +635,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
 
             case R.id.fragment_duty_slip_upload_document:
 
-                if (!edt_upload_document.getText().toString().trim().isEmpty()) {
-
-                } else {
+                if (edt_upload_document.getText().toString().trim().isEmpty()) {
                     Utility.showToast(getContext(), "Please enter text");
                 }
                 break;
@@ -601,12 +644,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 break;
         }
     }
-
-    DatePickerDialog datePickerDialog;
-    int year;
-    int month;
-    int dayOfMonth;
-    Calendar calendar;
 
     private void openDateTicker(final int i) {
         calendar = Calendar.getInstance();
@@ -617,7 +654,15 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        String a = year + "-" + (month + 1) + "-" + day;
+
+                        String mMonth = null, dDay;
+                        if (month < 10) {
+                            mMonth = "0" + (month + 1);
+                        } else mMonth = month + 1 + "";
+                        if (day < 10) {
+                            dDay = "0" + day;
+                        } else dDay = day + "";
+                        String a = year + "-" + mMonth + "-" + dDay;
                         if (i == 1) {
                             starting_date = a;
                             txtStartingDate.setText(starting_date);
@@ -631,13 +676,9 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         datePickerDialog.show();
     }
 
-    private Dialog charge1Dialog, charge2Dialog;
-    private EditText edtNight, edtEToll, edtParking, edttoll, edtinterstate, edtOther,
-            edtBeverage, edtEntrance, edtDTA, edtGuide;
-
-    private void showChargeDialog(int id) {
+    private void showChargeDialog() {
         charge1Dialog = new Dialog(getContext());
-        charge1Dialog.setContentView(id);
+        charge1Dialog.setContentView(R.layout.dialog_duty_slip_charge);
         charge1Dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         charge1Dialog.show();
         LinearLayout linearLayout = charge1Dialog.findViewById(R.id.duty_slip_charge1_cross);
@@ -676,9 +717,9 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
 
     }
 
-    private void showCharge2Dialog(int id) {
+    private void showCharge2Dialog() {
         charge2Dialog = new Dialog(getContext());
-        charge2Dialog.setContentView(id);
+        charge2Dialog.setContentView(R.layout.dialog_duty_slip_charge2);
         charge2Dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         charge2Dialog.show();
         LinearLayout linearLayout = charge2Dialog.findViewById(R.id.duty_slip_charge2_cross);
@@ -744,23 +785,18 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         main_Layout.setVisibility(View.VISIBLE);
         if (response != null) {
             if (response instanceof ViewDetailsData) {
-                ViewDetailsData viewDetailsData = new ViewDetailsData();
-                viewDetailsData = (ViewDetailsData) response;
+                ViewDetailsData viewDetailsData = (ViewDetailsData) response;
                 if (imagelistBeans != null)
                     imagelistBeans.clear();
                 if (viewDetailsData.getJob_detail() != null) {
                     if (viewDetailsData.getJob_detail().getVehiclerequest() != null)
                         txtVehicleReq.setText(viewDetailsData.getJob_detail().getVehiclerequest());
                     if (viewDetailsData.getJob_detail().getCompany_Name() != null) {
-                      //  txtCompanyName.setText(viewDetailsData.getJob_detail().getCompany_Name());
+                        //  txtCompanyName.setText(viewDetailsData.getJob_detail().getCompany_Name());
                         txtCompName2.setText(viewDetailsData.getJob_detail().getCompany_Name());
                     }
                     if (viewDetailsData.getJob_detail().getDutyslipnum() != null)
                         dutyslipnum = viewDetailsData.getJob_detail().getDutyslipnum();
-//            txtCompFax.setText(viewDetailsData.getJob_detail().getVehiclerequest());
-//            txtCompMobile.setText(viewDetailsData.getJob_detail().getVehiclerequest());
-//            txtCompEmail.setText(viewDetailsData.getJob_detail().getVehiclerequest());
-//            txtComapAdd.setText(viewDetailsData.getJob_detail().getVehiclerequest());
                     if (viewDetailsData.getJob_detail().getDetails() != null)
                         txtDetails.setText(viewDetailsData.getJob_detail().getDetails());
                     if (viewDetailsData.getJob_detail().getBookername() != null)
@@ -776,11 +812,11 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                     if (viewDetailsData.getJob_detail().getGuestcontacto() != null)
                         txtGuestNo.setText(viewDetailsData.getJob_detail().getGuestcontacto());
                     if (viewDetailsData.getJob_detail().getGuestname() != null)
-                         txtUserName.setText(viewDetailsData.getJob_detail().getGuestname());
+                        txtUserName.setText(viewDetailsData.getJob_detail().getGuestname());
                     if (viewDetailsData.getJob_detail().getDrivername() != null)
                         txtDriverDetail.setText(viewDetailsData.getJob_detail().getDrivername());
                     if (viewDetailsData.getJob_detail().getCarname() != null)
-                        txtCarDetail.setText(viewDetailsData.getJob_detail().getCarname()+" ("+ viewDetailsData.getJob_detail().getCarno()+")");
+                        txtCarDetail.setText(viewDetailsData.getJob_detail().getCarname() + " (" + viewDetailsData.getJob_detail().getCarno() + ")");
                     if (viewDetailsData.getJob_detail().getReservationid() != null)
                         txtrqNo.setText(viewDetailsData.getJob_detail().getReservationid());
                     if (viewDetailsData.getJob_detail().getStarting_date() != null &&
@@ -791,14 +827,15 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                         txtStartingDate.setText(viewDetailsData.getJob_detail().getReportingfrom());
                         starting_date = viewDetailsData.getJob_detail().getReportingfrom();
                     }
-                    if (viewDetailsData.getJob_detail().getSignature()!=null && viewDetailsData.getJob_detail().getSignature().length()>0){
+                    if (viewDetailsData.getJob_detail().getSignature() != null && viewDetailsData.getJob_detail().getSignature().length() > 0) {
                         signature = viewDetailsData.getJob_detail().getSignature();
                     }
-                    if (viewDetailsData.getJob_detail().getBookercontactno()!=null)
+                    if (viewDetailsData.getJob_detail().getBookercontactno() != null)
                         txtBookerNo.setText(viewDetailsData.getJob_detail().getBookercontactno());
 
                     if (viewDetailsData.getJob_detail().getEnding_date() != null) {
                         ending_date = viewDetailsData.getJob_detail().getEnding_date();
+
                         txtEdndingDate.setText(viewDetailsData.getJob_detail().getEnding_date());
                     } else {
                         txtEdndingDate.setText(viewDetailsData.getJob_detail().getReporingto());
@@ -840,14 +877,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                     if (viewDetailsData.getJob_detail().getTotal_time() != null)
                         total_time = viewDetailsData.getJob_detail().getTotal_time();
                     title2ListValue.add(total_time);
-                    /**
-                     * night_halt : null
-                     * toll : null
-                     * parking : null
-                     * e_toll : null
-                     * interstate_tax : null
-                     * others : null
-                     */
 
                     if (viewDetailsData.getJob_detail().getMisc_charges1().getNight_halt() != null) {
                         night_halt = viewDetailsData.getJob_detail().getMisc_charges1().getNight_halt() + "";
@@ -865,12 +894,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                         others = viewDetailsData.getJob_detail().getMisc_charges1().getOthers() + "";
                     }
                     calculateMischrage1();
-                    /**
-                     * beverage_charge : null
-                     * entrance_charge : null
-                     * parking : null
-                     * driver_ta : null
-                     */
 
                     if (viewDetailsData.getJob_detail().getMisc_charges2().getBeverage_charge() != null) {
                         beverages_charges = viewDetailsData.getJob_detail().getMisc_charges2().getBeverage_charge() + "";
@@ -905,7 +928,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             } else if (response instanceof SaveResponse) {
                 SaveResponse saveResponse = (SaveResponse) response;
                 if (saveResponse.getStatus().equals("1")) {
-                    if(charge1Dialog == null && charge2Dialog == null && img_base_64 != null && img_base_64.size() == 0) {
+                    if (charge1Dialog == null && charge2Dialog == null && img_base_64 != null && img_base_64.size() == 0) {
                         Utility.showToast(getContext(), saveResponse.getMessage());
                     }
                     if (charge1Dialog != null)
@@ -928,14 +951,12 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
 
                     if (endMeterDialog != null) {
                         endMeterDialog.dismiss();
-                     //   endMeterDialog = null;
+                        //   endMeterDialog = null;
 
-                        if (signature==null || signature.length()==0){
+                        if (signature == null || signature.length() == 0) {
                             FeedbackFragment feedbackFragment = new FeedbackFragment();
                             new Utility().callFragment(feedbackFragment, getFragmentManager(), R.id.fragment_container,
                                     FeedbackFragment.class.getName());
-                        } else {
-
                         }
                     }
 
@@ -956,10 +977,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     private void calculateMischrage2() {
         if (beverages_charges == null || beverages_charges.length() == 0) {
             beverages_charges = "0";
-        } else {
-            beverages_charges = beverages_charges;
         }
-
         if (entrance_charge == null || entrance_charge.length() == 0) {
             entrance_charge = "0";
         } else {
@@ -1027,17 +1045,9 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         else txtMisc1Value.setText("None");
     }
 
-    private void setTotal2(){
-        /**
-         * night_halt : null
-         * toll : null
-         * parking : null
-         * e_toll : null
-         * interstate_tax : null
-         * others : null
-         */
+    private void setTotal2() {
 
-        if(charge2Dialog!=null) {
+        if (charge2Dialog != null) {
             e_toll = edtEToll.getText().toString().trim();
             parking = edtParking.getText().toString().trim();
             toll = edttoll.getText().toString().trim();
@@ -1045,39 +1055,39 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             interstate_tax = edtinterstate.getText().toString().trim();
             others = edtOther.getText().toString().trim();
 
-            if (e_toll==null|| e_toll.length()==0){
-                e_toll= "0";
+            if (e_toll == null || e_toll.length() == 0) {
+                e_toll = "0";
             }
-            if (parking==null|| parking.length()==0){
-                parking= "0";
+            if (parking == null || parking.length() == 0) {
+                parking = "0";
             }
-            if (toll==null|| toll.length()==0){
-                toll= "0";
+            if (toll == null || toll.length() == 0) {
+                toll = "0";
             }
-            if (night_halt==null|| night_halt.length()==0){
-                night_halt= "0";
+            if (night_halt == null || night_halt.length() == 0) {
+                night_halt = "0";
             }
-            if (interstate_tax==null|| interstate_tax.length()==0){
-                interstate_tax= "0";
+            if (interstate_tax == null || interstate_tax.length() == 0) {
+                interstate_tax = "0";
             }
-            if (others==null|| others.length()==0){
-                others= "0";
+            if (others == null || others.length() == 0) {
+                others = "0";
             }
 
 
-            Double d1 = Double.parseDouble(night_halt) +
+            double d1 = Double.parseDouble(night_halt) +
                     Double.parseDouble(e_toll) +
                     Double.parseDouble(parking) +
                     Double.parseDouble(toll) +
                     Double.parseDouble(interstate_tax) +
                     Double.parseDouble(others);
-            if (d1>0)
-            txtMisc1Value.setText(d1 + "");
-            else txtMisc1Value.setText( "None");
+            if (d1 > 0)
+                txtMisc1Value.setText(d1 + "");
+            else txtMisc1Value.setText("None");
         }
     }
 
-    private void setTotal1(){
+    private void setTotal1() {
         /**
          * beverage_charge : null
          * entrance_charge : null
@@ -1085,18 +1095,15 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
          * driver_ta : null
          */
 
-        if(charge1Dialog != null) {
+        if (charge1Dialog != null) {
             driver_ta = edtDTA.getText().toString().trim();
             guide_charge = edtGuide.getText().toString().trim();
             entrance_charge = edtEntrance.getText().toString().trim();
             beverages_charges = edtBeverage.getText().toString().trim();
 
-            if (beverages_charges == null || beverages_charges.length() == 0) {
+            if (beverages_charges.length() == 0) {
                 beverages_charges = "0";
-            } else {
-                beverages_charges = beverages_charges;
             }
-
             if (entrance_charge == null || entrance_charge.length() == 0) {
                 entrance_charge = "0";
             } else {
@@ -1115,12 +1122,12 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 driver_ta = driver_ta;
             }
 
-            Double d2 = Double.parseDouble(beverages_charges) +
+            double d2 = Double.parseDouble(beverages_charges) +
                     Double.parseDouble(entrance_charge) +
                     Double.parseDouble(guide_charge) +
                     Double.parseDouble(driver_ta);
-            if (d2>0)
-            txtMisc2Value.setText(d2 + "");
+            if (d2 > 0)
+                txtMisc2Value.setText(d2 + "");
             else txtMisc2Value.setText("None");
         }
     }
@@ -1128,11 +1135,11 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     @Override
     public void onApiFailure(String message) {
         try {
+            new Utility().hideDialog();
             Utility.showToast(getContext(), getContext().getResources().getString(R.string.error));
         } catch (Exception e) {
             Log.d("TAG", "onApiFailure: " + e.getMessage());
         }
-        new Utility().hideDialog();
     }
 
     private void saveDutySlip() {
@@ -1186,8 +1193,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         new ResponseListner(this, getContext()).getResponse(call);
     }
 
-    private Dialog endMeterDialog, garageMeterDialog;
-
     private void showEndMeterDialog() {
         endMeterDialog = new Dialog(getContext());
         endMeterDialog.setContentView(R.layout.dialog_end_meter_confirmation);
@@ -1209,7 +1214,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             @Override
             public void onClick(View view) {
                 endMeterDialog.dismiss();
-              //  endMeterDialog = null;
+                //  endMeterDialog = null;
                 saveDutySlip();
             }
         });
@@ -1241,15 +1246,11 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         });
     }
 
-    int pos;
-
     @Override
     public void browse(View view, int pos) {
         this.pos = pos;
         selectImage();
     }
-
-    private boolean result;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -1261,7 +1262,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                     Toast.makeText(getActivity(), "Camera Permissions not granted", Toast.LENGTH_SHORT).show();
                 } else {
-                    result = true;
                     cameraIntent();
                 }
                 break;
@@ -1269,7 +1269,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                     Toast.makeText(getActivity(), "file Permissions not granted", Toast.LENGTH_SHORT).show();
                 } else {
-                    result = true;
                     galleryIntent();
                 }
                 break;
@@ -1288,7 +1287,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 if (items[item].equals("Take Photo")) {
                     userChoosenTask = "Take Photo";
                     if (appPermissions.hasPermission(Manifest.permission.CAMERA)) {
-                        result = true;
                         cameraIntent();
                     } else {
                         appPermissions.requestPermission(getActivity(), Manifest.permission.CAMERA, REQUEST_CAMERA);
@@ -1296,9 +1294,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 } else if (items[item].equals("Choose from Library")) {
                     userChoosenTask = "Choose from Library";
                     if (appPermissions.hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                        result = true;
                         galleryIntent();
-//                        Toast.makeText(getContext(), "All granted gal" + result, Toast.LENGTH_SHORT).show();
                     } else {
                         appPermissions.requestPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE, SELECT_FILE);
                     }
@@ -1382,21 +1378,17 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
 
                 if (pos > img_base_64.size())
                     img_base_64.set(pos, base_64);
-                else{
+                else {
                     img_base_64.add(pos, base_64);
                     arr_img.set(pos, "Photo1");
                 }
                 adapterDutySlipUploadDocument.notifyDataSetChanged();
-
-//                Toast.makeText(getActivity(), "" + img_base_64.size(), Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         //   endClock.setImageBitmap(bm);
     }
-
-    private final int REQUEST_CAMERA = 0, SELECT_FILE = 1;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1420,10 +1412,10 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     }
 
 
-    private void deleteDoc(String remove_id){
+    private void deleteDoc(String remove_id) {
         new Utility().showProgressDialog(getContext());
         Call<SaveResponse> call = APIClient.getInstance().getApiInterface().deleteDoc(dutyslipnum,
-                DashboardFragment.driverId,"remove", remove_id);
+                DashboardFragment.driverId, "remove", remove_id);
         call.request().url();
         Log.d("TAG", "rakhi: " + call.request().url());
         new ResponseListner(this, getContext()).getResponse(call);
@@ -1435,66 +1427,59 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new com.android.volley.Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                new Utility().hideDialog();
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    if (jsonObject.getString("status").equals("1")){
-//                        Utility.showToast(getContext(),jsonObject.getString("message"));
+                    @Override
+                    public void onResponse(String response) {
+                        new Utility().hideDialog();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("status").equals("1")) {
+                              //  saveDutySlip();
+                                List<ViewDetailsData.ImagelistBean> ilb = new ArrayList<>();
+                                for (int i = 0; i < slip_name.size(); i++) {
+                                    ViewDetailsData.ImagelistBean obj = new ViewDetailsData.ImagelistBean();
+                                    obj.setId("0");
+                                    obj.setName(slip_name.get(i));
+                                    ilb.add(obj);
+                                }
 
-                        List<ViewDetailsData.ImagelistBean> ilb = new ArrayList<>();
-                        for(int i=0; i<slip_name.size(); i++) {
-                            ViewDetailsData.ImagelistBean obj = new ViewDetailsData.ImagelistBean();
-                            obj.setId("0");
-                            obj.setName(slip_name.get(i));
-                            ilb.add(obj);
+                                if (slip_name != null) {
+                                    slip_name.clear();
+                                    arr_document_name.clear();
+                                    arr_img.clear();
+                                    img_base_64.clear();
+                                }
+                                setDocAdapter();
+                                fetchDetails(reservationId);
+                            } else {
+                                Utility.showToast(getContext(), jsonObject.getString("message"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-
-                        if (slip_name!=null){
-                            slip_name.clear();
-                            arr_document_name.clear();
-                            arr_img.clear();
-                            img_base_64.clear();
-                        }
-                        setDocAdapter();
-                        fetchDetails(reservationId);
-                    } else {
-                        Utility.showToast(getContext(),jsonObject.getString("message"));
+                        Log.d("TAG", "onResponse: " + response);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.d("TAG", "onResponse: "+response);
-            }
-        }, new com.android.volley.Response.ErrorListener() {
+                }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 new Utility().hideDialog();
-                Log.d("TAG", "onErrorResponse: "+error);
+                Log.d("TAG", "onErrorResponse: " + error);
             }
-        }){
+        }) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String>hashMap = new HashMap<>();
-                hashMap.put("dutyslipnum",dutyslipnum);
-                hashMap.put("driverId",DashboardFragment.driverId);
-                hashMap.put("action","ADD");
+            protected Map<String, String> getParams() {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("dutyslipnum", dutyslipnum);
+                hashMap.put("driverId", DashboardFragment.driverId);
+                hashMap.put("action", "ADD");
 
-                for(int i =0;i<slip_name.size();i++){
-                    hashMap.put("document_name["+i+"]", slip_name.get(i));
+                for (int i = 0; i < slip_name.size(); i++) {
+                    hashMap.put("document_name[" + i + "]", slip_name.get(i));
                 }
-                for(int i =0;i<img_base_64.size();i++){
-                    hashMap.put("document_file["+i+"]", img_base_64.get(i));
+                for (int i = 0; i < img_base_64.size(); i++) {
+                    hashMap.put("document_file[" + i + "]", img_base_64.get(i));
                 }
-                /*for(int i =0;i<arr_document_name.size();i++){
-                    hashMap.put("document_name[" + i + "]", arr_document_name.get(i));
-                }
-                for(int i =0;i<img_base_64.size();i++){
-                    hashMap.put("document_file["+i+"]", img_base_64.get(i));
-                }*/
 
-                Log.d("TAG", "getParams: "+hashMap);
+                Log.d("TAG", "getParams: " + hashMap);
                 return hashMap;
             }
         };

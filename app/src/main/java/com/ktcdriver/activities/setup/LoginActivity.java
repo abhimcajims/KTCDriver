@@ -148,11 +148,7 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
                     // contacts-related task you need to do.
                     imei = getDeviceIMEI();
                     Log.d(TAG, "rakhi: "+imei);
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                 }
-                return;
             }
 
             // other 'case' lines to check for other

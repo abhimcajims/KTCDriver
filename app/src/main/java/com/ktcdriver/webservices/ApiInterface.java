@@ -31,7 +31,6 @@ public interface ApiInterface {
     Call<NewUserResponse> registerNewUser(@Field("driverid")String driverId,
                                           @Field("IMEI")String IMEI,
                                           @Field("TOKEN_ID")String TOKEN_ID);
-
     @FormUrlEncoded
     @POST("save_duty_slip.php")
     Call<SaveResponse> saveDutySlip(@Field("dutyslipnum")String dutyslipnum,
