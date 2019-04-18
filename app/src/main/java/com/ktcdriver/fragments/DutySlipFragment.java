@@ -151,14 +151,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
 
     }
 
-    public static String formatDate(String date, String initDateFormat, String endDateFormat) throws ParseException {
-
-        Date initDate = new SimpleDateFormat(initDateFormat).parse(date);
-        SimpleDateFormat formatter = new SimpleDateFormat(endDateFormat);
-        String parsedDate = formatter.format(initDate);
-
-        return parsedDate;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -777,6 +769,8 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         new ResponseListner(this, getContext()).getResponse(call);
     }
 
+    private SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onApiResponse(Object response) {
@@ -822,10 +816,34 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                     if (viewDetailsData.getJob_detail().getStarting_date() != null &&
                             !viewDetailsData.getJob_detail().getStarting_date().equals("0000-00-00")) {
                         starting_date = viewDetailsData.getJob_detail().getStarting_date();
-                        txtStartingDate.setText(viewDetailsData.getJob_detail().getStarting_date());
+                        boolean valid = isValidFormat("yyyy-MM-dd",starting_date);
+                        if (!valid){
+                            try {
+                                Date date = new SimpleDateFormat("dd-MM-yyyy").parse(starting_date);
+                                starting_date = timeFormat.format(date);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        txtStartingDate.setText(starting_date);
+
                     } else {
-                        txtStartingDate.setText(viewDetailsData.getJob_detail().getReportingfrom());
                         starting_date = viewDetailsData.getJob_detail().getReportingfrom();
+                        boolean valid = isValidFormat("yyyy-MM-dd",starting_date);
+                        if (!valid){
+                            try {
+                                Date date = new SimpleDateFormat("dd-MM-yyyy").parse(starting_date);
+                                starting_date = timeFormat.format(date);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        txtStartingDate.setText(starting_date);
+
+
                     }
                     if (viewDetailsData.getJob_detail().getSignature() != null && viewDetailsData.getJob_detail().getSignature().length() > 0) {
                         signature = viewDetailsData.getJob_detail().getSignature();
@@ -835,11 +853,32 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
 
                     if (viewDetailsData.getJob_detail().getEnding_date() != null) {
                         ending_date = viewDetailsData.getJob_detail().getEnding_date();
+                        boolean valid = isValidFormat("yyyy-MM-dd",ending_date);
+                        if (!valid){
+                            try {
+                                Date date = new SimpleDateFormat("dd-MM-yyyy").parse(ending_date);
+                                ending_date = timeFormat.format(date);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
 
-                        txtEdndingDate.setText(viewDetailsData.getJob_detail().getEnding_date());
+                        }
+                        txtEdndingDate.setText(ending_date);
+
                     } else {
-                        txtEdndingDate.setText(viewDetailsData.getJob_detail().getReporingto());
                         ending_date = viewDetailsData.getJob_detail().getReporingto();
+                        boolean valid = isValidFormat("yyyy-MM-dd",ending_date);
+                        if (!valid){
+                            try {
+                                Date date = new SimpleDateFormat("dd-MM-yyyy").parse(ending_date);
+                                ending_date = timeFormat.format(date);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                        txtEdndingDate.setText(ending_date);
+
                     }
                     if (viewDetailsData.getJob_detail().getStarting_meter() != null)
                         starting_meter = viewDetailsData.getJob_detail().getStarting_meter();
@@ -974,6 +1013,20 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         }
     }
 
+    public static boolean isValidFormat(String format, String value) {
+        Date date = null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            date = sdf.parse(value);
+            if (!value.equals(sdf.format(date))) {
+                date = null;
+            }
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        return date != null;
+    }
+
     private void calculateMischrage2() {
         if (beverages_charges == null || beverages_charges.length() == 0) {
             beverages_charges = "0";
@@ -1073,7 +1126,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             if (others == null || others.length() == 0) {
                 others = "0";
             }
-
 
             double d1 = Double.parseDouble(night_halt) +
                     Double.parseDouble(e_toll) +
