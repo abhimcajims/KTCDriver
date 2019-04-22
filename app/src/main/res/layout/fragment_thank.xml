@@ -13,7 +13,7 @@
         android:layout_marginTop="110dp"
         android:layout_width="160dp"
         android:layout_height="160dp" />
-    <com.ktcdriver.customtext.CustomTextViewBold
+    <com.ktcdrivers.customtext.CustomTextViewBold
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:text="Thank You"
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <com.ktcdriver.customtext.CustomTextView
+    <com.ktcdrivers.customtext.CustomTextView
         android:layout_gravity="center"
         android:gravity="center"
         android:paddingLeft="10dp"
@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <com.ktcdriver.customtext.CustomTextView
+    <com.ktcdrivers.customtext.CustomTextView
         android:layout_gravity="center"
         android:text="Next Duty"
         android:background="@drawable/button_bg"

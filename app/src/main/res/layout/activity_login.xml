@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="10dp">
-        <com.ktcdriver.customtext.CustomEditText
+        <com.ktcdrivers.customtext.CustomEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/activity_login_driver_id"
@@ -36,7 +36,7 @@
             android:id="@+id/activity_login_edtDriverId"
             android:drawableLeft="@drawable/ic_user"/>
 
-        <com.ktcdriver.customtext.CustomEditText
+        <com.ktcdrivers.customtext.CustomEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/activity_login_password"
@@ -51,7 +51,7 @@
             android:id="@+id/activity_login_edtPass"
             android:drawableLeft="@drawable/ic_lock"/>
 
-        <com.ktcdriver.customtext.CustomTextView
+        <com.ktcdrivers.customtext.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/activity_login_txtLogin"

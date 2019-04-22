@@ -25,7 +25,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <com.ktcdriver.customtext.CustomTextViewBold
+                <com.ktcdrivers.customtext.CustomTextViewBold
                     android:text="Add Charges"
                     android:layout_marginTop="20dp"
                     android:layout_width="wrap_content"
@@ -33,14 +33,14 @@
                     android:padding="5dp"
                     android:textSize="@dimen/size_16"
                     android:layout_height="wrap_content" />
-                <com.ktcdriver.customtext.CustomTextView
+                <com.ktcdrivers.customtext.CustomTextView
                     android:text="Beverages Charges"
                     android:layout_width="wrap_content"
                     android:padding="5dp"
                     android:textSize="@dimen/size_12"
                     android:layout_height="wrap_content" />
 
-                <com.ktcdriver.customtext.CustomEditText
+                <com.ktcdrivers.customtext.CustomEditText
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:padding="10dp"
@@ -50,14 +50,14 @@
                     android:background="@drawable/edittext_bg"
                     android:inputType="number"/>
 
-                <com.ktcdriver.customtext.CustomTextView
+                <com.ktcdrivers.customtext.CustomTextView
                     android:text="Entrance Charges"
                     android:layout_width="wrap_content"
                     android:padding="5dp"
                     android:textSize="@dimen/size_12"
                     android:layout_height="wrap_content" />
 
-                <com.ktcdriver.customtext.CustomEditText
+                <com.ktcdrivers.customtext.CustomEditText
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:padding="10dp"
@@ -67,14 +67,14 @@
                     android:background="@drawable/edittext_bg"
                     android:inputType="number" />
 
-                <com.ktcdriver.customtext.CustomTextView
+                <com.ktcdrivers.customtext.CustomTextView
                     android:text="Guide Charges"
                     android:layout_width="wrap_content"
                     android:padding="5dp"
                     android:textSize="@dimen/size_12"
                     android:layout_height="wrap_content" />
 
-                <com.ktcdriver.customtext.CustomEditText
+                <com.ktcdrivers.customtext.CustomEditText
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:padding="10dp"
@@ -84,14 +84,14 @@
                     android:background="@drawable/edittext_bg"
                     android:inputType="number" />
 
-                <com.ktcdriver.customtext.CustomTextView
+                <com.ktcdrivers.customtext.CustomTextView
                     android:text="Driver TA"
                     android:layout_width="wrap_content"
                     android:padding="5dp"
                     android:textSize="@dimen/size_12"
                     android:layout_height="wrap_content" />
 
-                <com.ktcdriver.customtext.CustomEditText
+                <com.ktcdrivers.customtext.CustomEditText
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:padding="10dp"
@@ -101,7 +101,7 @@
                     android:background="@drawable/edittext_bg"
                     android:inputType="number" />
 
-                <com.ktcdriver.customtext.CustomTextView
+                <com.ktcdrivers.customtext.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Save"
@@ -142,7 +142,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="15dp">
 
-        <com.ktcdriver.customtext.CustomTextView
+        <com.ktcdrivers.customtext.CustomTextView
             android:id="@+id/dialog_location_tv_cross"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

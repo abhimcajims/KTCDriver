@@ -12,7 +12,7 @@
         android:layout_above="@+id/popup_notification_see_all"
         android:id="@+id/popup_notification_recycler"/>
 
-    <com.ktcdriver.customtext.CustomTextView
+    <com.ktcdrivers.customtext.CustomTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

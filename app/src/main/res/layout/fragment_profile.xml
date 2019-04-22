@@ -32,7 +32,7 @@
                 android:orientation="horizontal"
                 android:background="@drawable/top_bg">
 
-                <com.ktcdriver.customtext.CustomTextViewBold
+                <com.ktcdrivers.customtext.CustomTextViewBold
                     android:layout_width="0dp"
                     android:layout_weight=".8"
                     android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
                     android:textSize="@dimen/size_16"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/colorPrimary"/>
-                <com.ktcdriver.customtext.CustomTextView
+                <com.ktcdrivers.customtext.CustomTextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:textSize="@dimen/size_12"
@@ -59,7 +59,7 @@
                 android:orientation="horizontal"
                 android:background="@drawable/top_bg">
 
-                <com.ktcdriver.customtext.CustomTextViewBold
+                <com.ktcdrivers.customtext.CustomTextViewBold
                     android:layout_width="0dp"
                     android:layout_weight=".8"
                     android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                     android:textSize="@dimen/size_16"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/colorPrimary"/>
-                <com.ktcdriver.customtext.CustomTextView
+                <com.ktcdrivers.customtext.CustomTextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:textSize="@dimen/size_12"
@@ -85,7 +85,7 @@
                 android:orientation="horizontal"
                 android:background="@drawable/top_bg">
 
-                <com.ktcdriver.customtext.CustomTextViewBold
+                <com.ktcdrivers.customtext.CustomTextViewBold
                     android:layout_width="0dp"
                     android:layout_weight=".8"
                     android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                     android:textSize="@dimen/size_16"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/colorPrimary"/>
-                <com.ktcdriver.customtext.CustomTextView
+                <com.ktcdrivers.customtext.CustomTextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:textSize="@dimen/size_12"
@@ -111,7 +111,7 @@
                 android:orientation="horizontal"
                 android:background="@drawable/top_bg">
 
-                <com.ktcdriver.customtext.CustomTextViewBold
+                <com.ktcdrivers.customtext.CustomTextViewBold
                     android:layout_width="0dp"
                     android:layout_weight=".8"
                     android:layout_height="wrap_content"
@@ -119,7 +119,7 @@
                     android:textSize="@dimen/size_16"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/colorPrimary"/>
-                <com.ktcdriver.customtext.CustomTextView
+                <com.ktcdrivers.customtext.CustomTextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:textSize="@dimen/size_12"

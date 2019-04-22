@@ -4,7 +4,7 @@
     android:layout_width="100dp"
     android:layout_height="wrap_content">
 
-    <com.ktcdriver.customtext.CustomTextView
+    <com.ktcdrivers.customtext.CustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/duty_slip_bg"
@@ -21,7 +21,7 @@
         android:id="@+id/item_doc_cross"
         android:layout_alignParentRight="true">
 
-        <com.ktcdriver.customtext.CustomTextView
+        <com.ktcdrivers.customtext.CustomTextView
             android:id="@+id/dialog_location_tv_cross"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

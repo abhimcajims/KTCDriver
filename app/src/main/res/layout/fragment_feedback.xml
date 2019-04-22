@@ -25,7 +25,7 @@
         android:orientation="vertical"
         android:paddingBottom="10dp">
 
-        <com.ktcdriver.customtext.CustomTextView
+        <com.ktcdrivers.customtext.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -87,14 +87,14 @@
             android:layout_marginTop="20dp"
             android:background="@color/colorDarkGrey" />
 
-        <com.ktcdriver.customtext.CustomTextView
+        <com.ktcdrivers.customtext.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="Remarks(Optionals)"
             android:textSize="@dimen/size_16" />
 
-        <com.ktcdriver.customtext.CustomEditText
+        <com.ktcdrivers.customtext.CustomEditText
             android:id="@+id/fragment_feedback_edtMsg"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -117,14 +117,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <com.ktcdriver.customtext.CustomTextView
+            <com.ktcdrivers.customtext.CustomTextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:text="Signature"
                 android:textSize="@dimen/size_16" />
-            <com.ktcdriver.customtext.CustomTextView
+            <com.ktcdrivers.customtext.CustomTextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -189,7 +189,7 @@
             android:id="@+id/fragment_feedback_check"
             android:text="Not Sign"/>
 
-        <com.ktcdriver.customtext.CustomTextViewBold
+        <com.ktcdrivers.customtext.CustomTextViewBold
             android:id="@+id/fragment_feedback_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

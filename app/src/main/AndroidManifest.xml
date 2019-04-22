@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ktcdriver">
+    package="com.ktcdrivers">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -32,8 +32,8 @@
         </provider>
 -->
         <provider
-            android:name=".utils.GenericFileProvider"
-            android:authorities="com.ktcdriver.provider"
+            android:name="com.ktcdrivers.utils.GenericFileProvider"
+            android:authorities="com.ktcdrivers.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -42,9 +42,9 @@
         </provider>
 
         <activity
-            android:name=".activities.setup.LoginActivity"
+            android:name="com.ktcdrivers.activities.setup.LoginActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".activities.setup.SplashActivity">
+        <activity android:name="com.ktcdrivers.activities.setup.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,23 +52,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.home.HomeActivity"
+            android:name="com.ktcdrivers.activities.home.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".activities.home.MainActivity">
+        <activity android:name="com.ktcdrivers.activities.home.MainActivity">
 
         </activity>
-        <activity android:name=".activities.home.SignatureActivity"/>
+        <activity android:name="com.ktcdrivers.activities.home.SignatureActivity"/>
 
         <!-- Firebase Notifications -->
-        <service android:name=".service.MyFirebaseMessagingService">
+        <service android:name="com.ktcdrivers.service.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <service android:name=".service.MyFirebaseInstanceIDService">
+        <service android:name="com.ktcdrivers.service.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>

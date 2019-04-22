@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <com.ktcdriver.customtext.CustomTextView
+        <com.ktcdrivers.customtext.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Duty Slip no"
@@ -19,7 +19,7 @@
             android:id="@+id/item_dashboard_txtSlip"
             android:textColor="@color/colorBlack"/>
 
-        <com.ktcdriver.customtext.CustomTextView
+        <com.ktcdrivers.customtext.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Start job"
@@ -34,7 +34,7 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"/>
 
-        <com.ktcdriver.customtext.CustomTextView
+        <com.ktcdrivers.customtext.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="#232344"
@@ -43,7 +43,7 @@
             android:id="@+id/item_dashboard_txtSlipValue"
             android:textColor="@color/colorPrimary"/>
 
-        <com.ktcdriver.customtext.CustomTextView
+        <com.ktcdrivers.customtext.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Company Name"
@@ -52,7 +52,7 @@
             android:id="@+id/item_dashboard_txtComName"
             android:textColor="@color/colorBlack"/>
 
-        <com.ktcdriver.customtext.CustomTextView
+        <com.ktcdrivers.customtext.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/size_12"
@@ -76,7 +76,7 @@
            android:id="@+id/item_dashboard_img_cal_start"
            android:layout_below="@+id/item_dashboard_view"/>
 
-        <com.ktcdriver.customtext.CustomTextView
+        <com.ktcdrivers.customtext.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Start Date"
@@ -86,7 +86,7 @@
             android:layout_toRightOf="@+id/item_dashboard_img_cal_start"
             android:id="@+id/item_dashboard_txtStart"
             android:textColor="@color/colorBlack"/>
-        <com.ktcdriver.customtext.CustomTextView
+        <com.ktcdrivers.customtext.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="7dp"
@@ -112,7 +112,7 @@
                     android:src="@drawable/ic_calendar"
                     android:id="@+id/item_dashboard_img_cal_end"/>
 
-                <com.ktcdriver.customtext.CustomTextView
+                <com.ktcdrivers.customtext.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="End Date"
@@ -122,7 +122,7 @@
                     android:id="@+id/item_dashboard_txtEnd"
                     android:textColor="@color/colorBlack"
                     android:layout_toEndOf="@+id/item_dashboard_img_cal_end" />
-                <com.ktcdriver.customtext.CustomTextView
+                <com.ktcdrivers.customtext.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/item_dashboard_txtEnd"
@@ -157,14 +157,14 @@
                android:layout_height="wrap_content"
                android:layout_weight="1"
                android:orientation="vertical">
-               <com.ktcdriver.customtext.CustomTextView
+               <com.ktcdrivers.customtext.CustomTextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:text="Reporting Place"
                    android:paddingLeft="5dp"
                    android:textSize="@dimen/size_16"
                    android:textColor="@color/colorBlack"/>
-               <com.ktcdriver.customtext.CustomTextView
+               <com.ktcdrivers.customtext.CustomTextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:paddingLeft="7dp"
@@ -179,14 +179,14 @@
                android:layout_weight="1"
                android:orientation="vertical"
                android:gravity="right">
-               <com.ktcdriver.customtext.CustomTextView
+               <com.ktcdrivers.customtext.CustomTextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:text="Car No"
                    android:paddingLeft="5dp"
                    android:textSize="@dimen/size_16"
                    android:textColor="@color/colorBlack"/>
-               <com.ktcdriver.customtext.CustomTextView
+               <com.ktcdrivers.customtext.CustomTextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:paddingLeft="7dp"
@@ -216,14 +216,14 @@
                 android:layout_height="wrap_content"
 
                 android:orientation="vertical">
-                <com.ktcdriver.customtext.CustomTextView
+                <com.ktcdrivers.customtext.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Payment Mode"
                     android:paddingLeft="5dp"
                     android:textSize="@dimen/size_16"
                     android:textColor="@color/colorBlack"/>
-                <com.ktcdriver.customtext.CustomTextView
+                <com.ktcdrivers.customtext.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Card"
@@ -239,14 +239,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:orientation="vertical">
-                <com.ktcdriver.customtext.CustomTextView
+                <com.ktcdrivers.customtext.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Reporting Time"
                     android:paddingLeft="5dp"
                     android:textSize="@dimen/size_16"
                     android:textColor="@color/colorBlack"/>
-                <com.ktcdriver.customtext.CustomTextView
+                <com.ktcdrivers.customtext.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="10:10AM"

@@ -14,14 +14,14 @@
         android:layout_margin="10dp"
         android:orientation="vertical"
         android:gravity="center">
-        <com.ktcdriver.customtext.CustomTextViewBold
+        <com.ktcdrivers.customtext.CustomTextViewBold
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary"
             android:text="Duty Slip"
             android:textSize="25sp"
             android:gravity="center"/>
-        <com.ktcdriver.customtext.CustomTextView
+        <com.ktcdrivers.customtext.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="23243434"
@@ -33,7 +33,7 @@
 
     </LinearLayout>
 
-    <com.ktcdriver.customtext.CustomTextViewBold
+    <com.ktcdrivers.customtext.CustomTextViewBold
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Close DS"
