@@ -6,8 +6,8 @@ android {
         applicationId "com.ktcdrivers"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 6
-        versionName "1.2.4"
+        versionCode 7
+        versionName "1.2"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

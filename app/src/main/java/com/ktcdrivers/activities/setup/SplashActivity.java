@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.ktcdrivers.R;
 import com.ktcdrivers.activities.home.HomeActivity;
@@ -33,7 +34,7 @@ public class SplashActivity extends AppbaseActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         getSupportActionBar().hide();
-
+        FirebaseApp.initializeApp(this);
         tinyDB = new TinyDB(getApplicationContext());
 //        tinyDB.putString("FromNoti","0");
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {

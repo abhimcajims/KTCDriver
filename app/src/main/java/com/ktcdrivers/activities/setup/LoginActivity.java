@@ -90,16 +90,19 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
     private void displayFirebaseRegId() {
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
         String regId = pref.getString("regId", null);
-
     //    Toast.makeText(this, regId + "", Toast.LENGTH_SHORT).show();
         Log.e(TAG, "Firebase reg id: " + regId);
 
-        if (!TextUtils.isEmpty(regId))
-            token = regId;
-        else{
-            String token = FirebaseInstanceId.getInstance().getToken();
-            Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
-           // Utility.showToast(getApplicationContext(),"Token not generated");
+        try {
+            if (!TextUtils.isEmpty(regId))
+                token = regId;
+            else{
+                String token = FirebaseInstanceId.getInstance().getToken();
+                Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
+                // Utility.showToast(getApplicationContext(),"Token not generated");
+            }
+        } catch (Exception e){
+            Log.d(TAG, "displayFirebaseRegId: "+e.getMessage());
         }
     }
 
