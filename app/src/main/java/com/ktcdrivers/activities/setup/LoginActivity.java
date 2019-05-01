@@ -208,7 +208,9 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
         Log.d("TAG", "rakhi: " + new Gson().toJson(call.request().body()));
         new ResponseListner(this,getApplicationContext()).getResponse( call);
     }
-    LoginResponse loginResponse;
+
+    private LoginResponse loginResponse;
+
     @Override
     public void onApiResponse(Object response) {
         new Utility().hideDialog();

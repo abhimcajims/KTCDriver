@@ -121,7 +121,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     private TextView txtVehicleReq;
     private TextView txtUserName, txtBookerNo, txtMisc1Value, txtMisc2Value, txtAddmore, txtSaveDoc;
     private LinearLayout txtCharge1, txtCharge2;
-    private String reservationId, starting_date, ending_date, starting_meter,
+    private String reservationId, starting_date, ending_date, starting_meter,initial_meter,
             starting_time, reporting_meter, reporting_time, ending_meter, ending_time, meter_at_garage,
             time_at_garage, total_meter, total_time, night_halt, toll, parking, e_toll, interstate_tax, others,
             beverages_charges, entrance_charge, guide_charge, driver_ta, base_64, remove_id, signature;
@@ -568,7 +568,10 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                    }
                }*/
 
-                if (meter_at_garage != null && meter_at_garage.length() > 0) {
+                if (Double.parseDouble(starting_meter)<Double.parseDouble(initial_meter)){
+                    Utility.showToast(getContext(),"Stating meter should not less than"+initial_meter);
+                }
+                else if (meter_at_garage != null && meter_at_garage.length() > 0) {
 
                     if (ending_meter != null && ending_meter.length() > 0) {
 
@@ -893,7 +896,9 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                     }
                     if (viewDetailsData.getJob_detail().getStarting_meter() != null)
                         starting_meter = viewDetailsData.getJob_detail().getStarting_meter();
+                    initial_meter = starting_meter;
                     title1ListValue.add(starting_meter);
+
                     if (viewDetailsData.getJob_detail().getReporting_meter() != null)
                         reporting_meter = viewDetailsData.getJob_detail().getReporting_meter();
                     title1ListValue.add(reporting_meter);
@@ -1229,6 +1234,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             total_meter = "";
         if (total_time == null)
             total_time = "";
+
         Call<SaveResponse> call = APIClient.getInstance().getApiInterface().saveDutySlip(dutyslipnum, starting_date,
                 ending_date,
                 starting_meter, reporting_meter, starting_time, reporting_time, ending_meter, ending_time,
