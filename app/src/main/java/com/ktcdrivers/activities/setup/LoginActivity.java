@@ -53,7 +53,12 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
-        FirebaseApp.initializeApp(this);
+        try{
+            FirebaseApp.initializeApp(this);
+        } catch (Exception e){
+            Log.d(TAG, "onCreate: "+e.getMessage());
+        }
+
         getSupportActionBar().hide();
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
@@ -116,21 +121,20 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
 
             // Permission is not granted
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this,
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this,
                     Manifest.permission.READ_PHONE_STATE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(LoginActivity.this,
-                        new String[]{Manifest.permission.READ_PHONE_STATE},
-                        PERMISSION_READ_PHONE_STATE);
+                        // No explanation needed; request the permission
+                        ActivityCompat.requestPermissions(LoginActivity.this,
+                                new String[]{Manifest.permission.READ_PHONE_STATE},
+                                PERMISSION_READ_PHONE_STATE);
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
+                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                        // app-defined int constant. The callback method gets the
+                        // result of the request.
+                    }  // Show an explanation to the user *asynchronously* -- don't block
+            // this thread waiting for the user's response! After the user
+            // sees the explanation, try again to request the permission.
+
         } else {
             imei = getDeviceIMEI();
             Log.d(TAG, "rakhi: "+imei);
@@ -201,6 +205,7 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
         Call<NewUserResponse> call = APIClient.getInstance().getApiInterface().registerNewUser(driverId,imei,token);
         call.request().url();
         Log.d("TAG", "rakhi: " + call.request().url());
+        Log.d("TAG", "rakhi: " + new Gson().toJson(call.request().body()));
         new ResponseListner(this,getApplicationContext()).getResponse( call);
     }
     LoginResponse loginResponse;

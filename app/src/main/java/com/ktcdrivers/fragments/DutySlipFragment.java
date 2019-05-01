@@ -459,69 +459,33 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 Calendar datetime = Calendar.getInstance();
                 datetime.set(Calendar.HOUR_OF_DAY, selectedHour);
                 datetime.set(Calendar.MINUTE, selectedMinute);
-                if (!ending_date.isEmpty()) {
-                    SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    Date myDate;
-                    try {
-                        myDate = timeFormat.parse(ending_date);
-                        String cDate = timeFormat.format(datetime.getTime());
-                        if (ending_date.equals(cDate)){
-                            Log.d("TAG", "onTimeSet: equal");
-                            if (datetime.getTimeInMillis() >= c.getTimeInMillis()) {
-                                //it's after current
-                                int hour1 = selectedHour % 12;
-                                timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
-                                        selectedMinute, selectedHour < 12 ? "am" : "pm"));
-                                time = String.format("%02d:%02d", selectedHour, selectedMinute);
-
-                            } else Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
-
-                        }
-                         else if (myDate.after(datetime.getTime())) {
-                           /* if (datetime.getTimeInMillis() >= c.getTimeInMillis()) {
-                                //it's after current
-                                int hour1 = selectedHour % 12;
-                                timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
-                                        selectedMinute, selectedHour < 12 ? "am" : "pm"));
-                                time = String.format("%02d:%02d", selectedHour, selectedMinute);
-
-                            } else {
-                                //it's before current'
-                                Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
-                            }*/
-                            int hour1 = selectedHour % 12;
-                            timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
-                                    selectedMinute, selectedHour < 12 ? "am" : "pm"));
-                            time = String.format("%02d:%02d", selectedHour, selectedMinute);
-                        } else {
-                            int hour1 = selectedHour % 12;
-                            Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
-                          /*  timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
-                                    selectedMinute, selectedHour < 12 ? "am" : "pm"));
-                            time = String.format("%02d:%02d", selectedHour, selectedMinute);*/
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-
                 switch (i) {
                     case 0:
+                        int hour1 = selectedHour % 12;
+                        timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
+                                selectedMinute, selectedHour < 12 ? "am" : "pm"));
+                        time = String.format("%02d:%02d", selectedHour, selectedMinute);
                         starting_time = time;
                         if (time != null && time.length() > 0)
                             timeText.setText(time);
+                        time=null;
                         break;
                     case 1:
+                        validateTime(datetime,c,selectedHour,selectedMinute);
                         reporting_time = time;
                         if (time != null && time.length() > 0)
                             timeText.setText(time);
                         break;
                     case 2:
+                        validateTime(datetime,c,selectedHour,selectedMinute);
+
                         ending_time = time;
                         if (time != null && time.length() > 0)
                             timeText.setText(time);
                         break;
                     case 3:
+                        validateTime(datetime,c,selectedHour,selectedMinute);
+
                         time_at_garage = time;
                         if (time != null && time.length() > 0)
                             timeText.setText(time);
@@ -533,6 +497,55 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         }, hour, minute, true);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
+
+    }
+
+    private void validateTime(Calendar datetime, Calendar c, int selectedHour, int selectedMinute){
+        if (!ending_date.isEmpty()) {
+            SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date myDate;
+            try {
+                myDate = timeFormat.parse(ending_date);
+                String cDate = timeFormat.format(datetime.getTime());
+                if (ending_date.equals(cDate)){
+                    Log.d("TAG", "onTimeSet: equal");
+                    if (datetime.getTimeInMillis() >= c.getTimeInMillis()) {
+                        //it's after current
+                        int hour1 = selectedHour % 12;
+                        timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
+                                selectedMinute, selectedHour < 12 ? "am" : "pm"));
+                        time = String.format("%02d:%02d", selectedHour, selectedMinute);
+
+                    } else Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
+
+                }
+                else if (myDate.after(datetime.getTime())) {
+                           /* if (datetime.getTimeInMillis() >= c.getTimeInMillis()) {
+                                //it's after current
+                                int hour1 = selectedHour % 12;
+                                timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
+                                        selectedMinute, selectedHour < 12 ? "am" : "pm"));
+                                time = String.format("%02d:%02d", selectedHour, selectedMinute);
+
+                            } else {
+                                //it's before current'
+                                Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
+                            }*/
+                    int hour1 = selectedHour % 12;
+                    timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
+                            selectedMinute, selectedHour < 12 ? "am" : "pm"));
+                    time = String.format("%02d:%02d", selectedHour, selectedMinute);
+                } else {
+                    int hour1 = selectedHour % 12;
+                    Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
+                          /*  timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
+                                    selectedMinute, selectedHour < 12 ? "am" : "pm"));
+                            time = String.format("%02d:%02d", selectedHour, selectedMinute);*/
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 

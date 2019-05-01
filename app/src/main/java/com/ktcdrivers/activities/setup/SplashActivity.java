@@ -24,7 +24,6 @@ public class SplashActivity extends AppbaseActivity {
     private TinyDB tinyDB;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +33,11 @@ public class SplashActivity extends AppbaseActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         getSupportActionBar().hide();
-        FirebaseApp.initializeApp(this);
+        try {
+            FirebaseApp.initializeApp(this);
+        } catch (Exception e){
+            Log.d(TAG, "onCreate: "+e.getMessage());
+        }
         tinyDB = new TinyDB(getApplicationContext());
 //        tinyDB.putString("FromNoti","0");
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
@@ -53,9 +56,6 @@ public class SplashActivity extends AppbaseActivity {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
                     // txtMessage.setText(message);
                 }
             }
@@ -92,9 +92,6 @@ public class SplashActivity extends AppbaseActivity {
         if (!TextUtils.isEmpty(regId)){
          //   Toast.makeText(this, regId + "ABC", Toast.LENGTH_SHORT).show();
             token = regId;
-        }
-        else{
-
         }
     }
 
