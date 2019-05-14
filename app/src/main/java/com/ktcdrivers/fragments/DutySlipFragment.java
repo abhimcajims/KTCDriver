@@ -468,27 +468,40 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                         starting_time = time;
                         if (time != null && time.length() > 0)
                             timeText.setText(time);
-                        time=null;
+                        time = null;
                         break;
                     case 1:
-                        validateTime(datetime,c,selectedHour,selectedMinute);
-                        reporting_time = time;
-                        if (time != null && time.length() > 0)
-                            timeText.setText(time);
+                        validateTime(datetime,starting_time,selectedHour,selectedMinute);
+
+                        if (!isGreater){
+                            Utility.showToast(getContext(),"Reporting time should be greater than start time");
+                        } else {
+                            reporting_time = time;
+                        }
+                       /* if (time != null && time.length() > 0)
+                            timeText.setText(time);*/
                         break;
                     case 2:
-                        validateTime(datetime,c,selectedHour,selectedMinute);
+                        validateTime(datetime,reporting_time,selectedHour,selectedMinute);
+                        if (!isGreater){
+                            Utility.showToast(getContext(),"Ending time should be greater than reporting time");
+                        } else {
+                            ending_time = time;
 
-                        ending_time = time;
-                        if (time != null && time.length() > 0)
-                            timeText.setText(time);
+                        }
+                       /* if (time != null && time.length() > 0)
+                            timeText.setText(time);*/
                         break;
                     case 3:
-                        validateTime(datetime,c,selectedHour,selectedMinute);
+                        validateTime(datetime,ending_time,selectedHour,selectedMinute);
+                        if (!isGreater){
+                            Utility.showToast(getContext(),"Time at garrage should be greater than ending time");
+                        } else {
+                            time_at_garage = time;
 
-                        time_at_garage = time;
-                        if (time != null && time.length() > 0)
-                            timeText.setText(time);
+                        }
+                      /*  if (time != null && time.length() > 0)
+                            timeText.setText(time);*/
                         if (time_at_garage != null && time_at_garage.length() > 0)
                             calculateTime(starting_date, starting_time, ending_date, time_at_garage);
                         break;
@@ -497,19 +510,37 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         }, hour, minute, true);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
-
     }
+    boolean isGreater;
 
-    private void validateTime(Calendar datetime, Calendar c, int selectedHour, int selectedMinute){
+    private String TAG = DutySlipFragment.class.getName();
+    private void validateTime(Calendar datetime, String c, int selectedHour, int selectedMinute){
         if (!ending_date.isEmpty()) {
-            SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date myDate;
             try {
                 myDate = timeFormat.parse(ending_date);
                 String cDate = timeFormat.format(datetime.getTime());
+
                 if (ending_date.equals(cDate)){
                     Log.d("TAG", "onTimeSet: equal");
-                    if (datetime.getTimeInMillis() >= c.getTimeInMillis()) {
+                    String startTime = c;
+                    String endTime = selectedHour+":"+selectedMinute;
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                    Date d1 = sdf.parse(startTime);
+                    Date d2 = sdf.parse(endTime);
+                    if (d2.after(d1)|| d2.equals(d1)){
+                        Log.d(TAG, "validateTime: "+true);
+                        int hour1 = selectedHour % 12;
+                        time = String.format("%02d:%02d", selectedHour, selectedMinute);
+                        timeText.setText(time);
+                        isGreater = true;
+                    } else {
+                        Log.d(TAG, "validateTime: "+false);
+                        isGreater = false;
+                    }
+
+                  /*  if (datetime.getTimeInMillis() >= c.getTimeInMillis()) {
                         //it's after current
                         int hour1 = selectedHour % 12;
                         timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
@@ -517,7 +548,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                         time = String.format("%02d:%02d", selectedHour, selectedMinute);
 
                     } else Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
-
+*/
                 }
                 else if (myDate.after(datetime.getTime())) {
                            /* if (datetime.getTimeInMillis() >= c.getTimeInMillis()) {
@@ -531,10 +562,23 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                                 //it's before current'
                                 Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
                             }*/
-                    int hour1 = selectedHour % 12;
-                    timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
-                            selectedMinute, selectedHour < 12 ? "am" : "pm"));
-                    time = String.format("%02d:%02d", selectedHour, selectedMinute);
+                    String startTime = c;
+                    String endTime = selectedHour+":"+selectedMinute;
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                    Date d1 = sdf.parse(startTime);
+                    Date d2 = sdf.parse(endTime);
+                    if (d2.after(d1)|| d2.equals(d1)){
+                        Log.d(TAG, "validateTime: "+true);
+                        int hour1 = selectedHour % 12;
+                        time = String.format("%02d:%02d", selectedHour, selectedMinute);
+                        timeText.setText(time);
+                        isGreater = true;
+                    } else {
+                        Log.d(TAG, "validateTime: "+false);
+                        isGreater = false;
+                    }
+
+
                 } else {
                     int hour1 = selectedHour % 12;
                     Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
@@ -568,7 +612,8 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                    }
                }*/
 
-                if (Double.parseDouble(starting_meter)<Double.parseDouble(initial_meter)){
+                if (starting_meter!=null && initial_meter!=null &&
+                        Double.parseDouble(starting_meter)<Double.parseDouble(initial_meter)){
                     Utility.showToast(getContext(),"Stating meter should not less than"+initial_meter);
                 }
                 else if (meter_at_garage != null && meter_at_garage.length() > 0) {
