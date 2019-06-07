@@ -282,7 +282,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 } else if (ending_meter!=null && ending_meter.length()>0 && (Double.parseDouble(ending_meter)
                         < Double.parseDouble(reporting_meter))){
                     Utility.showToast(getContext(), "Ending meter should be > than reporting meter");
-                }else if (ending_meter!=null && ending_meter.length()>0 && (Double.parseDouble(ending_meter)
+                } else if (ending_meter!=null && ending_meter.length()>0 && (Double.parseDouble(ending_meter)
                         > Double.parseDouble(reporting_meter))&& signature == null || signature.length() == 0) {
                     showEndMeterDialog();
                 } else if (meter_at_garage!=null && meter_at_garage.length()>0
@@ -291,7 +291,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 }  else if (meter_at_garage!=null && meter_at_garage.length()>0
                         && (Double.parseDouble(meter_at_garage) > Double.parseDouble(ending_meter))){
                     showGarrageMeterDialog();
-                }else  {
+                } else  {
                     saveDutySlip();
                 }
             }
@@ -807,6 +807,33 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                             txtStartingDate.setText(starting_date);
                         } else if (i == 2) {
                             ending_date = a;
+                           /* if (ending_date.equals(starting_date)){
+                                String startTime = starting_time;
+                                String endTime = time_at_garage;
+                                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                                Date d1 = null,d2 = null;
+                                try {
+                                    d1 = sdf.parse(startTime);
+                                    d2 = sdf.parse(endTime);
+
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                if (d2.after(d1) || d2.equals(d1)) {
+                                    txtEdndingDate.setText(ending_date);
+                                    Log.d(TAG, "validateTime: " + true);
+                                    if (time_at_garage != null && time_at_garage.length() > 0)
+                                        calculateTime(starting_date, starting_time, ending_date, time_at_garage);
+
+                                } else {
+                                    Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                txtEdndingDate.setText(ending_date);
+
+                                if (time_at_garage != null && time_at_garage.length() > 0)
+                                    calculateTime(starting_date, starting_time, ending_date, time_at_garage);
+                            }*/
                             txtEdndingDate.setText(ending_date);
                             if (time_at_garage != null && time_at_garage.length() > 0)
                                 calculateTime(starting_date, starting_time, ending_date, time_at_garage);
@@ -814,7 +841,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                     }
                 }, year, month, dayOfMonth);
 
-        String myDate =starting_date;
+        String myDate = starting_date;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
         try {
@@ -1133,19 +1160,6 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                         charge1Dialog.dismiss();
                     if (charge2Dialog != null)
                         charge2Dialog.dismiss();
-                    if (garageMeterDialog != null) {
-                        garageMeterDialog.dismiss();
-                        endMeterDialog = null;
-                        new Utility().callFragment(new CloseDsFragment(), getFragmentManager(), R.id.fragment_container,
-                                CloseDsFragment.class.getName());
-                    }
-
-                    if (txtMisc1Value.getText().toString().equals("None") ||
-                            !txtMisc1Value.getText().toString().equals("None") ||
-                            txtMisc2Value.getText().toString().equals("None") ||
-                            !txtMisc2Value.getText().toString().equals("None")) {
-                        end_status = 0;
-                    }
 
                     if (endMeterDialog != null) {
                         endMeterDialog.dismiss();
@@ -1157,6 +1171,26 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                                     FeedbackFragment.class.getName());
                         }
                     }
+
+                    if (signature!=null && signature.length()>0){
+                        if (meter_at_garage!=null && meter_at_garage.length()>0
+                                && (Double.parseDouble(meter_at_garage) > Double.parseDouble(ending_meter))){
+                            //   garageMeterDialog.dismiss();
+                            endMeterDialog = null;
+                            new Utility().callFragment(new CloseDsFragment(), getFragmentManager(), R.id.fragment_container,
+                                    CloseDsFragment.class.getName());
+                        }
+
+                    }
+
+                    if (txtMisc1Value.getText().toString().equals("None") ||
+                            !txtMisc1Value.getText().toString().equals("None") ||
+                            txtMisc2Value.getText().toString().equals("None") ||
+                            !txtMisc2Value.getText().toString().equals("None")) {
+                        end_status = 0;
+                    }
+
+
 
                     setTotal2();        // To set total of Misc. Charges 1
                     setTotal1();        // To set total of Misc. Charges 2
