@@ -282,12 +282,12 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 } else if (ending_meter!=null && ending_meter.length()>0 && (Double.parseDouble(ending_meter)
                         < Double.parseDouble(reporting_meter))){
                     Utility.showToast(getContext(), "Ending meter should be > than reporting meter");
-                } else if (ending_meter!=null && ending_meter.length()>0 && (Double.parseDouble(ending_meter)
-                        > Double.parseDouble(reporting_meter))&& signature == null || signature.length() == 0) {
-                    showEndMeterDialog();
                 } else if (meter_at_garage!=null && meter_at_garage.length()>0
                         && (Double.parseDouble(meter_at_garage) < Double.parseDouble(ending_meter))){
                     Utility.showToast(getContext(), "Meter at garrage should be > than ending meter");
+                } else if (ending_meter!=null && ending_meter.length()>0 && (Double.parseDouble(ending_meter)
+                        > Double.parseDouble(reporting_meter))&& signature == null || signature.length() == 0) {
+                    showEndMeterDialog();
                 }  else if (meter_at_garage!=null && meter_at_garage.length()>0
                         && (Double.parseDouble(meter_at_garage) > Double.parseDouble(ending_meter))){
                     showGarrageMeterDialog();
@@ -1059,10 +1059,8 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-
                         }
                         txtEdndingDate.setText(ending_date);
-
                     }
                     if (viewDetailsData.getJob_detail().getStarting_meter() != null)
                         starting_meter = viewDetailsData.getJob_detail().getStarting_meter();
@@ -1086,7 +1084,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                     title1ListValue.add(total_meter);
                     if (viewDetailsData.getJob_detail().getStarting_time() != null)
                         starting_time = viewDetailsData.getJob_detail().getStarting_time();
-                    title2ListValue.add(starting_time);
+                     title2ListValue.add(starting_time);
                     if (viewDetailsData.getJob_detail().getReporingtime() != null)
                         reporting_time = viewDetailsData.getJob_detail().getReporting_time();
                     title2ListValue.add(reporting_time);
@@ -1130,7 +1128,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                         guide_charge = viewDetailsData.getJob_detail().getMisc_charges2().getGuide_charge() + "";
                     }
                     if (viewDetailsData.getJob_detail().getMisc_charges1().getParking() != null) {
-                        parking = viewDetailsData.getJob_detail().getMisc_charges1().getParking() + "";
+                         parking = viewDetailsData.getJob_detail().getMisc_charges1().getParking() + "";
                     }
                     if (viewDetailsData.getJob_detail().getMisc_charges2().getBeverage_charge() != null) {
                         driver_ta = viewDetailsData.getJob_detail().getMisc_charges2().getDriver_ta() + "";
@@ -1141,7 +1139,8 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                             && ending_time != null && ending_date.length() > 0) {
                         calculateTime(starting_date, starting_time, ending_date, time_at_garage);
                     }
-                    if (starting_meter != null && starting_meter.length() > 0 && meter_at_garage != null && meter_at_garage.length() > 0) {
+                    if (starting_meter != null && starting_meter.length() > 0
+                            && meter_at_garage != null && meter_at_garage.length() > 0) {
                         calculateMeter();
                     }
                     if (viewDetailsData.getImagelist() != null && viewDetailsData.getImagelist().size() > 0) {
@@ -1164,14 +1163,21 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                     if (endMeterDialog != null) {
                         endMeterDialog.dismiss();
                         //   endMeterDialog = null;
-
                         if (signature == null || signature.length() == 0) {
                             FeedbackFragment feedbackFragment = new FeedbackFragment();
                             new Utility().callFragment(feedbackFragment, getFragmentManager(), R.id.fragment_container,
                                     FeedbackFragment.class.getName());
                         }
                     }
+                    if (txtMisc1Value.getText().toString().equals("None") ||
+                            !txtMisc1Value.getText().toString().equals("None") ||
+                            txtMisc2Value.getText().toString().equals("None") ||
+                            !txtMisc2Value.getText().toString().equals("None")) {
+                        end_status = 0;
+                    }
 
+                    setTotal1();        // To set total of Misc. Charges 2
+                    setTotal2();        // To set total of Misc. Charges 1
                     if (signature!=null && signature.length()>0){
                         if (meter_at_garage!=null && meter_at_garage.length()>0
                                 && (Double.parseDouble(meter_at_garage) > Double.parseDouble(ending_meter))){
@@ -1180,23 +1186,10 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                             new Utility().callFragment(new CloseDsFragment(), getFragmentManager(), R.id.fragment_container,
                                     CloseDsFragment.class.getName());
                         }
-
                     }
-
-                    if (txtMisc1Value.getText().toString().equals("None") ||
-                            !txtMisc1Value.getText().toString().equals("None") ||
-                            txtMisc2Value.getText().toString().equals("None") ||
-                            !txtMisc2Value.getText().toString().equals("None")) {
-                        end_status = 0;
-                    }
-
-
-
-                    setTotal2();        // To set total of Misc. Charges 1
-                    setTotal1();        // To set total of Misc. Charges 2
-
                 } else {
-                    Utility.showToast(getContext(), getContext().getResources().getString(R.string.error));
+                    if (saveResponse.getMessage()!=null)
+                    Utility.showToast(getContext(), saveResponse.getMessage());
                 }
             } else {
                 Utility.showToast(getContext(), getResources().getString(R.string.error));
