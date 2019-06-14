@@ -273,27 +273,32 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         txtSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (starting_meter != null && !starting_meter.isEmpty() && initial_meter != null && !initial_meter.isEmpty() &&
-                        Double.parseDouble(starting_meter) < Double.parseDouble(initial_meter)) {
-                    Utility.showToast(getContext(), "Stating meter should not less than" + initial_meter);
-                } else if (reporting_meter != null && reporting_meter.length() > 0 &&
-                        (Double.parseDouble(reporting_meter) < Double.parseDouble(starting_meter))){
-                        Utility.showToast(getContext(), "Reporting meter should be > than starting meter");
-                } else if (ending_meter!=null && ending_meter.length()>0 && (Double.parseDouble(ending_meter)
-                        < Double.parseDouble(reporting_meter))){
-                    Utility.showToast(getContext(), "Ending meter should be > than reporting meter");
-                } else if (meter_at_garage!=null && meter_at_garage.length()>0
-                        && (Double.parseDouble(meter_at_garage) < Double.parseDouble(ending_meter))){
-                    Utility.showToast(getContext(), "Meter at garrage should be > than ending meter");
-                } else if (ending_meter!=null && ending_meter.length()>0 && (Double.parseDouble(ending_meter)
-                        > Double.parseDouble(reporting_meter))&& signature == null || signature.length() == 0) {
-                    showEndMeterDialog();
-                }  else if (meter_at_garage!=null && meter_at_garage.length()>0
-                        && (Double.parseDouble(meter_at_garage) > Double.parseDouble(ending_meter))){
-                    showGarrageMeterDialog();
-                } else  {
-                    saveDutySlip();
-                }
+               try{
+                   if (starting_meter != null && !starting_meter.isEmpty() && initial_meter != null && !initial_meter.isEmpty() &&
+                           Double.parseDouble(starting_meter) < Double.parseDouble(initial_meter)) {
+                       Utility.showToast(getContext(), "Stating meter should not less than" + initial_meter);
+                   } else if (reporting_meter != null && reporting_meter.length() > 0 &&
+                           (Double.parseDouble(reporting_meter) < Double.parseDouble(starting_meter))){
+                       Utility.showToast(getContext(), "Reporting meter should be > than starting meter");
+                   } else if (ending_meter!=null && ending_meter.length()>0 && (Double.parseDouble(ending_meter)
+                           < Double.parseDouble(reporting_meter))){
+                       Utility.showToast(getContext(), "Ending meter should be > than reporting meter");
+                   } else if (meter_at_garage!=null && meter_at_garage.length()>0
+                           && (Double.parseDouble(meter_at_garage) < Double.parseDouble(ending_meter))){
+                       Utility.showToast(getContext(), "Meter at garrage should be > than ending meter");
+                   } else if (ending_meter!=null && ending_meter.length()>0 && (Double.parseDouble(ending_meter)
+                           >= Double.parseDouble(reporting_meter))&& (signature == null /*||  signature.length() == 0)*/)) {
+                       showEndMeterDialog();
+                   }  else if (meter_at_garage!=null && meter_at_garage.length()>0 && ending_meter!=null && ending_meter.length()>0
+                           && (Double.parseDouble(meter_at_garage) > Double.parseDouble(ending_meter))){
+                       showGarrageMeterDialog();
+                   } else  {
+                       saveDutySlip();
+                   }
+               } catch (Exception e){
+                   Log.d(TAG, "onClick: "+e.getMessage());
+                   Utility.showToast(getContext(),"Previous filed can't be empty.");
+               }
             }
         });
         txtCharge2.setOnClickListener(this);
@@ -407,14 +412,23 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         switch (position) {
             case 0:
                 starting_meter = charSeq;
+                if (meter_at_garage != null && meter_at_garage.length() > 0) {
+                    calculateMeter();
+                }
                 break;
             case 1:
                 reporting_meter = charSeq;
 //                dutyListAdapter.notifyItemChanged(1);
+                if (meter_at_garage != null && meter_at_garage.length() > 0) {
+                    calculateMeter();
+                }
                 break;
             case 2:
                 ending_meter = charSeq;
                 end_status = 1;
+                if (meter_at_garage != null && meter_at_garage.length() > 0) {
+                    calculateMeter();
+                }
                 break;
             case 3:
                 meter_at_garage = charSeq;
@@ -430,10 +444,15 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             double total = (/*Double.parseDouble(reporting_meter)
                     + Double.parseDouble(ending_meter) +*/ Double.parseDouble(meter_at_garage)) -
                     (Double.parseDouble(starting_meter));
+
+
             if (total_meter != null && total_meter.length() > 0)
                 total_meter = Double.parseDouble(total_meter) + "";
             if (!String.valueOf(total).trim().equals(total_meter)) {
-                total_meter = ((int) total) + "";
+
+                if (total>0)
+                    total_meter = ((int) total) + "";
+                else total_meter ="0";
                 title1ListValue.set(4, total_meter);
                 if (dutyListAdapter != null)
                     dutyListAdapter.notifyItemChanged(4);
@@ -512,34 +531,47 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                         time = null;
                         break;
                     case 1:
-                        validateTime(datetime, starting_time, selectedHour, selectedMinute);
-                        if (!isGreater) {
-                            Utility.showToast(getContext(), "Reporting time should be greater than start time");
-                        } else {
-                            reporting_time = time;
-                        }
+                        if (starting_time!=null && starting_time.length()>0){
+                            validateTime(datetime, starting_time, selectedHour, selectedMinute);
+                            if (!isGreater) {
+                                Utility.showToast(getContext(), "Reporting time should be greater than start time");
+                            } else {
+                                reporting_time = time;
+                            }
+                        } else  Utility.showToast(getContext(), "Starting time should not be empty .");
+
                        /* if (time != null && time.length() > 0)
                             timeText.setText(time);*/
                         break;
                     case 2:
-                        validateTime(datetime, reporting_time, selectedHour, selectedMinute);
-                        if (!isGreater) {
-                            Utility.showToast(getContext(), "Ending time should be greater than reporting time");
-                        } else {
-                            ending_time = time;
+                        if (reporting_time!=null && reporting_time.length()>0){
 
+                            validateTime(datetime, reporting_time, selectedHour, selectedMinute);
+                            if (!isGreater) {
+                                Utility.showToast(getContext(), "Ending time should be greater than reporting time");
+                            } else {
+                                ending_time = time;
+
+                            }
+                        } else {
+                            Utility.showToast(getContext(), "Reporting time should not be empty .");
                         }
+
                        /* if (time != null && time.length() > 0)
                             timeText.setText(time);*/
                         break;
                     case 3:
-                        validateTime(datetime, ending_time, selectedHour, selectedMinute);
-                        if (!isGreater) {
-                            Utility.showToast(getContext(), "Time at garrage should be greater than ending time");
-                        } else {
-                            time_at_garage = time;
+                       if (ending_time!=null && ending_time.length()>0){
+                           validateTime(datetime, ending_time, selectedHour, selectedMinute);
+                           if (!isGreater) {
+                               Utility.showToast(getContext(), "Time at garrage should be greater than ending time");
+                           } else {
+                               time_at_garage = time;
+                           }
+                       } else {
+                           Utility.showToast(getContext(), "Ending time should not be empty .");
 
-                        }
+                       }
                       /*  if (time != null && time.length() > 0)
                             timeText.setText(time);*/
                         if (time_at_garage != null && time_at_garage.length() > 0)
@@ -557,31 +589,32 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             @SuppressLint("SimpleDateFormat") SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date myDate;
             try {
-                myDate = timeFormat.parse(ending_date);
-                String cDate = timeFormat.format(datetime.getTime());
-
-                if (ending_date.equals(starting_date)) {
-                    Log.d("TAG", "onTimeSet: equal");
-                    String startTime = c;
-                    String endTime = selectedHour + ":" + selectedMinute;
-                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                    Date d1 = sdf.parse(startTime);
-                    Date d2 = sdf.parse(endTime);
-                    if (d2.after(d1) || d2.equals(d1)) {
-                        Log.d(TAG, "validateTime: " + true);
-                        int hour1 = selectedHour % 12;
-                        time = String.format("%02d:%02d", selectedHour, selectedMinute);
-                        timeText.setText(time);
-                        isGreater = true;
-                    } else if (d2.after(sdf.parse("00:01")) && d2.before(sdf.parse("01:00"))) {
-                        Log.d(TAG, "validateTime: " + false);
+                if (c!=null && c.length()>0){
+                    try {
+                        myDate = timeFormat.parse(ending_date);
+                        String cDate = timeFormat.format(datetime.getTime());
+                        if (ending_date.equals(starting_date)) {
+                            Log.d("TAG", "onTimeSet: equal");
+                            String startTime = c;
+                            String endTime = selectedHour + ":" + selectedMinute;
+                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                            Date d1 = sdf.parse(startTime);
+                            Date d2 = sdf.parse(endTime);
+                            if (d2.after(d1) || d2.equals(d1)) {
+                                Log.d(TAG, "validateTime: " + true);
+                                int hour1 = selectedHour % 12;
+                                time = String.format("%02d:%02d", selectedHour, selectedMinute);
+                                timeText.setText(time);
+                                isGreater = true;
+                            } else if (d2.after(sdf.parse("00:01")) && d2.before(sdf.parse("01:00"))) {
+                                Log.d(TAG, "validateTime: " + false);
 //                    isGreater = false;
-                        Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
 
-                    } else {
-                        Log.d(TAG, "validateTime: " + false);
-                        isGreater = false;
-                    }
+                            } else {
+                                Log.d(TAG, "validateTime: " + false);
+                                isGreater = false;
+                            }
 
                   /*  if (datetime.getTimeInMillis() >= c.getTimeInMillis()) {
                         //it's after current
@@ -592,7 +625,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
 
                     } else Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
 */
-                } else if (myDate.after(timeFormat.parse(starting_date))) {
+                        } else if (myDate.after(timeFormat.parse(starting_date))) {
                            /* if (datetime.getTimeInMillis() >= c.getTimeInMillis()) {
                                 //it's after current
                                 int hour1 = selectedHour % 12;
@@ -604,11 +637,11 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                                 //it's before current'
                                 Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
                             }*/
-                    String startTime = c;
-                    String endTime = selectedHour + ":" + selectedMinute;
-                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                    Date d1 = sdf.parse(startTime);
-                    Date d2 = sdf.parse(endTime);
+                            String startTime = c;
+                            String endTime = selectedHour + ":" + selectedMinute;
+                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                            Date d1 = sdf.parse(startTime);
+                            Date d2 = sdf.parse(endTime);
                    /* if (d2.after(d1)|| d2.equals(d1)){
                         Log.d(TAG, "validateTime: "+true);
                         int hour1 = selectedHour % 12;
@@ -624,10 +657,10 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                         Log.d(TAG, "validateTime: "+false);
                         isGreater = false;
                     }*/
-                    time = String.format("%02d:%02d", selectedHour, selectedMinute);
-                    timeText.setText(time);
-                    isGreater = true;
-                } else if (myDate.before(timeFormat.parse(starting_date))) {
+                            time = String.format("%02d:%02d", selectedHour, selectedMinute);
+                            timeText.setText(time);
+                            isGreater = true;
+                        } else if (myDate.before(timeFormat.parse(starting_date))) {
                            /* if (datetime.getTimeInMillis() >= c.getTimeInMillis()) {
                                 //it's after current
                                 int hour1 = selectedHour % 12;
@@ -639,27 +672,27 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                                 //it's before current'
                                 Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
                             }*/
-                    Log.d("TAG", "onTimeSet: equal");
-                    String startTime = c;
-                    String endTime = selectedHour + ":" + selectedMinute;
-                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                    Date d1 = sdf.parse(startTime);
-                    Date d2 = sdf.parse(endTime);
-                    if (d2.after(d1) || d2.equals(d1)) {
-                        Log.d(TAG, "validateTime: " + true);
-                        int hour1 = selectedHour % 12;
-                        time = String.format("%02d:%02d", selectedHour, selectedMinute);
-                        timeText.setText(time);
-                        isGreater = true;
-                    } else if (d2.after(sdf.parse("00:01")) && d2.before(sdf.parse("01:00"))) {
-                        Log.d(TAG, "validateTime: " + false);
+                            Log.d("TAG", "onTimeSet: equal");
+                            String startTime = c;
+                            String endTime = selectedHour + ":" + selectedMinute;
+                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                            Date d1 = sdf.parse(startTime);
+                            Date d2 = sdf.parse(endTime);
+                            if (d2.after(d1) || d2.equals(d1)) {
+                                Log.d(TAG, "validateTime: " + true);
+                                int hour1 = selectedHour % 12;
+                                time = String.format("%02d:%02d", selectedHour, selectedMinute);
+                                timeText.setText(time);
+                                isGreater = true;
+                            } else if (d2.after(sdf.parse("00:01")) && d2.before(sdf.parse("01:00"))) {
+                                Log.d(TAG, "validateTime: " + false);
 //                    isGreater = false;
-                        Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
 
-                    } else {
-                        Log.d(TAG, "validateTime: " + false);
-                        isGreater = false;
-                    }
+                            } else {
+                                Log.d(TAG, "validateTime: " + false);
+                                isGreater = false;
+                            }
 
                   /*  if (datetime.getTimeInMillis() >= c.getTimeInMillis()) {
                         //it's after current
@@ -670,15 +703,21 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
 
                     } else Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
 */
-                } else {
-                    int hour1 = selectedHour % 12;
-                    Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
+                        } else {
+                            int hour1 = selectedHour % 12;
+                            Toast.makeText(getContext(), "You can't select previous time , Please change your ending date.", Toast.LENGTH_LONG).show();
                           /*  timeText.setText(String.format("%02d:%02d %s", hour1 == 0 ? 12 : hour1,
                                     selectedMinute, selectedHour < 12 ? "am" : "pm"));
                             time = String.format("%02d:%02d", selectedHour, selectedMinute);*/
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
+
+            } catch (Exception e){
+                Log.d(TAG, "validateTime: "+e.getMessage());
             }
         }
 
