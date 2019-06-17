@@ -78,7 +78,7 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
 
                     String message = intent.getStringExtra("message");
 
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+               //     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                    // txtMessage.setText(message);
                 }
@@ -103,7 +103,7 @@ public class LoginActivity extends AppbaseActivity implements View.OnClickListen
                 token = regId;
             else{
                 String token = FirebaseInstanceId.getInstance().getToken();
-                Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
                 // Utility.showToast(getApplicationContext(),"Token not generated");
             }
         } catch (Exception e){
