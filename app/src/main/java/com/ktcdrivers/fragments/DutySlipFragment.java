@@ -273,32 +273,32 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
         txtSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               try{
-                   if (starting_meter != null && !starting_meter.isEmpty() && initial_meter != null && !initial_meter.isEmpty() &&
-                           Double.parseDouble(starting_meter) < Double.parseDouble(initial_meter)) {
-                       Utility.showToast(getContext(), "Stating meter should not less than" + initial_meter);
-                   } else if (reporting_meter != null && reporting_meter.length() > 0 &&
-                           (Double.parseDouble(reporting_meter) < Double.parseDouble(starting_meter))){
-                       Utility.showToast(getContext(), "Reporting meter should be > than starting meter");
-                   } else if (ending_meter!=null && ending_meter.length()>0 && (Double.parseDouble(ending_meter)
-                           < Double.parseDouble(reporting_meter))){
-                       Utility.showToast(getContext(), "Ending meter should be > than reporting meter");
-                   } else if (meter_at_garage!=null && meter_at_garage.length()>0
-                           && (Double.parseDouble(meter_at_garage) < Double.parseDouble(ending_meter))){
-                       Utility.showToast(getContext(), "Meter at garrage should be > than ending meter");
-                   } else if (ending_meter!=null && ending_meter.length()>0 && (Double.parseDouble(ending_meter)
-                           >= Double.parseDouble(reporting_meter))&& (signature == null /*||  signature.length() == 0)*/)) {
-                       showEndMeterDialog();
-                   }  else if (meter_at_garage!=null && meter_at_garage.length()>0 && ending_meter!=null && ending_meter.length()>0
-                           && (Double.parseDouble(meter_at_garage) > Double.parseDouble(ending_meter))){
-                       showGarrageMeterDialog();
-                   } else  {
-                       saveDutySlip();
-                   }
-               } catch (Exception e){
-                   Log.d(TAG, "onClick: "+e.getMessage());
-                   Utility.showToast(getContext(),"Previous filed can't be empty.");
-               }
+                try {
+                    if (starting_meter != null && !starting_meter.isEmpty() && initial_meter != null && !initial_meter.isEmpty() &&
+                            Double.parseDouble(starting_meter) < Double.parseDouble(initial_meter)) {
+                        Utility.showToast(getContext(), "Stating meter should not less than" + initial_meter);
+                    } else if (reporting_meter != null && reporting_meter.length() > 0 &&
+                            (Double.parseDouble(reporting_meter) < Double.parseDouble(starting_meter))) {
+                        Utility.showToast(getContext(), "Reporting meter should be > than starting meter");
+                    } else if (ending_meter != null && ending_meter.length() > 0 && (Double.parseDouble(ending_meter)
+                            < Double.parseDouble(reporting_meter))) {
+                        Utility.showToast(getContext(), "Ending meter should be > than reporting meter");
+                    } else if (meter_at_garage != null && meter_at_garage.length() > 0
+                            && (Double.parseDouble(meter_at_garage) < Double.parseDouble(ending_meter))) {
+                        Utility.showToast(getContext(), "Meter at garrage should be > than ending meter");
+                    } else if (ending_meter != null && ending_meter.length() > 0 && (Double.parseDouble(ending_meter)
+                            >= Double.parseDouble(reporting_meter)) && (signature == null /*||  signature.length() == 0)*/)) {
+                        showEndMeterDialog();
+                    } else if (meter_at_garage != null && meter_at_garage.length() > 0 && ending_meter != null && ending_meter.length() > 0
+                            && (Double.parseDouble(meter_at_garage) > Double.parseDouble(ending_meter))) {
+                        showGarrageMeterDialog();
+                    } else {
+                        saveDutySlip();
+                    }
+                } catch (Exception e) {
+                    Log.d(TAG, "onClick: " + e.getMessage());
+                    Utility.showToast(getContext(), "Previous filed can't be empty.");
+                }
             }
         });
         txtCharge2.setOnClickListener(this);
@@ -450,9 +450,9 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                 total_meter = Double.parseDouble(total_meter) + "";
             if (!String.valueOf(total).trim().equals(total_meter)) {
 
-                if (total>0)
+                if (total > 0)
                     total_meter = ((int) total) + "";
-                else total_meter ="0";
+                else total_meter = "0";
                 title1ListValue.set(4, total_meter);
                 if (dutyListAdapter != null)
                     dutyListAdapter.notifyItemChanged(4);
@@ -531,20 +531,21 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                         time = null;
                         break;
                     case 1:
-                        if (starting_time!=null && starting_time.length()>0){
+                        if (starting_time != null && starting_time.length() > 0) {
                             validateTime(datetime, starting_time, selectedHour, selectedMinute);
                             if (!isGreater) {
                                 Utility.showToast(getContext(), "Reporting time should be greater than start time");
                             } else {
                                 reporting_time = time;
                             }
-                        } else  Utility.showToast(getContext(), "Starting time should not be empty .");
+                        } else
+                            Utility.showToast(getContext(), "Starting time should not be empty .");
 
                        /* if (time != null && time.length() > 0)
                             timeText.setText(time);*/
                         break;
                     case 2:
-                        if (reporting_time!=null && reporting_time.length()>0){
+                        if (reporting_time != null && reporting_time.length() > 0) {
 
                             validateTime(datetime, reporting_time, selectedHour, selectedMinute);
                             if (!isGreater) {
@@ -561,17 +562,17 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                             timeText.setText(time);*/
                         break;
                     case 3:
-                       if (ending_time!=null && ending_time.length()>0){
-                           validateTime(datetime, ending_time, selectedHour, selectedMinute);
-                           if (!isGreater) {
-                               Utility.showToast(getContext(), "Time at garrage should be greater than ending time");
-                           } else {
-                               time_at_garage = time;
-                           }
-                       } else {
-                           Utility.showToast(getContext(), "Ending time should not be empty .");
+                        if (ending_time != null && ending_time.length() > 0) {
+                            validateTime(datetime, ending_time, selectedHour, selectedMinute);
+                            if (!isGreater) {
+                                Utility.showToast(getContext(), "Time at garrage should be greater than ending time");
+                            } else {
+                                time_at_garage = time;
+                            }
+                        } else {
+                            Utility.showToast(getContext(), "Ending time should not be empty .");
 
-                       }
+                        }
                       /*  if (time != null && time.length() > 0)
                             timeText.setText(time);*/
                         if (time_at_garage != null && time_at_garage.length() > 0)
@@ -589,7 +590,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             @SuppressLint("SimpleDateFormat") SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date myDate;
             try {
-                if (c!=null && c.length()>0){
+                if (c != null && c.length() > 0) {
                     try {
                         myDate = timeFormat.parse(ending_date);
                         String cDate = timeFormat.format(datetime.getTime());
@@ -716,8 +717,8 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
 
                 }
 
-            } catch (Exception e){
-                Log.d(TAG, "validateTime: "+e.getMessage());
+            } catch (Exception e) {
+                Log.d(TAG, "validateTime: " + e.getMessage());
             }
         }
 
@@ -726,13 +727,13 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-          /*  case R.id.fragment_duty_slip_txtsave:
+            /*  case R.id.fragment_duty_slip_txtsave:
 
 
 
 
 
-              *//*  if (starting_meter != null && !starting_meter.isEmpty() && initial_meter != null && !initial_meter.isEmpty() &&
+             *//*  if (starting_meter != null && !starting_meter.isEmpty() && initial_meter != null && !initial_meter.isEmpty() &&
                         Double.parseDouble(starting_meter) < Double.parseDouble(initial_meter)) {
                     Utility.showToast(getContext(), "Stating meter should not less than" + initial_meter);
                 } else if (starting_meter != null && starting_meter.length() > 0) {
@@ -889,7 +890,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
             e.printStackTrace();
         }
         long millis = date.getTime();
-           datePickerDialog.getDatePicker().setMinDate(millis);
+        datePickerDialog.getDatePicker().setMinDate(millis);
         datePickerDialog.show();
     }
 
@@ -1123,7 +1124,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                     title1ListValue.add(total_meter);
                     if (viewDetailsData.getJob_detail().getStarting_time() != null)
                         starting_time = viewDetailsData.getJob_detail().getStarting_time();
-                     title2ListValue.add(starting_time);
+                    title2ListValue.add(starting_time);
                     if (viewDetailsData.getJob_detail().getReporingtime() != null)
                         reporting_time = viewDetailsData.getJob_detail().getReporting_time();
                     title2ListValue.add(reporting_time);
@@ -1167,7 +1168,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                         guide_charge = viewDetailsData.getJob_detail().getMisc_charges2().getGuide_charge() + "";
                     }
                     if (viewDetailsData.getJob_detail().getMisc_charges1().getParking() != null) {
-                         parking = viewDetailsData.getJob_detail().getMisc_charges1().getParking() + "";
+                        parking = viewDetailsData.getJob_detail().getMisc_charges1().getParking() + "";
                     }
                     if (viewDetailsData.getJob_detail().getMisc_charges2().getBeverage_charge() != null) {
                         driver_ta = viewDetailsData.getJob_detail().getMisc_charges2().getDriver_ta() + "";
@@ -1217,18 +1218,20 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
 
                     setTotal1();        // To set total of Misc. Charges 2
                     setTotal2();        // To set total of Misc. Charges 1
-                    if (signature!=null && signature.length()>0){
-                        if (meter_at_garage!=null && meter_at_garage.length()>0
-                                && (Double.parseDouble(meter_at_garage) > Double.parseDouble(ending_meter))){
+                    if (signature != null && signature.length() > 0) {
+                        if (meter_at_garage != null && meter_at_garage.length() > 0
+                                && (Double.parseDouble(meter_at_garage) > Double.parseDouble(ending_meter))) {
                             //   garageMeterDialog.dismiss();
                             endMeterDialog = null;
                             new Utility().callFragment(new CloseDsFragment(), getFragmentManager(), R.id.fragment_container,
                                     CloseDsFragment.class.getName());
+                        } else {
+                            Utility.showToast(getActivity(),"Please enter meter at garrage.");
                         }
                     }
                 } else {
-                    if (saveResponse.getMessage()!=null)
-                    Utility.showToast(getContext(), saveResponse.getMessage());
+                    if (saveResponse.getMessage() != null)
+                        Utility.showToast(getContext(), saveResponse.getMessage());
                 }
             } else {
                 Utility.showToast(getContext(), getResources().getString(R.string.error));
