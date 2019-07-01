@@ -1220,7 +1220,7 @@ public class DutySlipFragment extends Fragment implements DutyListAdapter.DutyLi
                     setTotal2();        // To set total of Misc. Charges 1
                     if (signature != null && signature.length() > 0) {
                         if (meter_at_garage != null && meter_at_garage.length() > 0
-                                && (Double.parseDouble(meter_at_garage) > Double.parseDouble(ending_meter))) {
+                                && (Double.parseDouble(meter_at_garage) >= Double.parseDouble(ending_meter))) {
                             //   garageMeterDialog.dismiss();
                             endMeterDialog = null;
                             new Utility().callFragment(new CloseDsFragment(), getFragmentManager(), R.id.fragment_container,
